@@ -1,10 +1,10 @@
 package fr.alexdoru.mwe.asm.hooks.mc.chat;
 
+import fr.alexdoru.mwe.api.utils.RenderUtil;
 import fr.alexdoru.mwe.api.utils.StringUtil;
 import fr.alexdoru.mwe.asm.interfaces.ChatComponentTextAccessor;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
-import fr.alexdoru.mwe.utils.RenderHelper;
 import net.minecraft.client.gui.ChatLine;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.IChatComponent;
@@ -19,7 +19,7 @@ public class GuiNewChatHook_ChatHeads {
     public static void preRenderStringCall(ChatLine chatLine, int alpha, int x, int y) {
         if (MWEConfig.chatHeads && chatLine.getChatComponent() instanceof ChatComponentTextAccessor && ((ChatComponentTextAccessor) chatLine.getChatComponent()).getSkinChatHead() != null) {
             isHeadLine = true;
-            RenderHelper.renderSkinHead(
+            RenderUtil.renderSkinHead(
                     ((ChatComponentTextAccessor) chatLine.getChatComponent()).getSkinChatHead().getSkin(),
                     x,
                     y - 8,

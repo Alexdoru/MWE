@@ -3,11 +3,12 @@ package fr.alexdoru.mwe.features.overlays;
 import fr.alexdoru.mwe.api.enums.MWClass;
 import fr.alexdoru.mwe.api.enums.MWSkin;
 import fr.alexdoru.mwe.api.events.ContainerSlotRenderEvent;
+import fr.alexdoru.mwe.api.utils.ColorUtil;
 import fr.alexdoru.mwe.api.utils.StringUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
-import fr.alexdoru.mwe.utils.ColorUtil;
 import fr.alexdoru.mwe.utils.ItemStackUtil;
 import fr.alexdoru.mwe.utils.MultithreadingUtil;
+import fr.alexdoru.mwe.utils.PrestigeColorHelper;
 import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -206,7 +207,7 @@ public final class ClassSelectorOverlay extends InventoryOverlay {
     }
 
     private void renderPrestigesAndClasspoints(int x, int y, int prestiges, int classpoints) {
-        final int classpointColor = ColorUtil.getColorInt(ColorUtil.getPrestige4Color(prestiges >= 4 ? classpoints : 0));
+        final int classpointColor = ColorUtil.getColorInt(PrestigeColorHelper.getPrestige4Color(prestiges >= 4 ? classpoints : 0));
         if (MWEConfig.classSelectorColoredBorder && classpoints >= 2000 && prestiges >= 4) {
             this.renderOutline(x, y, 16, classpointColor);
         }

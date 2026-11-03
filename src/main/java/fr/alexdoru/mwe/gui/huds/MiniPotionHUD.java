@@ -1,8 +1,8 @@
 package fr.alexdoru.mwe.gui.huds;
 
+import fr.alexdoru.mwe.api.utils.ColorUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
-import fr.alexdoru.mwe.utils.ColorUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.potion.PotionEffect;

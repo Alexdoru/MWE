@@ -3,6 +3,7 @@ package fr.alexdoru.mwe.api;
 import fr.alexdoru.configlib.api.IRenderer;
 import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.api.asm.IClassNodeTransformer;
+import fr.alexdoru.mwe.api.enums.MWSkin;
 import fr.alexdoru.mwe.api.enums.MWTeam;
 import fr.alexdoru.mwe.asm.MWELoadingPlugin;
 import fr.alexdoru.mwe.asm.interfaces.ChatComponentTextAccessor;
@@ -162,6 +163,19 @@ public final class MWEApi {
          */
         public static boolean addChatHead(IChatComponent msg, ResourceLocation locationSkin) {
             return ChatUtil.addSkinToComponent(msg, locationSkin);
+        }
+
+        /**
+         * Adds a chat head to the IChatComponent
+         *
+         * @return true if it succeeds
+         */
+        public static boolean addChatHead(IChatComponent msg, MWSkin skin) {
+            if (msg instanceof ChatComponentTextAccessor && skin != null) {
+                ((ChatComponentTextAccessor) msg).setSkinChatHead(skin.getSkinChatHead());
+                return true;
+            }
+            return false;
         }
 
         /**

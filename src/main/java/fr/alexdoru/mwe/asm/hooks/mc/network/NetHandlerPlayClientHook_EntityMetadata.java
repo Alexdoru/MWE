@@ -1,8 +1,8 @@
 package fr.alexdoru.mwe.asm.hooks.mc.network;
 
+import fr.alexdoru.mwe.api.utils.ColorUtil;
 import fr.alexdoru.mwe.api.utils.StringUtil;
 import fr.alexdoru.mwe.asm.interfaces.IWitherColor;
-import fr.alexdoru.mwe.utils.ColorUtil;
 import net.minecraft.entity.Entity;
 
 public class NetHandlerPlayClientHook_EntityMetadata {

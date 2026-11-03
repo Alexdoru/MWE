@@ -2,9 +2,9 @@ package fr.alexdoru.mwe.gui.huds;
 
 import fr.alexdoru.mwe.api.enums.MWSkin;
 import fr.alexdoru.mwe.api.utils.MapUtil;
+import fr.alexdoru.mwe.api.utils.RenderUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
-import fr.alexdoru.mwe.utils.RenderHelper;
 import fr.alexdoru.mwe.utils.TimerUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
@@ -61,7 +61,7 @@ public class ClassInLobbyHUD extends AbstractRenderer {
         final Minecraft mc = Minecraft.getMinecraft();
         for (final Map.Entry<MWSkin, Integer> entry : list) {
             maxWidth = Math.max(maxWidth, mc.fontRendererObj.getStringWidth(entry.getValue().toString()));
-            RenderHelper.renderSkinHead(entry.getKey().getSkin(), x, y, true, 8);
+            RenderUtil.renderSkinHead(entry.getKey().getSkin(), x, y, true, 8);
             mc.fontRendererObj.drawStringWithShadow(entry.getValue().toString(), x + 9, y, 0xFFFFFF);
             y += mc.fontRendererObj.FONT_HEIGHT;
             i++;

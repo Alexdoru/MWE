@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.gui.huds;
 
+import fr.alexdoru.mwe.api.utils.ColorUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
-import fr.alexdoru.mwe.utils.ColorUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.FontRenderer;

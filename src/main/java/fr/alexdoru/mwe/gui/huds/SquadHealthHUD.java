@@ -1,6 +1,8 @@
 package fr.alexdoru.mwe.gui.huds;
 
 import fr.alexdoru.mwe.api.ISquadInfoRenderer;
+import fr.alexdoru.mwe.api.utils.ColorUtil;
+import fr.alexdoru.mwe.api.utils.RenderUtil;
 import fr.alexdoru.mwe.api.utils.StringUtil;
 import fr.alexdoru.mwe.asm.interfaces.NetworkPlayerInfoAccessor;
 import fr.alexdoru.mwe.config.MWEConfig;
@@ -8,9 +10,7 @@ import fr.alexdoru.mwe.config.TablistSorting;
 import fr.alexdoru.mwe.data.NameFormatter;
 import fr.alexdoru.mwe.data.PlayerDataManager;
 import fr.alexdoru.mwe.features.SquadHandler;
-import fr.alexdoru.mwe.utils.ColorUtil;
 import fr.alexdoru.mwe.utils.NetInfoOrdering;
-import fr.alexdoru.mwe.utils.RenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
@@ -135,7 +135,7 @@ public class SquadHealthHUD extends AbstractRenderer {
             }
             // draw head
             final boolean renderHatLayer = entityPlayer == null || entityPlayer.isWearing(EnumPlayerModelParts.HAT);
-            RenderHelper.renderSkinHead(netInfo.getLocationSkin(), xDrawingPos, yDrawingPos, renderHatLayer, 8);
+            RenderUtil.renderSkinHead(netInfo.getLocationSkin(), xDrawingPos, yDrawingPos, renderHatLayer, 8);
             xDrawingPos += 9;
             // draw name
             mc.fontRendererObj.drawStringWithShadow(playername, (float) xDrawingPos, (float) yDrawingPos, 0xFFFFFF);
@@ -152,7 +152,7 @@ public class SquadHealthHUD extends AbstractRenderer {
             // draw score
             if (showScores && maxScoreWidth > 0 && netInfo.getGameType() != WorldSettings.GameType.SPECTATOR) {
                 final int scorePoints = scoreobjective.getScoreboard().getValueFromObjective(netInfo.getGameProfile().getName(), scoreobjective).getScorePoints();
-                final String scoreString = ColorUtil.getColoredHP(EnumChatFormatting.YELLOW, scorePoints).toString() + scorePoints;
+                final String scoreString = ColorUtil.getHPColorForTablist(EnumChatFormatting.YELLOW, scorePoints).toString() + scorePoints;
                 mc.fontRendererObj.drawStringWithShadow(scoreString, xDrawingPos, yDrawingPos, 0xFFFFFF);
             }
             xDrawingPos += maxScoreWidth;
@@ -189,7 +189,7 @@ public class SquadHealthHUD extends AbstractRenderer {
                 final int backGroundColor = 0xFFFFFF | (MWEConfig.squadHUDBackgroundAlpha << 24);
                 Gui.drawRect(xDrawingPos, yDrawingPos, hudXpos + maxLineWidth + 1, yDrawingPos + 8, backGroundColor);
             }
-            RenderHelper.renderSkinHead(DefaultPlayerSkin.getDefaultSkinLegacy(), xDrawingPos, yDrawingPos, true, 8);
+            RenderUtil.renderSkinHead(DefaultPlayerSkin.getDefaultSkinLegacy(), xDrawingPos, yDrawingPos, true, 8);
             xDrawingPos += 9;
             final String formattedName = EnumChatFormatting.GREEN + mc.thePlayer.getName();
             mc.fontRendererObj.drawStringWithShadow(formattedName, (float) xDrawingPos, (float) yDrawingPos, -1);
@@ -197,7 +197,7 @@ public class SquadHealthHUD extends AbstractRenderer {
             final int xStartScoreDrawingPos = xStartFinalDrawingPos + maxFinalWidth;
             if (maxScoreWidth + maxFinalWidth > 5) {
                 final int scorePoints = 12 + (i * 18 + 22) % 8;
-                final String scoreString = ColorUtil.getColoredHP(EnumChatFormatting.YELLOW, scorePoints) + " " + scorePoints;
+                final String scoreString = ColorUtil.getHPColorForTablist(EnumChatFormatting.YELLOW, scorePoints) + " " + scorePoints;
                 mc.fontRendererObj.drawStringWithShadow(scoreString, xStartScoreDrawingPos, yDrawingPos, 0xFFFFFF);
                 final String finalsString = EnumChatFormatting.GOLD + " " + (3 + (i * 28 + 15) % 5);
                 mc.fontRendererObj.drawStringWithShadow(finalsString, xStartFinalDrawingPos, yDrawingPos, 0xFFFFFF);

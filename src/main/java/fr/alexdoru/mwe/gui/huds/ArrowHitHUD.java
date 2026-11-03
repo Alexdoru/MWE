@@ -1,6 +1,8 @@
 package fr.alexdoru.mwe.gui.huds;
 
 import fr.alexdoru.mwe.MWE;
+import fr.alexdoru.mwe.api.utils.ColorUtil;
+import fr.alexdoru.mwe.api.utils.RenderUtil;
 import fr.alexdoru.mwe.api.utils.StringUtil;
 import fr.alexdoru.mwe.asm.interfaces.GuiNewChatAccessor;
 import fr.alexdoru.mwe.chat.ChatUtil;
@@ -8,8 +10,6 @@ import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.data.NameFormatter;
 import fr.alexdoru.mwe.data.NetPlayerInfoTracker;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
-import fr.alexdoru.mwe.utils.ColorUtil;
-import fr.alexdoru.mwe.utils.RenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ChatLine;
 import net.minecraft.client.gui.FontRenderer;
@@ -161,7 +161,7 @@ public class ArrowHitHUD extends AbstractRenderer {
         if (MWEConfig.showHeadOnArrowHitHUD && skin != null) {
             x -= 4;
             y += mc.fontRendererObj.FONT_HEIGHT + 1;
-            RenderHelper.renderSkinHead(skin, x, y, true, 8);
+            RenderUtil.renderSkinHead(skin, x, y, true, 8);
         }
     }
 

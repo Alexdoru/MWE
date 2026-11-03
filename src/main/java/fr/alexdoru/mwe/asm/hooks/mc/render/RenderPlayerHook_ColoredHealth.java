@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.asm.hooks.mc.render;
 
+import fr.alexdoru.mwe.api.utils.ColorUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
-import fr.alexdoru.mwe.utils.ColorUtil;
 import net.minecraft.client.entity.AbstractClientPlayer;
 
 public class RenderPlayerHook_ColoredHealth {

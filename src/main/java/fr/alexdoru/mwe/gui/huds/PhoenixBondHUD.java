@@ -1,12 +1,12 @@
 package fr.alexdoru.mwe.gui.huds;
 
 import fr.alexdoru.mwe.api.utils.MapUtil;
+import fr.alexdoru.mwe.api.utils.RenderUtil;
 import fr.alexdoru.mwe.api.utils.StringUtil;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.data.NetPlayerInfoTracker;
 import fr.alexdoru.mwe.features.SquadHandler;
-import fr.alexdoru.mwe.utils.RenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -136,7 +136,7 @@ public class PhoenixBondHUD extends AbstractRenderer {
         for (final PhxHealLine phxHealLine : toRenderList) {
             mc.fontRendererObj.drawStringWithShadow(phxHealLine.hpHealed, x + maxLeft - mc.fontRendererObj.getStringWidth(phxHealLine.hpHealed) - 1, y, 0xFFFFFF);
             mc.fontRendererObj.drawStringWithShadow(phxHealLine.name, x + maxLeft + 9, y, 0xFFFFFF);
-            RenderHelper.renderSkinHead(phxHealLine.skin, x + maxLeft, y, true, 8);
+            RenderUtil.renderSkinHead(phxHealLine.skin, x + maxLeft, y, true, 8);
             y += mc.fontRendererObj.FONT_HEIGHT;
         }
     }

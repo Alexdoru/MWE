@@ -6,8 +6,8 @@ import com.google.gson.JsonObject;
 import fr.alexdoru.mwe.api.enums.MWClass;
 import fr.alexdoru.mwe.api.utils.StringUtil;
 import fr.alexdoru.mwe.chat.ChatUtil;
-import fr.alexdoru.mwe.utils.ColorUtil;
 import fr.alexdoru.mwe.utils.JsonUtil;
+import fr.alexdoru.mwe.utils.PrestigeColorHelper;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
 import net.minecraft.util.ChatComponentText;
@@ -191,7 +191,7 @@ public class MegaWallsStats {
             if (prestige != 0) {
                 imsg.appendText(EnumChatFormatting.GOLD + " P" + ChatUtil.intToRoman(prestige));
             }
-            imsg.appendText(" : " + ColorUtil.getPrestige4Color(classpoints) + classpoints + "\n");
+            imsg.appendText(" : " + PrestigeColorHelper.getPrestige4Color(classpoints) + classpoints + "\n");
         }
         imsg.appendText(EnumChatFormatting.GREEN + "Total class points : " + EnumChatFormatting.GOLD + total_classpoints + "\n");
         final int AMOUNT_OF_KITS = MWClass.values().length;
