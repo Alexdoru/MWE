@@ -18,8 +18,8 @@ public class NetworkPlayerInfoTransformer_CustomTab implements MWETransformer {
     public void transform(ClassNode classNode, InjectionCallback status) {
         status.setInjectionPoints(3);
         addInterface(classNode, "NetworkPlayerInfoAccessor");
-        classNode.visitField(ACC_PUBLIC, FieldMapping.NETWORKPLAYERINFO$MWE$FINALKILLS.name, FieldMapping.NETWORKPLAYERINFO$MWE$FINALKILLS.desc, null, 0);
-        classNode.visitField(ACC_PRIVATE, FieldMapping.NETWORKPLAYERINFO$MWE$DISPLAYNAME.name, FieldMapping.NETWORKPLAYERINFO$MWE$DISPLAYNAME.desc, null, null);
+        addField(classNode, ACC_PUBLIC, FieldMapping.NETWORKPLAYERINFO$MWE$FINALKILLS);
+        addField(classNode, ACC_PRIVATE, FieldMapping.NETWORKPLAYERINFO$MWE$DISPLAYNAME);
         addGetterAndSetterMethod(classNode, "FinalKills", FieldMapping.NETWORKPLAYERINFO$MWE$FINALKILLS);
         addSetterMethod(classNode, "setCustomDisplayname", FieldMapping.NETWORKPLAYERINFO$MWE$DISPLAYNAME);
         for (final MethodNode methodNode : classNode.methods) {

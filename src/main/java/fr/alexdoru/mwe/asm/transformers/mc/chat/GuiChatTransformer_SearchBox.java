@@ -17,7 +17,7 @@ public class GuiChatTransformer_SearchBox implements MWETransformer {
     @Override
     public void transform(ClassNode classNode, InjectionCallback status) {
         status.setInjectionPoints(7);
-        classNode.visitField(ACC_PRIVATE, FieldMapping.GUICHAT$SEARCHBOXHOOK.name, FieldMapping.GUICHAT$SEARCHBOXHOOK.desc, null, null);
+        addField(classNode, ACC_PRIVATE, FieldMapping.GUICHAT$SEARCHBOXHOOK);
         for (final MethodNode methodNode : classNode.methods) {
             if (isConstructorMethod(methodNode)) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {

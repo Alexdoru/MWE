@@ -17,7 +17,7 @@ public class ChatLineTransformer_Accessor implements MWETransformer {
         status.setInjectionPoints(0);
         addInterface(classNode, "ChatLineAccessor");
         final String FIELD_NAME = "mwe$Text";
-        classNode.visitField(ACC_PRIVATE, FIELD_NAME, "Ljava/lang/String;", null, null);
+        addField(classNode, ACC_PRIVATE, FIELD_NAME, "Ljava/lang/String;");
         addGetterAndSetterMethod(classNode, FIELD_NAME, ClassMapping.CHATLINE, FIELD_NAME, "Ljava/lang/String;");
     }
 

@@ -18,10 +18,10 @@ public class EntityPlayerTransformer_Accessor implements MWETransformer {
         addInterface(classNode, "EntityPlayerAccessor");
         final String TEAM_COLOR_FIELD_NAME = "mwe$PlayerTeamColor";
         final String TEAM_COLOR_INT_FIELD_NAME = "mwe$PlayerSpecialRenderColor";
-        classNode.visitField(ACC_PRIVATE, FieldMapping.ENTITYPLAYER$PLAYERDATASAMPLES.name, FieldMapping.ENTITYPLAYER$PLAYERDATASAMPLES.desc, null, null);
-        classNode.visitField(ACC_PRIVATE, TEAM_COLOR_FIELD_NAME, "C", null, '\0');
+        addField(classNode, ACC_PRIVATE, FieldMapping.ENTITYPLAYER$PLAYERDATASAMPLES);
+        addField(classNode, ACC_PRIVATE, TEAM_COLOR_FIELD_NAME, "C");
         classNode.visitField(ACC_PRIVATE, TEAM_COLOR_INT_FIELD_NAME, "I", null, 0xFFFFFF); // HEX int to do white color
-        classNode.visitField(ACC_PRIVATE, FieldMapping.ENTITYPLAYER$MWCLASS.name, FieldMapping.ENTITYPLAYER$MWCLASS.desc, null, null);
+        addField(classNode, ACC_PRIVATE, FieldMapping.ENTITYPLAYER$MWCLASS);
         addGetterAndSetterMethod(classNode, "PlayerTeamColor", ClassMapping.ENTITYPLAYER, TEAM_COLOR_FIELD_NAME, "C");
         addGetterAndSetterMethod(classNode, "PlayerSpecialRenderColor", ClassMapping.ENTITYPLAYER, TEAM_COLOR_INT_FIELD_NAME, "I");
         addGetterAndSetterMethod(classNode, "MWClass", FieldMapping.ENTITYPLAYER$MWCLASS);

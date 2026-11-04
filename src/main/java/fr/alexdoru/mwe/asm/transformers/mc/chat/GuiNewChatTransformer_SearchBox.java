@@ -18,7 +18,7 @@ public class GuiNewChatTransformer_SearchBox implements MWETransformer {
     public void transform(ClassNode classNode, InjectionCallback status) {
         status.setInjectionPoints(11);
         addInterface(classNode, "GuiNewChatExt");
-        classNode.visitField(ACC_PRIVATE, FieldMapping.GUINEWCHAT$SEARCHBOXHOOK.name, FieldMapping.GUINEWCHAT$SEARCHBOXHOOK.desc, null, null);
+        addField(classNode, ACC_PRIVATE, FieldMapping.GUINEWCHAT$SEARCHBOXHOOK);
         for (final MethodNode methodNode : classNode.methods) {
             if (isConstructorMethod(methodNode)) {
                 for (final AbstractInsnNode insnNode : methodNode.instructions.toArray()) {

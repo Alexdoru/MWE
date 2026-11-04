@@ -25,7 +25,7 @@ public class NetworkPlayerInfoTransformer_ChatHeads implements MWETransformer {
     public void transform(ClassNode classNode, InjectionCallback status) {
         status.setInjectionPoints(0);
         addInterface(classNode, "NetworkPlayerInfoAccessor_ChatHeads");
-        classNode.visitField(ACC_PRIVATE, FieldMapping.NETWORKPLAYERINFO$MWE$SKIN.name, FieldMapping.NETWORKPLAYERINFO$MWE$SKIN.desc, null, null);
+        addField(classNode, ACC_PRIVATE, FieldMapping.NETWORKPLAYERINFO$MWE$SKIN);
         addSetterMethod(classNode, "setSkinChatHead", FieldMapping.NETWORKPLAYERINFO$MWE$SKIN);
 
         // add method :

@@ -106,6 +106,14 @@ public interface IClassNodeTransformer extends Opcodes {
         return new FieldInsnNode(opcode, field.owner(), field.fieldName(), field.desc());
     }
 
+    default void addField(ClassNode classNode, int access, IFieldInfo field) {
+        classNode.visitField(access, field.fieldName(), field.desc(), null, null);
+    }
+
+    default void addField(ClassNode classNode, int access, String fieldName, String fieldDesc) {
+        classNode.visitField(access, fieldName, fieldDesc, null, null);
+    }
+
     /* ========= ASM getter/setter methods ========= */
 
     default void addGetterAndSetterMethod(ClassNode classNode, String methodName, IFieldInfo field) {
