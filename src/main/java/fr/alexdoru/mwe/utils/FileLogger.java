@@ -1,65 +1,64 @@
 package fr.alexdoru.mwe.utils;
 
-import net.minecraft.client.Minecraft;
+import net.minecraft.launchwrapper.Launch;
 
-import java.io.*;
-import java.text.SimpleDateFormat;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
-public class FileLogger {
+public final class FileLogger {
 
-    private final SimpleDateFormat dateFormat;
-    private PrintStream printStream = null;
+    private static final String DEFAULT_TIME_FORMAT = "HH:mm:ss";
+    private final DateTimeFormatter timeFormatter;
+    private final BufferedWriter writer;
 
-    public FileLogger(File logFolder, String filename) {
-        this(logFolder, filename, "HH:mm:ss");
+    public FileLogger(String filename) {
+        this(filename, DEFAULT_TIME_FORMAT);
     }
 
     public FileLogger(String filename, String timeFormat) {
-        this(new File(Minecraft.getMinecraft().mcDataDir, "logs"), filename, timeFormat);
+        this(new File(Launch.minecraftHome, "logs"), filename, timeFormat);
+    }
+
+    public FileLogger(File logFolder, String filename) {
+        this(logFolder, filename, DEFAULT_TIME_FORMAT);
     }
 
     public FileLogger(File logFolder, String filename, String timeFormat) {
-        if (timeFormat == null) {
-            dateFormat = null;
-        } else {
-            dateFormat = new SimpleDateFormat(timeFormat);
-        }
-        if (logFolder == null) {
-            throw new IllegalStateException("FileLogger logFolder cannot be null!");
-        }
-        if (filename == null) {
-            throw new IllegalStateException("FileLogger file name cannot be null!");
-        }
-        //noinspection ResultOfMethodCallIgnored
-        logFolder.mkdirs();
-        final File logFile = new File(logFolder, filename);
-        if (logFile.exists()) {
-            //noinspection ResultOfMethodCallIgnored
-            logFile.delete();
-        }
-        if (!logFile.exists()) {
-            try {
-                //noinspection ResultOfMethodCallIgnored
-                logFile.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        Objects.requireNonNull(logFolder, "logFolder cannot be null");
+        Objects.requireNonNull(filename, "filename cannot be null");
+        this.timeFormatter = timeFormat == null ? null : DateTimeFormatter.ofPattern(timeFormat);
+        BufferedWriter w = null;
         try {
-            printStream = new PrintStream(new FileOutputStream(logFile, true));
-        } catch (FileNotFoundException e) {
+            final Path folder = logFolder.toPath();
+            Files.createDirectories(folder);
+            w = Files.newBufferedWriter(folder.resolve(filename), StandardCharsets.UTF_8);
+        } catch (IOException e) {
             e.printStackTrace();
         }
+        this.writer = w;
     }
 
-    public void log(String message) {
-        if (printStream == null) return;
-        if (dateFormat == null) {
-            printStream.println(message);
-            return;
+    public synchronized void log(String message) {
+        if (writer == null) return;
+        try {
+            if (timeFormatter != null) {
+                writer.write('[');
+                writer.write(timeFormatter.format(LocalTime.now()));
+                writer.write("] ");
+            }
+            writer.write(message);
+            writer.newLine();
+            writer.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        final String time = dateFormat.format(System.currentTimeMillis());
-        printStream.println("[" + time + "] " + message);
     }
 
 }
