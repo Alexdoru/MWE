@@ -18,7 +18,7 @@ public abstract class AbstractRenderer extends Gui implements IRenderer {
     }
 
     @Override
-    public RendererPosition getPosition() {
+    public final RendererPosition getPosition() {
         return this.rendererPosition;
     }
 

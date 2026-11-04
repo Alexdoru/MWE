@@ -1,0 +1,22 @@
+package fr.alexdoru.mwe.asm.transformers.mc.gui;
+
+import fr.alexdoru.mwe.api.asm.InjectionCallback;
+import fr.alexdoru.mwe.asm.mappings.FieldMapping;
+import fr.alexdoru.mwe.asm.transformers.MWETransformer;
+import org.objectweb.asm.tree.ClassNode;
+
+public class GuiPlayerTabOverlayTransformer_Accessor implements MWETransformer {
+
+    @Override
+    public String[] getTargetClassName() {
+        return new String[]{"net.minecraft.client.gui.GuiPlayerTabOverlay"};
+    }
+
+    @Override
+    public void transform(ClassNode classNode, InjectionCallback status) {
+        status.setInjectionPoints(0);
+        addInterface(classNode, "GuiPlayerTabOverlayAccessor");
+        addGetterMethod(classNode, "mwe$isBeingRendered", FieldMapping.GUIPLAYERTABOVERLAY$ISBEINGRENDERED, null);
+    }
+
+}

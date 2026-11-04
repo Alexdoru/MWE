@@ -366,6 +366,23 @@ public final class FinalKillCounter {
     }
 
     @Nullable
+    public static MWTeam getTeamFromDefaultColor(char color) {
+        final int index = "9ace".indexOf(color);
+        if (index == -1) return null;
+        switch (index) {
+            case 0:
+                return MWTeam.BLUE;
+            case 1:
+                return MWTeam.GREEN;
+            case 2:
+                return MWTeam.RED;
+            case 3:
+                return MWTeam.YELLOW;
+        }
+        return null;
+    }
+
+    @Nullable
     public MWTeam getTeamFromColor(char color) {
         final int index = this.COLOR_PREFIXES_STR.indexOf(color);
         if (index == -1) return null;

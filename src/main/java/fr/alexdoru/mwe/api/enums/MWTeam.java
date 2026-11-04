@@ -7,6 +7,7 @@ import fr.alexdoru.mwe.features.FinalKillCounter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.network.NetHandlerPlayClient;
+import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import org.jetbrains.annotations.NotNull;
@@ -70,7 +71,9 @@ public enum MWTeam {
     @Nullable
     public static MWTeam fromColorChar(char color) {
         final FinalKillCounter fkCounter = MWE.INSTANCE().getFinalKillCounter();
-        if (fkCounter == null) return null;
+        if (fkCounter == null) {
+            return FinalKillCounter.getTeamFromDefaultColor(color);
+        }
         return fkCounter.getTeamFromColor(color);
     }
 
@@ -101,7 +104,17 @@ public enum MWTeam {
     public static MWTeam ofPlayer(@NotNull UUID uuid) {
         final NetHandlerPlayClient netHandler = Minecraft.getMinecraft().getNetHandler();
         if (netHandler == null) return null;
-        final ScorePlayerTeam team = netHandler.getPlayerInfo(uuid).getPlayerTeam();
+        final NetworkPlayerInfo netInfo = netHandler.getPlayerInfo(uuid);
+        if (netInfo == null) return null;
+        return MWTeam.ofPlayer(netInfo);
+    }
+
+    /**
+     * Returns the MWTeam of a player, might be null
+     */
+    @Nullable
+    public static MWTeam ofPlayer(@NotNull NetworkPlayerInfo netInfo) {
+        final ScorePlayerTeam team = netInfo.getPlayerTeam();
         if (team == null) return null;
         return MWTeam.fromColorChar(StringUtil.getLastColorCharOf(team.getColorPrefix()));
     }

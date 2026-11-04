@@ -910,15 +910,29 @@ public final class MWEConfig {
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "HUD",
             name = "Class in lobby HUD",
-            comment = "Displays the amount of each class selected by the players in the current mega walls queue")
+            comment = "Displays the amounts of each class in the current Mega Walls lobby")
     public static final RendererPosition classInLobbyHUDPosition = new RendererPosition(true, 0.15d, 0.15d);
 
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "HUD",
-            name = "Always render class in lobby HUD",
+            name = "Display Class HUD with tablist",
+            dependsOn = "Class in lobby HUD",
+            comment = "Displays the class HUD only when the tablist is displayed")
+    public static boolean classInLobbyHUDOnlyInTablist;
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "HUD",
+            name = "Display Class HUD during games",
             dependsOn = "Class in lobby HUD",
             comment = "Also renders the HUD when ingame")
-    public static boolean alwaysRenderClassInLobbyHUD;
+    public static boolean classInLobbyHUDDuringGames;
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "HUD",
+            name = "Display class amounts per team",
+            dependsOn = "Display Class HUD during games",
+            comment = "During games it will display the classes in each team")
+    public static boolean classInLobbyHUDPerTeamDisplay = true;
 
     @ConfigProperty(
             category = FINAL_KILL_COUNTER, subCategory = "Chat",
