@@ -103,7 +103,7 @@ public class GuiNewChatTransformer_SearchBox implements MWETransformer {
                             INVOKEVIRTUAL,
                             getHookClass("mc/chat/GuiNewChatHook_SearchBox"),
                             "addDrawnChatLine",
-                            "(" + ClassMapping.CHATLINE.desc() + ")" + ClassMapping.CHATLINE.desc() + "",
+                            "(" + ClassMapping.CHATLINE.desc() + ")" + ClassMapping.CHATLINE.desc(),
                             false
                     ));
                     status.addInjection();

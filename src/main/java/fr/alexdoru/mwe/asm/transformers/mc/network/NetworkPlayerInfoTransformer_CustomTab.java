@@ -20,8 +20,8 @@ public class NetworkPlayerInfoTransformer_CustomTab implements MWETransformer {
         addInterface(classNode, "NetworkPlayerInfoAccessor");
         classNode.visitField(ACC_PUBLIC, FieldMapping.NETWORKPLAYERINFO$MWE$FINALKILLS.name, FieldMapping.NETWORKPLAYERINFO$MWE$FINALKILLS.desc, null, 0);
         classNode.visitField(ACC_PRIVATE, FieldMapping.NETWORKPLAYERINFO$MWE$DISPLAYNAME.name, FieldMapping.NETWORKPLAYERINFO$MWE$DISPLAYNAME.desc, null, null);
-        addGetterAndSetterMethod(classNode, "FinalKills", FieldMapping.NETWORKPLAYERINFO$MWE$FINALKILLS, null);
-        addSetterMethod(classNode, "setCustomDisplayname", FieldMapping.NETWORKPLAYERINFO$MWE$DISPLAYNAME, null);
+        addGetterAndSetterMethod(classNode, "FinalKills", FieldMapping.NETWORKPLAYERINFO$MWE$FINALKILLS);
+        addSetterMethod(classNode, "setCustomDisplayname", FieldMapping.NETWORKPLAYERINFO$MWE$DISPLAYNAME);
         for (final MethodNode methodNode : classNode.methods) {
 
             if (isConstructorMethod(methodNode)) {

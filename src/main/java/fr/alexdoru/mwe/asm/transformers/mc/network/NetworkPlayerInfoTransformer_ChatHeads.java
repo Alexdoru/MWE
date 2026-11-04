@@ -25,10 +25,8 @@ public class NetworkPlayerInfoTransformer_ChatHeads implements MWETransformer {
     public void transform(ClassNode classNode, InjectionCallback status) {
         status.setInjectionPoints(0);
         addInterface(classNode, "NetworkPlayerInfoAccessor_ChatHeads");
-        final String SKIN_FIELD_NAME = "mwe$skin";
-        final String SKIN_FIELD_DESC = ClassMapping.SKINCHATHEAD.desc();
-        classNode.visitField(ACC_PRIVATE, SKIN_FIELD_NAME, SKIN_FIELD_DESC, null, null);
-        addSetterMethod(classNode, "setSkinChatHead", ClassMapping.NETWORKPLAYERINFO, SKIN_FIELD_NAME, SKIN_FIELD_DESC, null);
+        classNode.visitField(ACC_PRIVATE, FieldMapping.NETWORKPLAYERINFO$MWE$SKIN.name, FieldMapping.NETWORKPLAYERINFO$MWE$SKIN.desc, null, null);
+        addSetterMethod(classNode, "setSkinChatHead", FieldMapping.NETWORKPLAYERINFO$MWE$SKIN);
 
         // add method :
         // public void mwe$onFinishedSkinLoading() {
@@ -37,6 +35,9 @@ public class NetworkPlayerInfoTransformer_ChatHeads implements MWETransformer {
         //      this.mwe$skin = null;
         //     }
         // }
+
+        final String SKIN_FIELD_NAME = FieldMapping.NETWORKPLAYERINFO$MWE$SKIN.name;
+        final String SKIN_FIELD_DESC = FieldMapping.NETWORKPLAYERINFO$MWE$SKIN.desc;
 
         final MethodVisitor mv = classNode.visitMethod(ACC_PUBLIC, "mwe$onFinishedSkinLoading", "()V", null, null);
         mv.visitCode();

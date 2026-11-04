@@ -26,7 +26,7 @@ public class EntityOtherPlayerMPTransformer_LeatherArmor implements MWETransform
                         INVOKESTATIC,
                         getHookClass("mc/entity/EntityOtherPlayerMPHook_LeatherArmor"),
                         "getLeatherArmor",
-                        "(" + ClassMapping.ENTITYOTHERPLAYERMP.desc() + "I" + ClassMapping.ITEMSTACK.desc() + ")" + ClassMapping.ITEMSTACK.desc() + "",
+                        "(" + ClassMapping.ENTITYOTHERPLAYERMP.desc() + "I" + ClassMapping.ITEMSTACK.desc() + ")" + ClassMapping.ITEMSTACK.desc(),
                         false
                 ));
                 list.add(new VarInsnNode(ASTORE, 2));

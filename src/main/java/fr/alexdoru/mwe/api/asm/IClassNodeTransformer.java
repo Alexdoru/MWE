@@ -106,30 +106,32 @@ public interface IClassNodeTransformer extends Opcodes {
         return new FieldInsnNode(opcode, field.owner(), field.fieldName(), field.desc());
     }
 
-    default void addGetterAndSetterMethod(ClassNode classNode, String methodName, IFieldInfo field, String methodSignature) {
-        addGetterMethod(classNode, "get" + methodName, field, methodSignature);
-        addSetterMethod(classNode, "set" + methodName, field, methodSignature);
+    /* ========= ASM getter/setter methods ========= */
+
+    default void addGetterAndSetterMethod(ClassNode classNode, String methodName, IFieldInfo field) {
+        addGetterMethod(classNode, "get" + methodName, field);
+        addSetterMethod(classNode, "set" + methodName, field);
     }
 
-    default void addGetterAndSetterMethod(ClassNode classNode, String methodName, IClassInfo owner, String fieldName, String fieldDesc, String methodSignature) {
-        addGetterMethod(classNode, "get" + methodName, owner.internalName(), fieldName, fieldDesc, methodSignature);
-        addSetterMethod(classNode, "set" + methodName, owner.internalName(), fieldName, fieldDesc, methodSignature);
+    default void addGetterAndSetterMethod(ClassNode classNode, String methodName, IClassInfo owner, String fieldName, String fieldDesc) {
+        addGetterMethod(classNode, "get" + methodName, owner.internalName(), fieldName, fieldDesc, null);
+        addSetterMethod(classNode, "set" + methodName, owner.internalName(), fieldName, fieldDesc, null);
+    }
+
+    default void addGetterMethod(ClassNode classNode, String methodName, IFieldInfo field) {
+        addGetterMethod(classNode, methodName, field.owner(), field.fieldName(), field.desc(), null);
     }
 
     default void addGetterMethod(ClassNode classNode, String methodName, IFieldInfo field, String methodSignature) {
         addGetterMethod(classNode, methodName, field.owner(), field.fieldName(), field.desc(), methodSignature);
     }
 
-    default void addGetterMethod(ClassNode classNode, String methodName, IClassInfo owner, String fieldName, String fieldDesc, String methodSignature) {
-        addGetterMethod(classNode, methodName, owner.internalName(), fieldName, fieldDesc, methodSignature);
+    default void addSetterMethod(ClassNode classNode, String methodName, IFieldInfo field) {
+        addSetterMethod(classNode, methodName, field.owner(), field.fieldName(), field.desc(), null);
     }
 
     default void addSetterMethod(ClassNode classNode, String methodName, IFieldInfo field, String methodSignature) {
         addSetterMethod(classNode, methodName, field.owner(), field.fieldName(), field.desc(), methodSignature);
-    }
-
-    default void addSetterMethod(ClassNode classNode, String methodName, IClassInfo owner, String fieldName, String fieldDesc, String methodSignature) {
-        addSetterMethod(classNode, methodName, owner.internalName(), fieldName, fieldDesc, methodSignature);
     }
 
     /**

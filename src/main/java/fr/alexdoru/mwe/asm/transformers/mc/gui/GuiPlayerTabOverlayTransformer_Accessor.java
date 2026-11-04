@@ -16,7 +16,7 @@ public class GuiPlayerTabOverlayTransformer_Accessor implements MWETransformer {
     public void transform(ClassNode classNode, InjectionCallback status) {
         status.setInjectionPoints(0);
         addInterface(classNode, "GuiPlayerTabOverlayAccessor");
-        addGetterMethod(classNode, "mwe$isBeingRendered", FieldMapping.GUIPLAYERTABOVERLAY$ISBEINGRENDERED, null);
+        addGetterMethod(classNode, "mwe$isBeingRendered", FieldMapping.GUIPLAYERTABOVERLAY$ISBEINGRENDERED);
     }
 
 }

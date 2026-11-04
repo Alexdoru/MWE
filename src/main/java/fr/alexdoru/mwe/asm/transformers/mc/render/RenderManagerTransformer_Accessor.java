@@ -16,7 +16,7 @@ public class RenderManagerTransformer_Accessor implements MWETransformer {
     public void transform(ClassNode classNode, InjectionCallback status) {
         status.setInjectionPoints(0);
         addInterface(classNode, "RenderManagerAccessor");
-        addGetterMethod(classNode, "isRenderOutlines", FieldMapping.RENDERMANAGER$RENDEROUTLINES, null);
+        addGetterMethod(classNode, "isRenderOutlines", FieldMapping.RENDERMANAGER$RENDEROUTLINES);
     }
 
 }

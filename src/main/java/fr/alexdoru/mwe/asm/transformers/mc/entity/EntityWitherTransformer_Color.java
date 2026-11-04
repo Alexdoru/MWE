@@ -18,7 +18,7 @@ public class EntityWitherTransformer_Color implements MWETransformer {
         addInterface(classNode, "IWitherColor");
         final String colorFieldName = "mwe$witherColor";
         classNode.visitField(ACC_PRIVATE, colorFieldName, "I", null, 0);
-        addGetterAndSetterMethod(classNode, "mwe$Color", ClassMapping.ENTITYWITHER, colorFieldName, "I", null);
+        addGetterAndSetterMethod(classNode, "mwe$Color", ClassMapping.ENTITYWITHER, colorFieldName, "I");
     }
 
 }

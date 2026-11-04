@@ -65,7 +65,7 @@ public class RenderManagerTransformer_Hitboxes implements MWETransformer {
                                 INVOKESTATIC,
                                 getHookClass("mc/render/RenderManagerHook_Hitboxes"),
                                 "getAxisAlignedBB",
-                                "(" + ClassMapping.AXISALIGNEDBB.desc() + ClassMapping.ENTITY.desc() + ")" + ClassMapping.AXISALIGNEDBB.desc() + "",
+                                "(" + ClassMapping.AXISALIGNEDBB.desc() + ClassMapping.ENTITY.desc() + ")" + ClassMapping.AXISALIGNEDBB.desc(),
                                 false
                         ));
                         methodNode.instructions.insert(insnNode, list);

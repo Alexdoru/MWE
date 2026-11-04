@@ -22,10 +22,10 @@ public class EntityPlayerTransformer_Accessor implements MWETransformer {
         classNode.visitField(ACC_PRIVATE, TEAM_COLOR_FIELD_NAME, "C", null, '\0');
         classNode.visitField(ACC_PRIVATE, TEAM_COLOR_INT_FIELD_NAME, "I", null, 0xFFFFFF); // HEX int to do white color
         classNode.visitField(ACC_PRIVATE, FieldMapping.ENTITYPLAYER$MWCLASS.name, FieldMapping.ENTITYPLAYER$MWCLASS.desc, null, null);
-        addGetterAndSetterMethod(classNode, "PlayerTeamColor", ClassMapping.ENTITYPLAYER, TEAM_COLOR_FIELD_NAME, "C", null);
-        addGetterAndSetterMethod(classNode, "PlayerSpecialRenderColor", ClassMapping.ENTITYPLAYER, TEAM_COLOR_INT_FIELD_NAME, "I", null);
-        addGetterAndSetterMethod(classNode, "MWClass", FieldMapping.ENTITYPLAYER$MWCLASS, null);
-        addGetterMethod(classNode, "getPlayerDataSamples", FieldMapping.ENTITYPLAYER$PLAYERDATASAMPLES, null);
+        addGetterAndSetterMethod(classNode, "PlayerTeamColor", ClassMapping.ENTITYPLAYER, TEAM_COLOR_FIELD_NAME, "C");
+        addGetterAndSetterMethod(classNode, "PlayerSpecialRenderColor", ClassMapping.ENTITYPLAYER, TEAM_COLOR_INT_FIELD_NAME, "I");
+        addGetterAndSetterMethod(classNode, "MWClass", FieldMapping.ENTITYPLAYER$MWCLASS);
+        addGetterMethod(classNode, "getPlayerDataSamples", FieldMapping.ENTITYPLAYER$PLAYERDATASAMPLES);
         status.setInjectionPoints(1);
         for (final MethodNode methodNode : classNode.methods) {
             if (isConstructorMethod(methodNode)) {

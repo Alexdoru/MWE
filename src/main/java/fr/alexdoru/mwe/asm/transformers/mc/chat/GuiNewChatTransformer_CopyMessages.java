@@ -51,7 +51,7 @@ public class GuiNewChatTransformer_CopyMessages implements MWETransformer {
                                     INVOKESTATIC,
                                     getHookClass("mc/chat/GuiNewChatHook_CopyMessages"),
                                     "setText",
-                                    "(" + ClassMapping.CHATLINE.desc() + ClassMapping.ICHATCOMPONENT.desc() + ")" + ClassMapping.CHATLINE.desc() + "",
+                                    "(" + ClassMapping.CHATLINE.desc() + ClassMapping.ICHATCOMPONENT.desc() + ")" + ClassMapping.CHATLINE.desc(),
                                     false
                             ));
                         } else {
@@ -59,7 +59,7 @@ public class GuiNewChatTransformer_CopyMessages implements MWETransformer {
                                     INVOKESTATIC,
                                     getHookClass("mc/chat/GuiNewChatHook_CopyMessages"),
                                     "setText1",
-                                    "(" + ClassMapping.CHATLINE.desc() + ")" + ClassMapping.CHATLINE.desc() + "",
+                                    "(" + ClassMapping.CHATLINE.desc() + ")" + ClassMapping.CHATLINE.desc(),
                                     false
                             ));
                         }

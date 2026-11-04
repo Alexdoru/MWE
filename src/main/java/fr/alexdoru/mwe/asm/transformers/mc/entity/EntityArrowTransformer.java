@@ -21,20 +21,17 @@ public class EntityArrowTransformer implements MWETransformer {
         addGetterMethod(
                 classNode,
                 "mwe$isInGround",
-                FieldMapping.ENTITYARROW$ISINGROUND,
-                null
+                FieldMapping.ENTITYARROW$ISINGROUND
         );
         addGetterMethod(
                 classNode,
                 "mwe$PinnedEntity",
-                FieldMapping.ENTITYARROW$PINNEDENTITY,
-                null
+                FieldMapping.ENTITYARROW$PINNEDENTITY
         );
         addGetterMethod(
                 classNode,
                 "mwe$isPinnedToEntity",
-                FieldMapping.ENTITYARROW$PINNEDTOENTITY,
-                null
+                FieldMapping.ENTITYARROW$PINNEDTOENTITY
         );
     }
 

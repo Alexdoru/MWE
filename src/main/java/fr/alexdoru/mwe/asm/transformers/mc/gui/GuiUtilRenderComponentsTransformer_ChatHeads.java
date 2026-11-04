@@ -35,7 +35,7 @@ public class GuiUtilRenderComponentsTransformer_ChatHeads implements MWETransfor
                                     INVOKESTATIC,
                                     getHookClass("mc/gui/GuiUtilRenderComponentsHook_ChatHeads"),
                                     "getStarterChatComponent",
-                                    "(" + ClassMapping.CHATCOMPONENTTEXT.desc() + ClassMapping.ICHATCOMPONENT.desc() + ")" + ClassMapping.CHATCOMPONENTTEXT.desc() + "",
+                                    "(" + ClassMapping.CHATCOMPONENTTEXT.desc() + ClassMapping.ICHATCOMPONENT.desc() + ")" + ClassMapping.CHATCOMPONENTTEXT.desc(),
                                     false
                             ));
                             methodNode.instructions.insert(insnNode, list);
