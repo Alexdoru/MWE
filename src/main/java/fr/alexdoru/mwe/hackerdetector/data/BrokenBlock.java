@@ -13,7 +13,7 @@ public class BrokenBlock {
     public final BlockPos blockPos;
     public final long breakTime;
     public final String tool;
-    public List<EntityPlayer> playerList = null;
+    private List<EntityPlayer> playerList = null;
 
     public BrokenBlock(Block block, BlockPos blockPos, String tool) {
         this.block = block;
@@ -27,6 +27,10 @@ public class BrokenBlock {
             this.playerList = new ArrayList<>();
         }
         this.playerList.add(player);
+    }
+
+    public List<EntityPlayer> playerList() {
+        return playerList;
     }
 
 }

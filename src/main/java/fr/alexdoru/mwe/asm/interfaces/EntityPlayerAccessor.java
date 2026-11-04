@@ -6,6 +6,8 @@ import fr.alexdoru.mwe.hackerdetector.data.PlayerDataSamples;
 
 public interface EntityPlayerAccessor extends IPlayerInfoAccessor {
 
+    void setPlayerDataSamples(PlayerDataSamples data);
+
     PlayerDataSamples getPlayerDataSamples();
 
     void setPlayerTeamColor(char color);

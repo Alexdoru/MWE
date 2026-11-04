@@ -8,7 +8,7 @@ import net.minecraft.entity.EntityLivingBase;
 public class EntityLivingBaseHook_RotationTracker {
 
     public static void setRotationYawHead(EntityLivingBase entity, float yawHead) {
-        if (MWEConfig.hackerDetector && entity instanceof EntityPlayerAccessor) {
+        if (MWEConfig.hackerDetector && entity.worldObj.isRemote && entity instanceof EntityPlayerAccessor) {
             MWE.INSTANCE().getHackerDetector().addScheduledTask(() ->
                     ((EntityPlayerAccessor) entity).getPlayerDataSamples().setRotationYawHead(yawHead)
             );

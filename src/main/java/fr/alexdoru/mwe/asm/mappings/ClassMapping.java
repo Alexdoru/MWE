@@ -89,6 +89,7 @@ public enum ClassMapping implements IClassInfo {
     TEAM("auq", "net/minecraft/scoreboard/Team"),
     TESSELLATOR("bfx", "net/minecraft/client/renderer/Tessellator"),
     THREADQUICKEXITEXCEPTION("ki", "net/minecraft/network/ThreadQuickExitException"),
+    WORLD("adm", "net/minecraft/world/World"),
     WORLDCLIENT("bdb", "net/minecraft/client/multiplayer/WorldClient"),
     WORLDRENDERER("bfd", "net/minecraft/client/renderer/WorldRenderer"),
     WORLDSETTINGS$GAMETYPE("adp$a", "net/minecraft/world/WorldSettings$GameType");

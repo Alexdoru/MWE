@@ -6,6 +6,7 @@ import fr.alexdoru.mwe.asm.MWELoadingPlugin;
 import fr.alexdoru.mwe.chat.ChatHandler;
 import fr.alexdoru.mwe.data.PlayerDataManager;
 import fr.alexdoru.mwe.features.LeatherArmorManager;
+import fr.alexdoru.mwe.hackerdetector.HackerDetector;
 import fr.alexdoru.mwe.nocheaters.ReportQueue;
 import fr.alexdoru.mwe.nocheaters.WarningMessageHandler;
 import fr.alexdoru.mwe.utils.SoundUtil;
@@ -1168,6 +1169,11 @@ public final class MWEConfig {
             name = "Hacker Detector",
             comment = "Analyses movements and actions of players around you")
     public static volatile boolean hackerDetector = true;
+
+    @ConfigPropertyEvent(name = "Hacker Detector")
+    private static void onHackerDetectorSetting() {
+        HackerDetector.onSettingChange();
+    }
 
     @ConfigProperty(
             category = HACKER_DETECTOR, subCategory = "Flags",

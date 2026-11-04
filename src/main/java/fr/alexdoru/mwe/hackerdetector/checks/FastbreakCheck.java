@@ -116,10 +116,10 @@ public class FastbreakCheck extends Check {
         final Minecraft mc = Minecraft.getMinecraft();
         if (isCheckActive() && mc.theWorld != null && mc.thePlayer != null && mc.theWorld.isRemote) {
             for (final BrokenBlock brokenBlock : this.brokenBlocksList) {
-                if (brokenBlock.playerList == null) continue;
+                if (brokenBlock.playerList() == null) continue;
                 long oldestTime = System.currentTimeMillis();
                 EntityPlayer playerBreaking = null;
-                for (final EntityPlayer player : brokenBlock.playerList) {
+                for (final EntityPlayer player : brokenBlock.playerList()) {
                     if (player instanceof EntityPlayerAccessor) {
                         final PlayerDataSamples data = ((EntityPlayerAccessor) player).getPlayerDataSamples();
                         if (data.lastBreakBlockTime - oldestTime < 0) {

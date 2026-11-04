@@ -121,6 +121,14 @@ public class HackerDetector {
 
     }
 
+    public static void onSettingChange() {
+        final Minecraft mc = Minecraft.getMinecraft();
+        if (mc.theWorld == null) return;
+        for (final EntityPlayer player : mc.theWorld.playerEntities) {
+            ((EntityPlayerAccessor) player).setPlayerDataSamples(MWEConfig.hackerDetector ? new PlayerDataSamples() : null);
+        }
+    }
+
     public static boolean isValidPlayer(UUID uuid) {
         final int v = uuid.version();
         if (ScoreboardTracker.isReplayMode()) {
