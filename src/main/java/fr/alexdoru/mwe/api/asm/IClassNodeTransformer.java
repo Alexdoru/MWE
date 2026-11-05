@@ -114,6 +114,14 @@ public interface IClassNodeTransformer extends Opcodes {
         classNode.visitField(access, fieldName, fieldDesc, null, null);
     }
 
+    default void insertAfterLabel(MethodNode methodNode, LabelNode label, InsnList list) {
+        AbstractInsnNode insn = label;
+        while (insn.getNext() instanceof LineNumberNode || insn.getNext() instanceof FrameNode) {
+            insn = insn.getNext();
+        }
+        methodNode.instructions.insert(insn, list);
+    }
+
     /* ========= ASM getter/setter methods ========= */
 
     default void addGetterAndSetterMethod(ClassNode classNode, String methodName, IFieldInfo field) {
