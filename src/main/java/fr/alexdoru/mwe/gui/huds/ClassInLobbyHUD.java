@@ -11,6 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.network.NetworkPlayerInfo;
+import net.minecraft.scoreboard.ScorePlayerTeam;
 
 import java.util.*;
 
@@ -85,6 +86,7 @@ public class ClassInLobbyHUD extends AbstractRenderer {
             map.clear();
         }
         for (final NetworkPlayerInfo netInfo : Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap()) {
+            if (isSpectator(netInfo)) continue;
             final MWTeam team = MWTeam.ofPlayer(netInfo);
             final MWSkin defaultSkin = this.getDefaultSkin(netInfo);
             if (team != null && defaultSkin != null) {
@@ -99,12 +101,19 @@ public class ClassInLobbyHUD extends AbstractRenderer {
     private void updateClassData() {
         final Map<MWSkin, Integer> map = new HashMap<>();
         for (final NetworkPlayerInfo netInfo : Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap()) {
+            if (isSpectator(netInfo)) continue;
             final MWSkin defaultSkin = this.getDefaultSkin(netInfo);
             if (defaultSkin != null) {
                 map.merge(defaultSkin, 1, Integer::sum);
             }
         }
         this.allClassList = this.getSortedEntries(map);
+    }
+
+    private boolean isSpectator(NetworkPlayerInfo netInfo) {
+        final ScorePlayerTeam team = netInfo.getPlayerTeam();
+        if (team == null) return false;
+        return team.getColorPrefix().indexOf('✖') > -1;
     }
 
     private List<Map.Entry<MWSkin, String>> getSortedEntries(Map<MWSkin, Integer> map) {
