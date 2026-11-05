@@ -18,11 +18,11 @@ public class ClassInLobbyHUD extends AbstractRenderer {
 
     private final TimerUtil timer = new TimerUtil(1000L);
 
-    private final List<Map.Entry<MWSkin, Integer>> dummyAllClassList;
-    private List<Map.Entry<MWSkin, Integer>> allClassList = new ArrayList<>();
+    private final List<Map.Entry<MWSkin, String>> dummyAllClassList;
+    private List<Map.Entry<MWSkin, String>> allClassList = new ArrayList<>();
 
     private final MWTeam[] teams;
-    private final List<Map.Entry<MWSkin, Integer>>[] perTeamRenderList;
+    private final List<Map.Entry<MWSkin, String>>[] perTeamRenderList;
     private final Map<MWSkin, Integer>[] perTeamData;
 
     @SuppressWarnings("unchecked")
@@ -107,18 +107,22 @@ public class ClassInLobbyHUD extends AbstractRenderer {
         this.allClassList = this.getSortedEntries(map);
     }
 
-    private List<Map.Entry<MWSkin, Integer>> getSortedEntries(Map<MWSkin, Integer> map) {
+    private List<Map.Entry<MWSkin, String>> getSortedEntries(Map<MWSkin, Integer> map) {
         if (map.isEmpty()) {
             return Collections.emptyList();
         }
-        return MapUtil.sortByKey(map);
+        final Map<MWSkin, String> stringMap = new HashMap<>();
+        for (final Map.Entry<MWSkin, Integer> entry : map.entrySet()) {
+            stringMap.put(entry.getKey(), entry.getValue().toString());
+        }
+        return MapUtil.sortByKey(stringMap);
     }
 
     private void renderTeamHUD() {
         final Minecraft mc = Minecraft.getMinecraft();
         int y = this.rendererPosition.getAbsoluteRenderY();
         for (int i = 0; i < this.perTeamRenderList.length; i++) {
-            final List<Map.Entry<MWSkin, Integer>> teamData = this.perTeamRenderList[i];
+            final List<Map.Entry<MWSkin, String>> teamData = this.perTeamRenderList[i];
             if (teamData.isEmpty()) continue;
             int x = this.rendererPosition.getAbsoluteRenderX();
             final String label = getTeamDisplayName(i);
@@ -129,14 +133,14 @@ public class ClassInLobbyHUD extends AbstractRenderer {
         }
     }
 
-    private void renderClassHUD(List<Map.Entry<MWSkin, Integer>> list) {
+    private void renderClassHUD(List<Map.Entry<MWSkin, String>> list) {
         final int perLine = 5;
         final int x = this.rendererPosition.getAbsoluteRenderX();
         final int y = this.rendererPosition.getAbsoluteRenderY();
         drawClassListAt(Minecraft.getMinecraft().fontRendererObj, x, y, list, perLine);
     }
 
-    private void drawClassListAt(FontRenderer fr, final int x, final int y, List<Map.Entry<MWSkin, Integer>> list, final int perLine) {
+    private void drawClassListAt(FontRenderer fr, final int x, final int y, List<Map.Entry<MWSkin, String>> list, final int perLine) {
         final int size = list.size();
 
         int drawX = x;
@@ -145,11 +149,11 @@ public class ClassInLobbyHUD extends AbstractRenderer {
         int index = 0;
 
         while (col < perLine && index < size) {
-            final Map.Entry<MWSkin, Integer> entry = list.get(index);
+            final Map.Entry<MWSkin, String> entry = list.get(index);
             final int drawY = y + (index / perLine) * fr.FONT_HEIGHT;
 
             RenderUtil.renderSkinHead(entry.getKey().getSkin(), drawX, drawY, true, 8);
-            final String text = entry.getValue().toString();
+            final String text = entry.getValue();
             maxWidth = Math.max(maxWidth, fr.getStringWidth(text));
             fr.drawStringWithShadow(text, drawX + 8 + 1, drawY, 0xFFFFFF);
 
