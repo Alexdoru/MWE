@@ -293,6 +293,7 @@ public final class MWEConfig {
     @ConfigProperty(
             category = VANILLA, subCategory = "Tablist",
             name = "Hide Header Footer only in MW",
+            dependsOn = "Hide Header Footer Tablist",
             comment = "Hides the header and footer text only when playing Mega Walls")
     public static boolean hideTablistHeaderFooterOnlyInMW;
 
