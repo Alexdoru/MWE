@@ -16,7 +16,7 @@ public class GuiPlayerTabOverlayTransformer_ClassInFooter extends GuiPlayerTabOv
     @Override
     public void transform(ClassNode classNode, InjectionCallback status) {
         status.setInjectionPoints(2);
-        final int listIndex = injectAfterHeaderCheck(classNode, status, FieldMapping.GUIPLAYERTABOVERLAY$FOOTER, "GuiPlayerTabOverlayHook_ClassInFooter");
+        final int listIndex = injectAfterHeaderCheck(classNode, status, FieldMapping.GUIPLAYERTABOVERLAY$FOOTER, "GuiPlayerTabOverlayHook_ClassCount");
         if (listIndex == -1) {
             return;
         }
@@ -32,7 +32,7 @@ public class GuiPlayerTabOverlayTransformer_ClassInFooter extends GuiPlayerTabOv
                         list.add(new VarInsnNode(ILOAD, 1));
                         list.add(new MethodInsnNode(
                                 INVOKESTATIC,
-                                getHookClass("mc/gui/GuiPlayerTabOverlayHook_ClassInFooter"),
+                                getHookClass("mc/gui/GuiPlayerTabOverlayHook_ClassCount"),
                                 "drawString",
                                 "(" + ClassMapping.FONTRENDERER.desc() + "Ljava/lang/String;FFII)I",
                                 false

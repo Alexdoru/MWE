@@ -6,7 +6,7 @@ import fr.alexdoru.mwe.gui.huds.*;
 public final class MWERenderers {
 
     public final ArrowHitHUD arrowHitHUD;
-    public final ClassInLobbyHUD classInLobbyHUD;
+    public final ClassCountHUD classCountHUD;
     public final CreeperPrimedTntHUD creeperPrimedTntHUD;
     public final FKCounterHUD fkCounterHUD;
     public final StrengthHUD strengthHUD;
@@ -20,7 +20,7 @@ public final class MWERenderers {
         rendererManager.registerHUDRenderer(new ArmorHUD());
         rendererManager.registerHUDRenderer(arrowHitHUD = new ArrowHitHUD());
         rendererManager.registerHUDRenderer(new BaseLocationHUD());
-        rendererManager.registerHUDRenderer(classInLobbyHUD = new ClassInLobbyHUD());
+        rendererManager.registerHUDRenderer(classCountHUD = new ClassCountHUD());
         rendererManager.registerHUDRenderer(creeperPrimedTntHUD = new CreeperPrimedTntHUD());
         rendererManager.registerHUDRenderer(new EnergyDisplayHUD());
         rendererManager.registerHUDRenderer(fkCounterHUD = new FKCounterHUD());

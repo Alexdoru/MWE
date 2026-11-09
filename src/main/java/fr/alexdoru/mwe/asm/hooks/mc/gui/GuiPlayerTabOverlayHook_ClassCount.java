@@ -1,7 +1,7 @@
 package fr.alexdoru.mwe.asm.hooks.mc.gui;
 
 import fr.alexdoru.mwe.MWE;
-import fr.alexdoru.mwe.gui.huds.ClassInLobbyHUD;
+import fr.alexdoru.mwe.gui.huds.ClassCountHUD;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.MathHelper;
 import org.jetbrains.annotations.Nullable;
@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GuiPlayerTabOverlayHook_ClassInFooter {
+public class GuiPlayerTabOverlayHook_ClassCount {
 
     private static final String PLACEHOLDER = "mwe$placeholder";
 
@@ -18,7 +18,7 @@ public class GuiPlayerTabOverlayHook_ClassInFooter {
 
     @Nullable
     public static List<String> modifyList(@Nullable List<String> listIn) {
-        final ClassInLobbyHUD classyHUD = MWE.INSTANCE().getMweRenderers().classInLobbyHUD;
+        final ClassCountHUD classyHUD = MWE.INSTANCE().getMweRenderers().classCountHUD;
         if (classyHUD.isTabDisplayEnabled()) {
             classyHUD.updateData();
             final int lines = classyHUD.getLinesCount();
@@ -43,7 +43,7 @@ public class GuiPlayerTabOverlayHook_ClassInFooter {
             if (skipDraw) {
                 return 0;
             }
-            MWE.INSTANCE().getMweRenderers().classInLobbyHUD.renderAt((width - textWidth) / 2, MathHelper.floor_float(y));
+            MWE.INSTANCE().getMweRenderers().classCountHUD.renderAt((width - textWidth) / 2, MathHelper.floor_float(y));
             skipDraw = true;
             return 0;
         }

@@ -910,30 +910,30 @@ public final class MWEConfig {
 
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "HUD",
-            name = "Class in lobby HUD",
-            comment = "Displays the amounts of each class in the current Mega Walls lobby")
-    public static final RendererPosition classInLobbyHUDPosition = new RendererPosition(true, 0.15d, 0.15d);
+            name = "Class count HUD",
+            comment = "Displays the amounts of each class in the current lobby")
+    public static final RendererPosition classCountHUDPosition = new RendererPosition(true, 0.15d, 0.15d);
 
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "HUD",
-            name = "Display Class HUD in tablist",
-            dependsOn = "Class in lobby HUD",
-            comment = "Displays the class HUD at the bottom of the tablist")
-    public static boolean classInLobbyHUDOnlyInTablist = true;
+            name = "Display class count in tablist",
+            dependsOn = "Class count HUD",
+            comment = "Displays the class counts at the bottom of the tablist")
+    public static boolean classCountHUDOnlyInTablist = true;
 
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "HUD",
-            name = "Display Class HUD during games",
-            dependsOn = "Class in lobby HUD",
-            comment = "Also renders the HUD when ingame")
-    public static boolean classInLobbyHUDDuringGames = true;
+            name = "Display class count during games",
+            dependsOn = "Class count HUD",
+            comment = "Also displays the HUD when ingame")
+    public static boolean classCountHUDDuringGames = true;
 
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "HUD",
-            name = "Display class amounts per team",
-            dependsOn = "Display Class HUD during games",
-            comment = "During games it will display the classes in each team")
-    public static boolean classInLobbyHUDPerTeamDisplay = true;
+            name = "Display class counts per team",
+            dependsOn = "Display class count during games",
+            comment = "During games it will display the class counts per team")
+    public static boolean classCountHUDPerTeamDisplay = true;
 
     @ConfigProperty(
             category = FINAL_KILL_COUNTER, subCategory = "Chat",

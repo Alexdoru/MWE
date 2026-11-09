@@ -14,7 +14,7 @@ import net.minecraft.scoreboard.ScorePlayerTeam;
 
 import java.util.*;
 
-public class ClassInLobbyHUD extends AbstractRenderer {
+public class ClassCountHUD extends AbstractRenderer {
 
     private static final int PER_LINE_HEADS = 9;
 
@@ -28,8 +28,8 @@ public class ClassInLobbyHUD extends AbstractRenderer {
     private final Map<MWSkin, Integer>[] perTeamData;
 
     @SuppressWarnings("unchecked")
-    public ClassInLobbyHUD() {
-        super(MWEConfig.classInLobbyHUDPosition);
+    public ClassCountHUD() {
+        super(MWEConfig.classCountHUDPosition);
         final Map<MWSkin, Integer> map = new HashMap<>();
         map.put(MWSkin.DREADLORD$DREADLORD, 10);
         map.put(MWSkin.ENDERMAN$ENDERMAN, 5);
@@ -84,19 +84,19 @@ public class ClassInLobbyHUD extends AbstractRenderer {
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        return !MWEConfig.classInLobbyHUDOnlyInTablist && this.isEnabled();
+        return !MWEConfig.classCountHUDOnlyInTablist && this.isEnabled();
     }
 
     private boolean isEnabled() {
-        return this.rendererPosition.isEnabled() && (this.parser.isPreGameLobby() || MWEConfig.classInLobbyHUDDuringGames && (this.parser.isInMwGame() || this.parser.isMWReplay()));
+        return this.rendererPosition.isEnabled() && (this.parser.isPreGameLobby() || MWEConfig.classCountHUDDuringGames && (this.parser.isInMwGame() || this.parser.isMWReplay()));
     }
 
     public boolean isTabDisplayEnabled() {
-        return MWEConfig.classInLobbyHUDOnlyInTablist && this.isEnabled();
+        return MWEConfig.classCountHUDOnlyInTablist && this.isEnabled();
     }
 
     private boolean showPerTeamHud() {
-        return MWEConfig.classInLobbyHUDPerTeamDisplay && (this.parser.isInMwGame() || this.parser.isMWReplay());
+        return MWEConfig.classCountHUDPerTeamDisplay && (this.parser.isInMwGame() || this.parser.isMWReplay());
     }
 
     public int getLinesCount() {
