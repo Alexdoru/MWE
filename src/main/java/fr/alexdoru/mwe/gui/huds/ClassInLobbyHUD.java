@@ -4,7 +4,6 @@ import fr.alexdoru.mwe.api.enums.MWSkin;
 import fr.alexdoru.mwe.api.enums.MWTeam;
 import fr.alexdoru.mwe.api.utils.MapUtil;
 import fr.alexdoru.mwe.api.utils.RenderUtil;
-import fr.alexdoru.mwe.asm.interfaces.GuiPlayerTabOverlayAccessor;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.utils.TimerUtil;
 import net.minecraft.client.Minecraft;
@@ -16,6 +15,8 @@ import net.minecraft.scoreboard.ScorePlayerTeam;
 import java.util.*;
 
 public class ClassInLobbyHUD extends AbstractRenderer {
+
+    private static final int PER_LINE_HEADS = 9;
 
     private final TimerUtil timer = new TimerUtil(1000L);
 
@@ -49,36 +50,84 @@ public class ClassInLobbyHUD extends AbstractRenderer {
 
     @Override
     public void render(ScaledResolution resolution) {
-        final boolean showPerTeam = MWEConfig.classInLobbyHUDPerTeamDisplay && (this.parser.isInMwGame() || this.parser.isMWReplay());
+        this.updateData();
+        this.rendererPosition.updateAbsolutePosition(resolution);
+        final int x = this.rendererPosition.getAbsoluteRenderX();
+        final int y = this.rendererPosition.getAbsoluteRenderY();
+        this.renderAt(x, y);
+    }
+
+    public void updateData() {
         if (this.timer.update()) {
-            if (showPerTeam) {
+            if (this.showPerTeamHud()) {
                 this.updatePerTeamData();
             } else {
                 this.updateClassData();
             }
         }
-        this.rendererPosition.updateAbsolutePosition(resolution);
-        if (showPerTeam) {
-            this.renderTeamHUD();
+    }
+
+    public void renderAt(int x, int y) {
+        if (this.showPerTeamHud()) {
+            this.renderTeamHUD(x, y);
         } else {
-            this.renderClassHUD(this.allClassList);
+            this.renderClassHUD(this.allClassList, x, y);
         }
     }
 
     @Override
     public void renderDummy() {
-        this.renderClassHUD(this.dummyAllClassList);
+        final int x = this.rendererPosition.getAbsoluteRenderX();
+        final int y = this.rendererPosition.getAbsoluteRenderY();
+        this.renderClassHUD(this.dummyAllClassList, x, y);
     }
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        return this.rendererPosition.isEnabled()
-                && (this.parser.isPreGameLobby() || MWEConfig.classInLobbyHUDDuringGames && (this.parser.isInMwGame() || this.parser.isMWReplay()))
-                && (!MWEConfig.classInLobbyHUDOnlyInTablist || isTablistDisplayed());
+        return !MWEConfig.classInLobbyHUDOnlyInTablist && this.isEnabled();
     }
 
-    private boolean isTablistDisplayed() {
-        return ((GuiPlayerTabOverlayAccessor) Minecraft.getMinecraft().ingameGUI.getTabList()).mwe$isBeingRendered();
+    private boolean isEnabled() {
+        return this.rendererPosition.isEnabled() && (this.parser.isPreGameLobby() || MWEConfig.classInLobbyHUDDuringGames && (this.parser.isInMwGame() || this.parser.isMWReplay()));
+    }
+
+    public boolean isTabDisplayEnabled() {
+        return MWEConfig.classInLobbyHUDOnlyInTablist && this.isEnabled();
+    }
+
+    private boolean showPerTeamHud() {
+        return MWEConfig.classInLobbyHUDPerTeamDisplay && (this.parser.isInMwGame() || this.parser.isMWReplay());
+    }
+
+    public int getLinesCount() {
+        if (this.showPerTeamHud()) {
+            int count = 0;
+            for (int i = 0; i < this.teams.length; i++) {
+                if (!this.perTeamRenderList[i].isEmpty()) count++;
+            }
+            return count;
+        } else {
+            final int size = this.allClassList.size();
+            if (size == 0) {
+                return 0;
+            }
+            return size / PER_LINE_HEADS + (size % PER_LINE_HEADS == 0 ? 0 : 1);
+        }
+    }
+
+    public int getWidth() {
+        final FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
+        final int singleWidth = 8 + 1 + fr.getStringWidth("1") + 1;
+        if (this.showPerTeamHud()) {
+            int width = 0;
+            for (int i = 0; i < this.teams.length; i++) {
+                width = Math.max(width, this.perTeamRenderList[i].size() * singleWidth);
+            }
+            final int header = fr.getStringWidth(getTeamDisplayName(0));
+            return width + header;
+        } else {
+            return Math.min(this.allClassList.size(), PER_LINE_HEADS) * singleWidth;
+        }
     }
 
     private void updatePerTeamData() {
@@ -93,7 +142,7 @@ public class ClassInLobbyHUD extends AbstractRenderer {
                 this.perTeamData[team.ordinal()].merge(defaultSkin, 1, Integer::sum);
             }
         }
-        for (int i = 0; i < this.perTeamData.length; i++) {
+        for (int i = 0; i < this.teams.length; i++) {
             this.perTeamRenderList[i] = this.getSortedEntries(this.perTeamData[i]);
         }
     }
@@ -127,26 +176,22 @@ public class ClassInLobbyHUD extends AbstractRenderer {
         return MapUtil.sortByKey(stringMap);
     }
 
-    private void renderTeamHUD() {
+    private void renderTeamHUD(int x, int y) {
         final Minecraft mc = Minecraft.getMinecraft();
-        int y = this.rendererPosition.getAbsoluteRenderY();
         for (int i = 0; i < this.perTeamRenderList.length; i++) {
             final List<Map.Entry<MWSkin, String>> teamData = this.perTeamRenderList[i];
             if (teamData.isEmpty()) continue;
-            int x = this.rendererPosition.getAbsoluteRenderX();
+            int drawX = x;
             final String label = getTeamDisplayName(i);
-            mc.fontRendererObj.drawStringWithShadow(label, x, y, 0xFFFFFF);
-            x += mc.fontRendererObj.getStringWidth(label) + 4;
-            drawClassListAt(mc.fontRendererObj, x, y, teamData, 100);
+            mc.fontRendererObj.drawStringWithShadow(label, drawX, y, 0xFFFFFF);
+            drawX += mc.fontRendererObj.getStringWidth(label) + 4;
+            drawClassListAt(mc.fontRendererObj, drawX, y, teamData, 100);
             y += mc.fontRendererObj.FONT_HEIGHT;
         }
     }
 
-    private void renderClassHUD(List<Map.Entry<MWSkin, String>> list) {
-        final int perLine = 5;
-        final int x = this.rendererPosition.getAbsoluteRenderX();
-        final int y = this.rendererPosition.getAbsoluteRenderY();
-        drawClassListAt(Minecraft.getMinecraft().fontRendererObj, x, y, list, perLine);
+    private void renderClassHUD(List<Map.Entry<MWSkin, String>> list, int x, int y) {
+        this.drawClassListAt(Minecraft.getMinecraft().fontRendererObj, x, y, list, PER_LINE_HEADS);
     }
 
     private void drawClassListAt(FontRenderer fr, final int x, final int y, List<Map.Entry<MWSkin, String>> list, final int perLine) {

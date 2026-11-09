@@ -916,17 +916,17 @@ public final class MWEConfig {
 
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "HUD",
-            name = "Display Class HUD with tablist",
+            name = "Display Class HUD in tablist",
             dependsOn = "Class in lobby HUD",
-            comment = "Displays the class HUD only when the tablist is displayed")
-    public static boolean classInLobbyHUDOnlyInTablist;
+            comment = "Displays the class HUD at the bottom of the tablist")
+    public static boolean classInLobbyHUDOnlyInTablist = true;
 
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "HUD",
             name = "Display Class HUD during games",
             dependsOn = "Class in lobby HUD",
             comment = "Also renders the HUD when ingame")
-    public static boolean classInLobbyHUDDuringGames;
+    public static boolean classInLobbyHUDDuringGames = true;
 
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "HUD",
