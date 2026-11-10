@@ -181,7 +181,7 @@ public interface IClassNodeTransformer extends Opcodes {
             case "I":
             case "Z":
                 return IRETURN;
-            case "L":
+            case "J":
                 return LRETURN;
             default:
                 return ARETURN;
