@@ -41,6 +41,10 @@ public final class RenderHelper {
     }
 
     public static void renderLabelInWorld(String label, double x, double y, double z, float partialTicks) {
+        renderLabelInWorld(label, x, y, z, partialTicks, 1F);
+    }
+
+    public static void renderLabelInWorld(String label, double x, double y, double z, float partialTicks, float size) {
 
         final Minecraft mc = Minecraft.getMinecraft();
         final EntityPlayer player = mc.thePlayer;
@@ -60,7 +64,7 @@ public final class RenderHelper {
         final float viewX = (mc.gameSettings.thirdPersonView == 2 ? -1 : 1) * mc.getRenderManager().playerViewX;
         GlStateManager.rotate(-mc.getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
         GlStateManager.rotate(viewX, 1.0F, 0.0F, 0.0F);
-        final float scale = 0.016666668F * 1.6F;
+        final float scale = 0.016666668F * 1.6F * size;
         GlStateManager.scale(-scale, -scale, scale);
         GlStateManager.disableLighting();
         GlStateManager.depthMask(false);

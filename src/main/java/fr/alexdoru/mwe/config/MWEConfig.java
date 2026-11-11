@@ -800,6 +800,19 @@ public final class MWEConfig {
 
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "Render",
+            name = "Base location labels",
+            comment = "Displays the location of each base in the world while holding a compass")
+    public static boolean baseLocationLabels = true;
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "Render",
+            name = "Base labels during deathmatch",
+            dependsOn = "Base location labels",
+            comment = "Displays the base location labels during deathmatch")
+    public static boolean baseLocationLabelsInDeathmatch = true;
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "Render",
             name = "Render wither outline",
             comment = "Renders a colored outline around withers\n"
                     + "§cThis doesn't work with Optifine's Fast Render")
