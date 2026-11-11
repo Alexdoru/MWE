@@ -41,6 +41,7 @@ public class ConfigGuiScreen extends GuiScreen {
     private String selectedCategory = "";
     private SliderGuiButton lastInteractedSlider;
     private OverlayConfigGuiButton lastInteractedOverlay;
+    private KeybindGuiButton listeningKeybind;
 
     private final Scrollbar configScrollbar = new Scrollbar();
     private final Scrollbar categoryScrollbar = new Scrollbar();
@@ -169,6 +170,7 @@ public class ConfigGuiScreen extends GuiScreen {
         this.configScrollbar.init(lastConfigScroll, this.getConfigContentHeight(), CONFIG_BOX.getHeight());
 
         this.lastInteractedSlider = null;
+        this.stopListeningKeybind();
         if (this.lastInteractedOverlay != null) {
             this.lastInteractedOverlay.closeOverlay();
             this.lastInteractedOverlay = null;
@@ -243,6 +245,11 @@ public class ConfigGuiScreen extends GuiScreen {
 
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+        if (listeningKeybind != null) {
+            listeningKeybind.setKeyCode(mouseButton - 100);
+            listeningKeybind = null;
+            return;
+        }
         final MouseButton button = MouseButton.from(mouseButton);
         if (lastInteractedOverlay != null) {
             try {
@@ -273,6 +280,11 @@ public class ConfigGuiScreen extends GuiScreen {
                             final OverlayConfigGuiButton overlay = (OverlayConfigGuiButton) element;
                             if (overlay.isOverlayOpen()) {
                                 lastInteractedOverlay = overlay;
+                            }
+                        } else if (element instanceof KeybindGuiButton) {
+                            final KeybindGuiButton keybindButton = (KeybindGuiButton) element;
+                            if (keybindButton.isListening()) {
+                                listeningKeybind = keybindButton;
                             }
                         }
                         return true;
@@ -308,6 +320,11 @@ public class ConfigGuiScreen extends GuiScreen {
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
+        if (listeningKeybind != null) {
+            listeningKeybind.onKeyTyped(typedChar, keyCode);
+            listeningKeybind = null;
+            return;
+        }
         if (lastInteractedOverlay != null) {
             if (keyCode == Keyboard.KEY_ESCAPE) {
                 lastInteractedOverlay.closeOverlay();
@@ -406,6 +423,7 @@ public class ConfigGuiScreen extends GuiScreen {
         }
         this.configScrollbar.resetScroll();
         this.lastInteractedSlider = null;
+        this.stopListeningKeybind();
         this.rebuildRenderedElementList();
     }
 
@@ -416,7 +434,15 @@ public class ConfigGuiScreen extends GuiScreen {
         }
         this.configScrollbar.resetScroll();
         this.lastInteractedSlider = null;
+        this.stopListeningKeybind();
         this.rebuildRenderedElementList();
+    }
+
+    private void stopListeningKeybind() {
+        if (this.listeningKeybind != null) {
+            this.listeningKeybind.stopListening();
+            this.listeningKeybind = null;
+        }
     }
 
     public void rebuildRenderedElementList() {

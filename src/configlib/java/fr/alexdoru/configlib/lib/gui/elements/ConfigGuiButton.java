@@ -7,6 +7,7 @@ import fr.alexdoru.configlib.lib.gui.ConfigGuiScreen;
 import fr.alexdoru.configlib.lib.gui.GuiUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 
 import java.lang.reflect.Field;
@@ -107,6 +108,10 @@ public abstract class ConfigGuiButton implements ConfigUIElement {
 
     protected final void playPressSound() {
         this.mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F));
+    }
+
+    protected static String getSwitchButtonText(boolean toggled) {
+        return toggled ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled";
     }
 
 }

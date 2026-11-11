@@ -4,7 +4,6 @@ import fr.alexdoru.configlib.api.ColorPalette;
 import fr.alexdoru.configlib.lib.ConfigFieldContainer;
 import fr.alexdoru.configlib.lib.gui.ConfigGuiScreen;
 import fr.alexdoru.configlib.lib.gui.MouseButton;
-import net.minecraft.util.EnumChatFormatting;
 
 public class BooleanGuiButton extends ConfigGuiButton {
 
@@ -16,7 +15,7 @@ public class BooleanGuiButton extends ConfigGuiButton {
         super(container);
         this.configGuiScreen = configGuiScreen;
         this.toggled = (boolean) this.field.get(null);
-        this.button = new ClickGuiButton(mc.fontRendererObj.getStringWidth(" Disabled "), 20, getButtonText());
+        this.button = new ClickGuiButton(mc.fontRendererObj.getStringWidth(" Disabled "), 20, getSwitchButtonText(toggled));
     }
 
     @Override
@@ -31,7 +30,7 @@ public class BooleanGuiButton extends ConfigGuiButton {
     public boolean mouseClicked(int mouseX, int mouseY, MouseButton mouseButton) throws IllegalAccessException {
         if (mouseButton.isLeft() && button.mousePressed(mouseX, mouseY)) {
             flipBooleanConfig();
-            button.displayString = getButtonText();
+            button.displayString = getSwitchButtonText(toggled);
             toggleDependencies(this.configGuiScreen);
             return true;
         }
@@ -42,10 +41,6 @@ public class BooleanGuiButton extends ConfigGuiButton {
         field.set(null, !((boolean) this.field.get(null)));
         toggled = (boolean) this.field.get(null);
         invokeConfigEvent();
-    }
-
-    private String getButtonText() {
-        return toggled ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled";
     }
 
 }

@@ -4,9 +4,11 @@ import fr.alexdoru.configlib.api.ConfigProperty;
 import fr.alexdoru.configlib.api.RendererPosition;
 import fr.alexdoru.configlib.lib.gui.ConfigGuiScreen;
 import fr.alexdoru.configlib.lib.gui.elements.*;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -53,6 +55,8 @@ public final class ConfigFieldContainer {
             return FieldType.DOUBLE;
         } else if (field.getType() == int.class) {
             return FieldType.INT;
+        } else if (field.getType() == KeyBinding.class) {
+            return FieldType.KEYBIND;
         } else if (field.getType() == EnumChatFormatting.class) {
             return FieldType.ENUM_COLOR;
         } else if (Enum.class.isAssignableFrom(field.getType())) {
@@ -94,6 +98,12 @@ public final class ConfigFieldContainer {
             }
             case INT: {
                 propertyMap.put(this.getKey(), config.get(annotation.category(), annotation.name(), (int) field.get(null)));
+                break;
+            }
+            case KEYBIND: {
+                final KeyBinding keyBinding = (KeyBinding) field.get(null);
+                Objects.requireNonNull(keyBinding, "Keybinding fields must not be null");
+                ClientRegistry.registerKeyBinding(keyBinding);
                 break;
             }
             case ENUM_COLOR: {
@@ -150,6 +160,9 @@ public final class ConfigFieldContainer {
                 field.setInt(null, this.getProp().getInt());
                 break;
             }
+            case KEYBIND: {
+                break;
+            }
             case ENUM_COLOR: {
                 EnumChatFormatting value = this.getEnumValue(this.getProp().getString());
                 if (value == null || !value.isColor()) {
@@ -203,6 +216,9 @@ public final class ConfigFieldContainer {
             }
             case INT: {
                 this.getProp().set((int) field.get(null));
+                break;
+            }
+            case KEYBIND: {
                 break;
             }
             case ENUM_COLOR: {
@@ -265,6 +281,9 @@ public final class ConfigFieldContainer {
                 } else {
                     return new SliderGuiButton(this);
                 }
+            }
+            case KEYBIND: {
+                return new KeybindGuiButton(this);
             }
             case ENUM_COLOR: {
                 return new ColorEnumGuiButton(this, configGuiScreen);
@@ -343,6 +362,7 @@ public final class ConfigFieldContainer {
         BOOLEAN,
         DOUBLE,
         INT,
+        KEYBIND,
         ENUM_COLOR,
         ENUM,
         STRING_LIST

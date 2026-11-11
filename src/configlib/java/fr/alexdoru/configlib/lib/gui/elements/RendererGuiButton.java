@@ -7,7 +7,6 @@ import fr.alexdoru.configlib.lib.RendererManager;
 import fr.alexdoru.configlib.lib.gui.ConfigGuiScreen;
 import fr.alexdoru.configlib.lib.gui.MouseButton;
 import fr.alexdoru.configlib.lib.gui.RendererEditGuiScreen;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 
 public class RendererGuiButton extends ConfigGuiButton {
@@ -25,7 +24,7 @@ public class RendererGuiButton extends ConfigGuiButton {
         this.rendererManager = rendererManager;
         this.rendererPosition = ((RendererPosition) field.get(null));
         this.toggled = this.rendererPosition.isEnabled();
-        this.buttonEnabled = new ClickGuiButton(mc.fontRendererObj.getStringWidth(" Disabled "), 20, getButtonText());
+        this.buttonEnabled = new ClickGuiButton(mc.fontRendererObj.getStringWidth(" Disabled "), 20, this.getSwitchButtonText(toggled));
         this.buttonMoveHud = new ClickGuiButton(20, 20);
         this.buttonMoveHud.setTexture(new ResourceLocation("configlib", "move.png"));
     }
@@ -60,7 +59,7 @@ public class RendererGuiButton extends ConfigGuiButton {
         if (mouseButton.isLeft()) {
             if (buttonEnabled.mousePressed(mouseX, mouseY)) {
                 flipBooleanConfig();
-                buttonEnabled.displayString = getButtonText();
+                buttonEnabled.displayString = this.getSwitchButtonText(toggled);
                 toggleDependencies(this.parentScreen);
                 return true;
             } else if (buttonMoveHud.mousePressed(mouseX, mouseY)) {
@@ -75,10 +74,6 @@ public class RendererGuiButton extends ConfigGuiButton {
         rendererPosition.setEnabled(!rendererPosition.isEnabled());
         toggled = rendererPosition.isEnabled();
         invokeConfigEvent();
-    }
-
-    private String getButtonText() {
-        return toggled ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled";
     }
 
 }
