@@ -2,29 +2,23 @@ package fr.alexdoru.mwe.gui.huds;
 
 import fr.alexdoru.mwe.config.MWEConfig;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.EnumChatFormatting;
 
-public class SpeedHUD extends AbstractRenderer {
+public class SpeedHUD extends SimpleTextRenderer {
 
     public SpeedHUD() {
         super(MWEConfig.speedHUDPosition);
+        this.setDummyText(EnumChatFormatting.GREEN + "Speed: " + EnumChatFormatting.WHITE + "5.65m/s");
     }
 
     @Override
-    public void render(ScaledResolution resolution) {
+    protected void updateText() {
         final Minecraft mc = Minecraft.getMinecraft();
         final double vX = mc.thePlayer.motionX;
         final double vZ = mc.thePlayer.motionZ;
         final double velocity = Math.sqrt(vX * vX + vZ * vZ) * 20d;
-        final String displayText = "Speed: " + EnumChatFormatting.WHITE + String.format("%.2f", velocity) + "m/s";
-        this.rendererPosition.updateAdjustedAbsolutePosition(resolution, mc.fontRendererObj.getStringWidth(displayText), mc.fontRendererObj.FONT_HEIGHT);
-        mc.fontRendererObj.drawStringWithShadow(displayText, this.rendererPosition.getAbsoluteRenderX(), this.rendererPosition.getAbsoluteRenderY(), MWEConfig.speedHUDColor);
-    }
-
-    @Override
-    public void renderDummy() {
-        Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow("Speed: " + EnumChatFormatting.WHITE + "5.65m/s", this.rendererPosition.getAbsoluteRenderX(), this.rendererPosition.getAbsoluteRenderY(), MWEConfig.speedHUDColor);
+        this.setText("Speed: " + EnumChatFormatting.WHITE + String.format("%.2f", velocity) + "m/s");
+        this.setColor(MWEConfig.speedHUDColor);
     }
 
     @Override

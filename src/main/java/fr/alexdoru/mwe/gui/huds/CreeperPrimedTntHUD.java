@@ -1,14 +1,12 @@
 package fr.alexdoru.mwe.gui.huds;
 
 import fr.alexdoru.mwe.config.MWEConfig;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class CreeperPrimedTntHUD extends AbstractRenderer {
+public class CreeperPrimedTntHUD extends SimpleTextRenderer {
 
     private static final Pattern CREEPER_FISSION_HEART_PATTERN = Pattern.compile("^§a§lFISSION HEART §c§l([0-9])s");
     private long timeStartRender;
@@ -18,20 +16,15 @@ public class CreeperPrimedTntHUD extends AbstractRenderer {
 
     public CreeperPrimedTntHUD() {
         super(MWEConfig.creeperTNTHUDPosition);
+        this.setCentered();
+        this.setDummyText(EnumChatFormatting.GREEN + "Tnt " + EnumChatFormatting.RED + "3.0s");
     }
 
     @Override
-    public void render(ScaledResolution resolution) {
-        this.rendererPosition.updateAbsolutePosition(resolution);
-        final long temp = (timeStartRender + renderDuration - System.currentTimeMillis());
-        final String timeLeft = String.format("%.1f", (float) temp / 1000);
-        final String displayText = EnumChatFormatting.GREEN + "Tnt " + (colorPrefix + timeLeft + "s");
-        drawCenteredString(Minecraft.getMinecraft().fontRendererObj, displayText, this.rendererPosition.getAbsoluteRenderX(), this.rendererPosition.getAbsoluteRenderY(), 0xFFFFFF);
-    }
-
-    @Override
-    public void renderDummy() {
-        drawCenteredString(Minecraft.getMinecraft().fontRendererObj, EnumChatFormatting.GREEN + "Tnt " + EnumChatFormatting.RED + "3.0s", this.rendererPosition.getAbsoluteRenderX(), this.rendererPosition.getAbsoluteRenderY(), 0xFFFFFF);
+    protected void updateText() {
+        final long msLeft = timeStartRender + renderDuration - System.currentTimeMillis();
+        final String timeLeft = String.format("%.1f", (float) msLeft / 1000);
+        this.setText(EnumChatFormatting.GREEN + "Tnt " + colorPrefix + timeLeft + "s");
     }
 
     @Override

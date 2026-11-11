@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,6 +17,7 @@ import java.util.List;
 
 public class PotionHUD extends AbstractRenderer {
 
+    private static final ResourceLocation INVENTORY_BACKGROUND = new ResourceLocation("textures/gui/container/inventory.png");
     private final List<PotionEffect> dummyList = new ArrayList<>();
 
     public PotionHUD() {
@@ -107,7 +109,7 @@ public class PotionHUD extends AbstractRenderer {
             final Potion potion = Potion.potionTypes[potioneffect.getPotionID()];
             if (potion.hasStatusIcon()) {
                 GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-                mc.getTextureManager().bindTexture(inventoryBackground);
+                mc.getTextureManager().bindTexture(INVENTORY_BACKGROUND);
                 final int index = potion.getStatusIconIndex();
                 GlStateManager.translate(xDrawPots, yDrawPots, 0d);
                 GlStateManager.scale(1.5d, 1.5d, 1.5d);

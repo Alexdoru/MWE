@@ -8,13 +8,11 @@ import fr.alexdoru.mwe.api.events.WitherHealthDecayEvent;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.TimerUtil;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public class KillCooldownHUD extends AbstractRenderer {
+public class KillCooldownHUD extends SimpleTextRenderer {
 
     private final TimerUtil timerKillCooldown = new TimerUtil(60000L);
     private MWTeam ownTeam;
@@ -23,12 +21,13 @@ public class KillCooldownHUD extends AbstractRenderer {
 
     public KillCooldownHUD() {
         super(MWEConfig.killCooldownHUDPosition);
+        this.setDummyText(EnumChatFormatting.DARK_RED + "/kill cooldown : 60s");
         MinecraftForge.EVENT_BUS.register(this);
     }
 
     @SubscribeEvent
     public void onSentMessage(ChatMessageSentEvent event) {
-        if (this.getPosition().isEnabled() && ScoreboardTracker.isInMwGame()) {
+        if (this.getPosition().isEnabled() && this.parser.isInMwGame()) {
             final String message = event.message.toLowerCase();
             if (message.equals("/kill") || message.startsWith("/kill ")) {
                 if (timerKillCooldown.update()) {
@@ -56,27 +55,20 @@ public class KillCooldownHUD extends AbstractRenderer {
         }
     }
 
-    public void hideHUD() {
-        lastkilltime = 0;
-    }
-
     @Override
-    public void render(ScaledResolution resolution) {
-        final FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
+    protected void updateText() {
         final int timeleft = 60 - ((int) (System.currentTimeMillis() - lastkilltime)) / 1000;
-        final String displayText = "/kill cooldown : " + timeleft + "s";
-        this.rendererPosition.updateAdjustedAbsolutePosition(resolution, fr.getStringWidth(displayText), fr.FONT_HEIGHT);
-        fr.drawStringWithShadow(displayText, this.rendererPosition.getAbsoluteRenderX(), this.rendererPosition.getAbsoluteRenderY(), MWEConfig.killCooldownHUDColor);
-    }
-
-    @Override
-    public void renderDummy() {
-        Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow("/kill cooldown : 60s", this.rendererPosition.getAbsoluteRenderX(), this.rendererPosition.getAbsoluteRenderY(), MWEConfig.killCooldownHUDColor);
+        this.setText("/kill cooldown : " + timeleft + "s");
+        this.setColor(MWEConfig.killCooldownHUDColor);
     }
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        return currentTimeMillis - lastkilltime < 60000L && ScoreboardTracker.isInMwGame();
+        return currentTimeMillis - lastkilltime < 60000L && this.parser.isInMwGame();
+    }
+
+    public void hideHUD() {
+        lastkilltime = 0;
     }
 
 }

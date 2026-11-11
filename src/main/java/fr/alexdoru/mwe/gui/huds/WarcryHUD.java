@@ -2,11 +2,7 @@ package fr.alexdoru.mwe.gui.huds;
 
 import fr.alexdoru.mwe.api.events.MegaWallsGameEvent;
 import fr.alexdoru.mwe.config.MWEConfig;
-import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiGameOver;
-import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -15,49 +11,47 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class WarcryHUD extends AbstractRenderer {
+public class WarcryHUD extends SimpleTextRenderer {
 
     private static final String WARCRY_AVAILABLE_MESSAGE = "Your warcry is now available!";
     private static final Pattern WARCRY_COOLDOWN_PATTERN = Pattern.compile("^You can use your warcry again in (\\d+)m (\\d+)s!$");
     private static final Pattern WARCRY_ACTIVATION_PATTERN = Pattern.compile("^You performed the (?:\\w+ )+warcry!$");
     private long activationTime;
-    private String displayText = "";
 
     public WarcryHUD() {
         super(MWEConfig.warcryHUDPosition);
+        this.setCentered();
+        this.setDummyText(EnumChatFormatting.RED + "4m 15s");
         MinecraftForge.EVENT_BUS.register(this);
     }
 
-    @Override
-    public void render(ScaledResolution resolution) {
-        final FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
-        this.rendererPosition.updateAdjustedAbsolutePosition(resolution, fr.getStringWidth(displayText), fr.FONT_HEIGHT);
-        drawCenteredString(fr, this.displayText, this.rendererPosition.getAbsoluteRenderX(), this.rendererPosition.getAbsoluteRenderY(), 0xFFFFFF);
+    @SubscribeEvent
+    public void onMWEvent(MegaWallsGameEvent event) {
+        if (event.type == MegaWallsGameEvent.Type.DEATHMATCH_START) {
+            this.activationTime = 0;
+        }
+    }
+
+    @SubscribeEvent
+    public void onGuiScreen(GuiScreenEvent.InitGuiEvent.Pre event) {
+        if (event.gui instanceof GuiGameOver) {
+            this.activationTime = 0;
+        }
     }
 
     @Override
-    public void renderDummy() {
-        drawCenteredString(Minecraft.getMinecraft().fontRendererObj, EnumChatFormatting.RED + "4m 15s", this.rendererPosition.getAbsoluteRenderX(), this.rendererPosition.getAbsoluteRenderY(), 0xFFFFFF);
+    protected void updateText() {
+        final long currentTimeMillis = System.currentTimeMillis();
+        if (this.activationTime + 30L * 1000L > currentTimeMillis) {
+            this.setText(EnumChatFormatting.GREEN + formatTime(this.activationTime + 30L * 1000L - currentTimeMillis));
+        } else {
+            this.setText(EnumChatFormatting.RED + formatTime(this.activationTime + 5L * 60L * 1000L - currentTimeMillis));
+        }
     }
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        if (this.rendererPosition.isEnabled() && ScoreboardTracker.isInMwGame()) {
-            return updateDisplayText(currentTimeMillis);
-        }
-        return false;
-    }
-
-    private boolean updateDisplayText(long currentTimeMillis) {
-        if (this.activationTime + 5L * 60L * 1000L > currentTimeMillis) {
-            if (this.activationTime + 30L * 1000L > currentTimeMillis) {
-                this.displayText = EnumChatFormatting.GREEN + formatTime(this.activationTime + 30L * 1000L - currentTimeMillis);
-                return true;
-            }
-            this.displayText = EnumChatFormatting.RED + formatTime(this.activationTime + 5L * 60L * 1000L - currentTimeMillis);
-            return true;
-        }
-        return false;
+        return this.rendererPosition.isEnabled() && this.parser.isInMwGame() && this.activationTime + 5L * 60L * 1000L > currentTimeMillis;
     }
 
     private static String formatTime(long millisec) {
@@ -84,20 +78,6 @@ public class WarcryHUD extends AbstractRenderer {
             return true;
         }
         return false;
-    }
-
-    @SubscribeEvent
-    public void onMWEvent(MegaWallsGameEvent event) {
-        if (event.type == MegaWallsGameEvent.Type.DEATHMATCH_START) {
-            this.activationTime = 0;
-        }
-    }
-
-    @SubscribeEvent
-    public void onGuiScreen(GuiScreenEvent.InitGuiEvent.Pre event) {
-        if (event.gui instanceof GuiGameOver) {
-            this.activationTime = 0;
-        }
     }
 
 }

@@ -6,7 +6,6 @@ import fr.alexdoru.mwe.api.utils.MapUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.features.FinalKillCounter;
 import fr.alexdoru.mwe.features.SquadHandler;
-import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
@@ -113,7 +112,7 @@ public class FKCounterHUD extends AbstractRenderer {
     public boolean isEnabled(long currentTimeMillis) {
         return !MWEConfig.fkcounterHUDinSidebar
                 && this.rendererPosition.isEnabled()
-                && ScoreboardTracker.isInMwGame()
+                && this.parser.isInMwGame()
                 && MWE.INSTANCE().getFinalKillCounter() != null;
     }
 

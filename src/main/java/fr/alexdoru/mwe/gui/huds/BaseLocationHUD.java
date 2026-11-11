@@ -3,43 +3,35 @@ package fr.alexdoru.mwe.gui.huds;
 import fr.alexdoru.mwe.api.enums.MWMap;
 import fr.alexdoru.mwe.api.events.MapEvent;
 import fr.alexdoru.mwe.config.MWEConfig;
-import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public class BaseLocationHUD extends AbstractRenderer {
+public class BaseLocationHUD extends SimpleTextRenderer {
 
     private MWMap currentMap;
 
     public BaseLocationHUD() {
         super(MWEConfig.baseLocationHUDPosition);
+        this.setCentered();
+        this.setDummyText(EnumChatFormatting.GREEN + "GREEN");
         MinecraftForge.EVENT_BUS.register(this);
-    }
-
-    @Override
-    public void render(ScaledResolution resolution) {
-        final Minecraft mc = Minecraft.getMinecraft();
-        final String text = currentMap.getPlayerBaseLocation(mc.thePlayer);
-        this.rendererPosition.updateAdjustedAbsolutePosition(resolution, mc.fontRendererObj.getStringWidth(text), mc.fontRendererObj.FONT_HEIGHT);
-        drawCenteredString(mc.fontRendererObj, text, this.rendererPosition.getAbsoluteRenderX(), this.rendererPosition.getAbsoluteRenderY(), 0xFFFFFF);
-    }
-
-    @Override
-    public void renderDummy() {
-        drawCenteredString(Minecraft.getMinecraft().fontRendererObj, EnumChatFormatting.GREEN + "GREEN", this.rendererPosition.getAbsoluteRenderX(), this.rendererPosition.getAbsoluteRenderY(), 0xFFFFFF);
-    }
-
-    @Override
-    public boolean isEnabled(long currentTimeMillis) {
-        return this.rendererPosition.isEnabled() && (ScoreboardTracker.isInMwGame() || ScoreboardTracker.isMWReplay()) && this.currentMap != null;
     }
 
     @SubscribeEvent
     public void onMapEvent(MapEvent event) {
         currentMap = MWMap.fromName(event.mapName);
+    }
+
+    @Override
+    protected void updateText() {
+        this.setText(currentMap.getPlayerBaseLocation(Minecraft.getMinecraft().thePlayer));
+    }
+
+    @Override
+    public boolean isEnabled(long currentTimeMillis) {
+        return this.rendererPosition.isEnabled() && (this.parser.isInMwGame() || this.parser.isMWReplay()) && this.currentMap != null;
     }
 
 }

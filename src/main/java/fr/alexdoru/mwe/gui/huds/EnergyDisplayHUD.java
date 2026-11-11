@@ -1,23 +1,26 @@
 package fr.alexdoru.mwe.gui.huds;
 
 import fr.alexdoru.mwe.config.MWEConfig;
-import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class EnergyDisplayHUD extends AbstractRenderer {
+public class EnergyDisplayHUD extends SimpleTextRenderer {
 
     private static final Set<Item> VALID_ITEMS = new HashSet<>();
 
     private long timeStartRender;
     private int prevEnergyValue;
+    private boolean hasEnergyToDisplay;
 
     static {
         VALID_ITEMS.add(Items.diamond_sword);
@@ -29,53 +32,45 @@ public class EnergyDisplayHUD extends AbstractRenderer {
 
     public EnergyDisplayHUD() {
         super(MWEConfig.energyHUDPosition);
+        this.setCentered();
+        this.setDummyText(EnumChatFormatting.AQUA + EnumChatFormatting.BOLD.toString() + 100);
+        MinecraftForge.EVENT_BUS.register(this);
     }
 
-    @Override
-    public void render(ScaledResolution resolution) {
-        final Minecraft mc = Minecraft.getMinecraft();
-        final ItemStack itemStack = mc.thePlayer.getHeldItem();
-        if (itemStack == null) {
+    @SubscribeEvent
+    public void onTick(TickEvent.ClientTickEvent event) {
+        if (event.phase != TickEvent.Phase.END || !this.isEnabled()) {
             return;
         }
-        final Item item = itemStack.getItem();
-        if (item == null) {
+        final EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+        if (player == null) {
             return;
         }
-        final int energy = mc.thePlayer.experienceLevel;
-        final long currentTime = System.currentTimeMillis();
-        if (VALID_ITEMS.contains(item)) {
-            if (energy != prevEnergyValue) {
-                this.timeStartRender = currentTime;
+        final ItemStack itemStack = player.getHeldItem();
+        final int energy = player.experienceLevel;
+        if (itemStack != null && VALID_ITEMS.contains(itemStack.getItem())) {
+            if (energy != this.prevEnergyValue) {
+                this.timeStartRender = System.currentTimeMillis();
             }
-            prevEnergyValue = energy;
+            this.prevEnergyValue = energy;
         }
-        if (energy == 0) {
-            return;
-        }
-        if (this.timeStartRender + 2500L - currentTime > 0L) {
-            this.rendererPosition.updateAbsolutePosition(resolution);
-            if (energy >= MWEConfig.highEnergyThreshold) {
-                drawCenteredString(mc.fontRendererObj, EnumChatFormatting.BOLD.toString() + energy, this.rendererPosition.getAbsoluteRenderX(), this.rendererPosition.getAbsoluteRenderY(), MWEConfig.highEnergyHUDColor);
-            } else {
-                drawCenteredString(mc.fontRendererObj, String.valueOf(energy), this.rendererPosition.getAbsoluteRenderX(), this.rendererPosition.getAbsoluteRenderY(), MWEConfig.lowEnergyHUDColor);
-            }
-        }
-    }
-
-    @Override
-    public void renderDummy() {
-        final int energy = 50;
+        this.hasEnergyToDisplay = itemStack != null && itemStack.getItem() != null && energy != 0;
         if (energy >= MWEConfig.highEnergyThreshold) {
-            drawCenteredString(Minecraft.getMinecraft().fontRendererObj, EnumChatFormatting.BOLD.toString() + energy, this.rendererPosition.getAbsoluteRenderX(), this.rendererPosition.getAbsoluteRenderY(), MWEConfig.highEnergyHUDColor);
+            this.setText(EnumChatFormatting.BOLD.toString() + energy);
+            this.setColor(MWEConfig.highEnergyHUDColor);
         } else {
-            drawCenteredString(Minecraft.getMinecraft().fontRendererObj, String.valueOf(energy), this.rendererPosition.getAbsoluteRenderX(), this.rendererPosition.getAbsoluteRenderY(), MWEConfig.lowEnergyHUDColor);
+            this.setText(String.valueOf(energy));
+            this.setColor(MWEConfig.lowEnergyHUDColor);
         }
     }
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        return this.rendererPosition.isEnabled() && ScoreboardTracker.isInMwGame();
+        return this.isEnabled() && this.hasEnergyToDisplay && this.timeStartRender + 2500L > currentTimeMillis;
+    }
+
+    private boolean isEnabled() {
+        return this.rendererPosition.isEnabled() && this.parser.isInMwGame();
     }
 
 }

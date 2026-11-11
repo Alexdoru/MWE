@@ -13,7 +13,7 @@ public class GuiIngameHook_CustomSidebarLines {
                 && MWEConfig.lastWitherHUDPosition.isEnabled()
                 && ScoreboardTracker.isInMwGame()
                 && ScoreboardTracker.getParser().isOnlyOneWitherAlive()) {
-            return MWE.INSTANCE().getMweRenderers().lastWitherHPHUD.getDisplayText();
+            return MWE.INSTANCE().getMweRenderers().lastWitherHPHUD.getText();
         }
         if (MWEConfig.fkcounterHUDinSidebar
                 && lineNumber == 12
@@ -30,7 +30,7 @@ public class GuiIngameHook_CustomSidebarLines {
                 && MWEConfig.lastWitherHUDPosition.isEnabled()
                 && ScoreboardTracker.isInMwGame()
                 && ScoreboardTracker.getParser().isOnlyOneWitherAlive()) {
-            width = Math.max(width, fontRenderer.getStringWidth(MWE.INSTANCE().getMweRenderers().lastWitherHPHUD.getDisplayText() + (redNumbers ? ": 12" : "")));
+            width = Math.max(width, fontRenderer.getStringWidth(MWE.INSTANCE().getMweRenderers().lastWitherHPHUD.getText() + (redNumbers ? ": 12" : "")));
         }
         if (MWEConfig.fkcounterHUDinSidebar
                 && MWEConfig.fkcounterHUDPosition.isEnabled()

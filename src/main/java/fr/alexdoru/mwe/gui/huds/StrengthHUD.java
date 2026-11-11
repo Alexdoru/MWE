@@ -3,15 +3,13 @@ package fr.alexdoru.mwe.gui.huds;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.utils.SoundUtil;
 import fr.alexdoru.mwe.utils.TimerUtil;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScaledResolution;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static net.minecraft.util.EnumChatFormatting.*;
 
-public class StrengthHUD extends AbstractRenderer {
+public class StrengthHUD extends SimpleTextRenderer {
 
     private static final Pattern DREADLORD_STRENGTH_PATTERN = Pattern.compile("§4§lSOUL SIPHON §c§l85% ([0-9])s");
     private static final Pattern HEROBRINE_STRENGTH_PATTERN = Pattern.compile("§e§lPOWER §c§l85% ([0-9])s");
@@ -27,19 +25,14 @@ public class StrengthHUD extends AbstractRenderer {
 
     public StrengthHUD() {
         super(MWEConfig.strengthHUDPosition);
+        this.setCentered();
+        this.setDummyText(DUMMY_TEXT);
     }
 
     @Override
-    public void render(ScaledResolution resolution) {
-        this.rendererPosition.updateAbsolutePosition(resolution);
+    protected void updateText() {
         final int timeLeft = (int) ((timeStartRender + renderDuration - System.currentTimeMillis()) / 1000L);
-        final String displayText = (isStrengthRender ? STRENGTH_TEXT : PRE_STRENGTH_TEXT) + timeLeft;
-        drawCenteredString(Minecraft.getMinecraft().fontRendererObj, displayText, this.rendererPosition.getAbsoluteRenderX(), this.rendererPosition.getAbsoluteRenderY(), 0xFFFFFF);
-    }
-
-    @Override
-    public void renderDummy() {
-        drawCenteredString(Minecraft.getMinecraft().fontRendererObj, DUMMY_TEXT, this.rendererPosition.getAbsoluteRenderX(), this.rendererPosition.getAbsoluteRenderY(), 0xFFFFFF);
+        this.setText((isStrengthRender ? STRENGTH_TEXT : PRE_STRENGTH_TEXT) + timeLeft);
     }
 
     @Override

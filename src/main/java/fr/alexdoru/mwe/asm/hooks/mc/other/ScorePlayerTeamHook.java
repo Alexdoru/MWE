@@ -12,7 +12,7 @@ public class ScorePlayerTeamHook {
                 && ScoreboardTracker.isInMwGame()
                 && "\ud83d\udca3".equals(playername)
                 && ScoreboardTracker.getParser().isOnlyOneWitherAlive()) {
-            return MWE.INSTANCE().getMweRenderers().lastWitherHPHUD.getDisplayText();
+            return MWE.INSTANCE().getMweRenderers().lastWitherHPHUD.getText();
         }
         if (MWEConfig.fkcounterHUDinSidebar
                 && MWEConfig.fkcounterHUDPosition.isEnabled()
