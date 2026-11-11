@@ -16,7 +16,7 @@ public class HypixelPlayerStatus {
     private String map;
 
     public HypixelPlayerStatus(UUID uuid) throws ApiException {
-        final JsonObject obj = HttpClient.getAsJsonObject("https://api.hypixel.net/status?uuid=" + uuid.toString());
+        final JsonObject obj = HttpClient.getAsJsonObject("https://api.hypixel.net/v2/status?uuid=" + uuid.toString());
         final JsonObject sessionobj = JsonUtil.getJsonObject(obj, "session");
         if (sessionobj == null) {
             throw new ApiException("Failed to retreive data from Hypixel's Api for this player");
