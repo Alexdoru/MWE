@@ -10,6 +10,8 @@ import net.minecraft.client.gui.GuiGameOver;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent.MouseInputEvent;
+import org.lwjgl.input.Mouse;
 
 public final class KeybindingListener {
 
@@ -17,6 +19,17 @@ public final class KeybindingListener {
 
     @SubscribeEvent
     public void onKeyInput(KeyInputEvent e) {
+        this.handleKeybinds();
+    }
+
+    @SubscribeEvent
+    public void onMouseInput(MouseInputEvent e) {
+        if (Mouse.getEventButtonState()) {
+            this.handleKeybinds();
+        }
+    }
+
+    private void handleKeybinds() {
 
         final Minecraft mc = Minecraft.getMinecraft();
 
