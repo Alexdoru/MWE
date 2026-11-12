@@ -100,7 +100,7 @@ public class HypixelPlayerStatus {
 
             case "MURDER_DOUBLE_UP":
                 return "Double up !";
-            case "MURDER_INFECTION	":
+            case "MURDER_INFECTION":
                 return "Infection v2";
             case "MURDER_ASSASSINS":
                 return "Assassins";

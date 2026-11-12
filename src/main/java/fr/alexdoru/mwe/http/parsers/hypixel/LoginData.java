@@ -155,6 +155,7 @@ public class LoginData {
                     return;
                 case "MVP":
                     this.formattedname = EnumChatFormatting.AQUA + "[MVP]" + " " + this.displayname;
+                    return;
                 case "MVP_PLUS":
                     this.formattedname = EnumChatFormatting.AQUA + "[MVP" + EnumChatFormatting.getValueByName(rankPlusColor) + "+" + EnumChatFormatting.AQUA + "]" + " " + this.displayname;
                     return;
