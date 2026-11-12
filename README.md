@@ -183,9 +183,9 @@ Allows you to customize the look of the f3+b hitboxes.
 - **Safe Inventory** - "Prevents hotkeying important kit items out of your inventory"
 - **Squad Halo Player** - Adds to the squad the player you give your halo to when playing the Angel class
 - **Wither alerts** - Plays an alert when a wither's health falls below a certain threshold
-- **Class in lobby HUD** - shows how many of each class is in the current lobby
+- **Class count HUD** - shows how many of each class is in the current lobby, can be displayed in the tablist and sorted per team
+- **Base location labels** - Displays the location of each base in the world while holding a compass
 - **Auto-Requeue** - automatically joins the next game of MW when your game ends
-- **Capture the flag** - adds a capture the flag minigame that spawns during pre-deathmatch
 - Notification at 5 mins before a game ends, and 10 seconds before the walls fall if you are not on the game
 - Shows class and kit in the chat message when you hit an arrow
 
