@@ -1,43 +1,22 @@
 package fr.alexdoru.mwe.events;
 
 import fr.alexdoru.mwe.MWE;
+import fr.alexdoru.mwe.api.IScoreboardParser;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGameOver;
-import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 
-public class KeybindingListener {
+public final class KeybindingListener {
 
-    private static final KeyBinding killKey = new KeyBinding("/Kill", 0, "MWE");
-    private static final KeyBinding surfaceKey = new KeyBinding("/Surface", 0, "MWE");
-    private static final KeyBinding echestKey = new KeyBinding("/enderchest", 0, "MWE");
-    private static final KeyBinding teamchestKey = new KeyBinding("/teamchest", 0, "MWE");
-    private static final KeyBinding toggleSprintKey = new KeyBinding("Toggle Sprint", 0, "MWE");
-    private static final KeyBinding warcryKey = new KeyBinding("/warcry", 0, "MWE");
-    private static final KeyBinding newNickKey = new KeyBinding("New Random Nick", 0, "MWE");
-    private static final KeyBinding playerHitboxes = new KeyBinding("Toggle player hitboxes", 0, "Hitboxes");
-    private static final KeyBinding toggleDroppedItemLimit = new KeyBinding("Toggle dropped item limit", 0, "MWE");
-
-    public KeybindingListener() {
-        ClientRegistry.registerKeyBinding(killKey);
-        ClientRegistry.registerKeyBinding(surfaceKey);
-        ClientRegistry.registerKeyBinding(echestKey);
-        ClientRegistry.registerKeyBinding(teamchestKey);
-        ClientRegistry.registerKeyBinding(toggleSprintKey);
-        ClientRegistry.registerKeyBinding(warcryKey);
-        ClientRegistry.registerKeyBinding(newNickKey);
-        ClientRegistry.registerKeyBinding(playerHitboxes);
-        ClientRegistry.registerKeyBinding(toggleDroppedItemLimit);
-    }
+    private final IScoreboardParser parser = ScoreboardTracker.getParser();
 
     @SubscribeEvent
-    public void key(KeyInputEvent e) {
+    public void onKeyInput(KeyInputEvent e) {
 
         final Minecraft mc = Minecraft.getMinecraft();
 
@@ -45,46 +24,54 @@ public class KeybindingListener {
             return;
         }
 
-        if (ScoreboardTracker.isInMwGame() && !ScoreboardTracker.isPrepPhase() && killKey.isPressed() && !(mc.currentScreen instanceof GuiGameOver)) {
+        if (MWEConfig.killKey.isPressed() && this.parser.isInMwGame() && !this.parser.isPrepPhase() && !(mc.currentScreen instanceof GuiGameOver)) {
             mc.thePlayer.sendChatMessage("/kill");
-        } else if (ScoreboardTracker.isPrepPhase() && surfaceKey.isPressed()) {
+        } else if (MWEConfig.surfaceKey.isPressed() && this.parser.isPrepPhase()) {
             mc.thePlayer.sendChatMessage("/surface");
-        } else if (ScoreboardTracker.isInMwGame() && echestKey.isPressed()) {
+        } else if (MWEConfig.echestKey.isPressed() && this.parser.isInMwGame()) {
             mc.thePlayer.sendChatMessage("/enderchest");
-        } else if (ScoreboardTracker.isInMwGame() && teamchestKey.isPressed()) {
+        } else if (MWEConfig.teamchestKey.isPressed() && this.parser.isInMwGame()) {
             mc.thePlayer.sendChatMessage("/teamchest");
-        } else if (toggleSprintKey.isPressed()) {
-            MWEConfig.toggleSprint = !MWEConfig.toggleSprint;
-            if (MWEConfig.toggleSprint) {
-                ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "Toggle Sprint On");
-            } else {
-                ChatUtil.addChatMessage(EnumChatFormatting.RED + "Toggle Sprint Off");
-            }
-            MWE.INSTANCE().getConfigHandler().saveConfig();
-        } else if (ScoreboardTracker.isInMwGame() && !ScoreboardTracker.isPrepPhase() && warcryKey.isPressed()) {
+        } else if (MWEConfig.warcryKey.isPressed() && this.parser.isInMwGame() && !this.parser.isPrepPhase()) {
             mc.thePlayer.sendChatMessage("/warcry");
-        } else if (toggleDroppedItemLimit.isPressed()) {
-            MWEConfig.limitDroppedEntityRendered = !MWEConfig.limitDroppedEntityRendered;
-            MWE.INSTANCE().getConfigHandler().saveConfig();
-            if (MWEConfig.limitDroppedEntityRendered) {
-                ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.YELLOW + "Limit dropped items rendered: " + EnumChatFormatting.GREEN + "On");
-            } else {
-                ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.YELLOW + "Limit dropped items rendered: " + EnumChatFormatting.RED + "Off");
-            }
-        } else if (playerHitboxes.isPressed()) {
-            MWEConfig.drawHitboxForPlayers = !MWEConfig.drawHitboxForPlayers;
-            MWE.INSTANCE().getConfigHandler().saveConfig();
-            if (MWEConfig.drawHitboxForPlayers) {
-                ChatUtil.addChatMessage(ChatUtil.getTagHitboxes() + EnumChatFormatting.WHITE + "Draw hitboxes for players: " + EnumChatFormatting.GREEN + "On");
-            } else {
-                ChatUtil.addChatMessage(ChatUtil.getTagHitboxes() + EnumChatFormatting.WHITE + "Draw hitboxes for players: " + EnumChatFormatting.RED + "Off");
-            }
+        } else if (MWEConfig.toggleSprintKey.isPressed()) {
+            this.toggleSprint();
+        } else if (MWEConfig.toggleDroppedItemLimit.isPressed()) {
+            this.toggleDroppedItemLimit();
+        } else if (MWEConfig.playerHitboxes.isPressed()) {
+            this.togglePlayerHitboxes();
         }
 
     }
 
-    public static KeyBinding getNewNickKey() {
-        return newNickKey;
+    private void toggleSprint() {
+        MWEConfig.toggleSprint = !MWEConfig.toggleSprint;
+        MWE.INSTANCE().getConfigHandler().saveConfig();
+        if (MWEConfig.toggleSprint) {
+            ChatUtil.addChatMessage(EnumChatFormatting.GREEN + "Toggle Sprint On");
+        } else {
+            ChatUtil.addChatMessage(EnumChatFormatting.RED + "Toggle Sprint Off");
+        }
+    }
+
+    private void toggleDroppedItemLimit() {
+        MWEConfig.limitDroppedEntityRendered = !MWEConfig.limitDroppedEntityRendered;
+        MWE.INSTANCE().getConfigHandler().saveConfig();
+        if (MWEConfig.limitDroppedEntityRendered) {
+            ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.YELLOW + "Limit dropped items rendered: " + EnumChatFormatting.GREEN + "On");
+        } else {
+            ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.YELLOW + "Limit dropped items rendered: " + EnumChatFormatting.RED + "Off");
+        }
+    }
+
+    private void togglePlayerHitboxes() {
+        MWEConfig.drawHitboxForPlayers = !MWEConfig.drawHitboxForPlayers;
+        MWE.INSTANCE().getConfigHandler().saveConfig();
+        if (MWEConfig.drawHitboxForPlayers) {
+            ChatUtil.addChatMessage(ChatUtil.getTagHitboxes() + EnumChatFormatting.WHITE + "Draw hitboxes for players: " + EnumChatFormatting.GREEN + "On");
+        } else {
+            ChatUtil.addChatMessage(ChatUtil.getTagHitboxes() + EnumChatFormatting.WHITE + "Draw hitboxes for players: " + EnumChatFormatting.RED + "Off");
+        }
     }
 
 }

@@ -11,11 +11,13 @@ import fr.alexdoru.mwe.nocheaters.ReportQueue;
 import fr.alexdoru.mwe.nocheaters.WarningMessageHandler;
 import fr.alexdoru.mwe.utils.SoundUtil;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.Loader;
+import org.lwjgl.input.Keyboard;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -231,8 +233,8 @@ public final class MWEConfig {
     @ConfigProperty(
             category = VANILLA, subCategory = "Performance",
             name = "Limit dropped item rendered",
-            comment = "Dynamically modifies the render distance of dropped item entities to preserve performance. It starts reducing the render distance when exceeding the threshold set below.\n"
-                    + "There is a keybind (ESC -> options -> controls -> MWE) to toggle it")
+            comment = "Dynamically modifies the render distance of dropped item entities to preserve performance." +
+                    " It starts reducing the render distance when exceeding the threshold set below.")
     public static boolean limitDroppedEntityRendered = true;
 
     @ConfigProperty(
@@ -242,6 +244,12 @@ public final class MWEConfig {
             comment = "Max amount of items rendered",
             sliderMin = 40, sliderMax = 200)
     public static int maxDroppedEntityRendered = 80;
+
+    @ConfigProperty(
+            category = VANILLA, subCategory = "Performance",
+            name = "Toggle dropped item limit key",
+            comment = "A key for turning on and off the dropped item limit")
+    public static final KeyBinding toggleDroppedItemLimit = new KeyBinding("Toggle dropped item limit", Keyboard.KEY_NONE, "MWE");
 
     @ConfigProperty(
             category = VANILLA, subCategory = "Render",
@@ -442,9 +450,14 @@ public final class MWEConfig {
     @ConfigProperty(
             category = PVP_STUFF, subCategory = "Toggle Sprint",
             name = "Toggle Sprint",
-            comment = "Always sprint when you hold the forward key\n"
-                    + "There is a keybind (ESC -> options -> controls -> MWE) to toggle it")
+            comment = "Always sprint when you hold the forward key")
     public static boolean toggleSprint = true;
+
+    @ConfigProperty(
+            category = PVP_STUFF, subCategory = "Toggle Sprint",
+            name = "Toggle Sprint Key",
+            comment = "A key for turning on and off the toggle sprint")
+    public static final KeyBinding toggleSprintKey = new KeyBinding("Toggle Sprint", Keyboard.KEY_NONE, "MWE");
 
     @ConfigProperty(
             category = PVP_STUFF, subCategory = "Health",
@@ -555,6 +568,12 @@ public final class MWEConfig {
             category = HITBOXES, subCategory = "Render hitbox for : ",
             name = "Hitbox for other entity")
     public static boolean drawHitboxForOtherEntity = true;
+
+    @ConfigProperty(
+            category = HITBOXES, subCategory = "Keyboard",
+            name = "Toggle player hitboxes key",
+            comment = "A key for turning on and off the hitboxes of players")
+    public static final KeyBinding playerHitboxes = new KeyBinding("Toggle player hitboxes", Keyboard.KEY_NONE, "Hitboxes");
 
     @ConfigProperty(
             category = HITBOXES, subCategory = "Red box",
@@ -948,6 +967,36 @@ public final class MWEConfig {
             dependsOn = "Display class count during games",
             comment = "During games it will display the class counts per team")
     public static boolean classCountHUDPerTeamDisplay = true;
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "Keyboard",
+            name = "Enderchest key",
+            comment = "Runs the /enderchest command")
+    public static final KeyBinding echestKey = new KeyBinding("/enderchest", Keyboard.KEY_NONE, "MWE");
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "Keyboard",
+            name = "Kill key",
+            comment = "Runs the /kill command")
+    public static final KeyBinding killKey = new KeyBinding("/Kill", Keyboard.KEY_NONE, "MWE");
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "Keyboard",
+            name = "Surface key",
+            comment = "Runs the /surface command")
+    public static final KeyBinding surfaceKey = new KeyBinding("/Surface", Keyboard.KEY_NONE, "MWE");
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "Keyboard",
+            name = "Teamchest key",
+            comment = "Runs the /teamchest command")
+    public static final KeyBinding teamchestKey = new KeyBinding("/teamchest", Keyboard.KEY_NONE, "MWE");
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "Keyboard",
+            name = "Warcry key",
+            comment = "Runs the /warcry command")
+    public static final KeyBinding warcryKey = new KeyBinding("/warcry", Keyboard.KEY_NONE, "MWE");
 
     @ConfigProperty(
             category = FINAL_KILL_COUNTER, subCategory = "Chat",

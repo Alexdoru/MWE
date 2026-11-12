@@ -3,10 +3,10 @@ package fr.alexdoru.mwe.asm.hooks.mc.gui;
 import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.api.utils.StringUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
-import fr.alexdoru.mwe.events.KeybindingListener;
 import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.utils.TimerUtil;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -73,14 +73,17 @@ public class GuiScreenBookHook {
     }
 
     public static void onKeyTyped(int keycode) {
-        if (isOnNickGenerationPage && timer.update() && KeybindingListener.getNewNickKey().getKeyCode() != 0 && KeybindingListener.getNewNickKey().getKeyCode() == keycode) {
-            Minecraft.getMinecraft().thePlayer.sendChatMessage("/nick help setrandom");
+        if (isOnNickGenerationPage && timer.update()) {
+            final KeyBinding keyBinding = MWE.INSTANCE().getNewNickKey();
+            if (keyBinding.getKeyCode() != 0 && keyBinding.getKeyCode() == keycode) {
+                Minecraft.getMinecraft().thePlayer.sendChatMessage("/nick help setrandom");
+            }
         }
     }
 
     public static void renderInstructions(int screenWidth, int y) {
         if (isOnNickGenerationPage) {
-            final int keyCode = KeybindingListener.getNewNickKey().getKeyCode();
+            final int keyCode = MWE.INSTANCE().getNewNickKey().getKeyCode();
             final String text;
             if (keyCode == 0) {
                 text = EnumChatFormatting.GREEN + "Go to " + EnumChatFormatting.GOLD + "Option -> Controls -> MWE" + EnumChatFormatting.GREEN + ", to set the keybind to get a random nick";
