@@ -70,6 +70,7 @@ public class MWE {
     private MWERenderers mweRenderers;
     private File configFolder;
     private KeyBinding newNickKey;
+    private final LeatherArmorManager leatherArmorManager = new LeatherArmorManager();
 
     public MWE() {
         if (INSTANCE != null) {
@@ -191,6 +192,10 @@ public class MWE {
 
     public KeyBinding getNewNickKey() {
         return newNickKey;
+    }
+
+    public LeatherArmorManager getLeatherArmorManager() {
+        return leatherArmorManager;
     }
 
 }

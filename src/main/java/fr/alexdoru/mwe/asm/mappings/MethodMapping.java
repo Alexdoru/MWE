@@ -75,6 +75,7 @@ public enum MethodMapping implements IMethodInfo {
     INVENTORYPLAYER$CHANGECURRENTITEM(INVOKEVIRTUAL, INVENTORYPLAYER, "d", "changeCurrentItem", "(I)V"),
     INVENTORYPLAYER$GETCURRENTITEM(INVOKEVIRTUAL, INVENTORYPLAYER, "h", "getCurrentItem", "()" + ITEMSTACK.desc()),
     KEYBINDING$ISKEYDOWN(INVOKEVIRTUAL, KEYBINDING, "d", "isKeyDown", "()Z"),
+    LAYERARMORBASE$GETCURRENTARMOR("a", "getCurrentArmor", "(" + ENTITYLIVINGBASE.desc() + "I)" + ITEMSTACK.desc()),
     LAYERARMORBASE$SHOULDCOMBINETEXTURES("b", "shouldCombineTextures", "()Z"),
     LAYERARROW$DORENDERLAYER("a", "doRenderLayer", "(" + ENTITYLIVINGBASE.desc() + "FFFFFFF)V"),
     LIST$ADD(INVOKEINTERFACE, "java/util/List", "add", "(Ljava/lang/Object;)Z"),

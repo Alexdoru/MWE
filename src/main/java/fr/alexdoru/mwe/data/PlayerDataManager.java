@@ -1,6 +1,7 @@
 package fr.alexdoru.mwe.data;
 
 import com.mojang.authlib.GameProfile;
+import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.api.ITabNameModifier;
 import fr.alexdoru.mwe.api.enums.MWClass;
 import fr.alexdoru.mwe.api.utils.ColorUtil;
@@ -9,7 +10,6 @@ import fr.alexdoru.mwe.asm.interfaces.EntityPlayerAccessor;
 import fr.alexdoru.mwe.asm.interfaces.NetworkPlayerInfoAccessor;
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
-import fr.alexdoru.mwe.features.LeatherArmorManager;
 import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.nocheaters.WDR;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
@@ -151,7 +151,7 @@ public final class PlayerDataManager {
             playerAccessor.setPlayerSpecialRenderColor(ColorUtil.getColorInt(playerData.teamColor));
         }
         playerAccessor.setMWClass(playerData.mwClass);
-        LeatherArmorManager.onColorChange(player, oldColor, playerAccessor.getPlayerSpecialRenderColor());
+        MWE.INSTANCE().getLeatherArmorManager().onColorChange(player, oldColor, playerAccessor.getPlayerSpecialRenderColor());
 
         player.getPrefixes().removeAll(ALL_ICONS_LIST);
         if (playerData.prefixIcon != null) {

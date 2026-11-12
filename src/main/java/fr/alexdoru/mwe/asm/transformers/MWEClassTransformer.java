@@ -108,6 +108,7 @@ public class MWEClassTransformer implements IClassTransformer {
         register(new GuiUtilRenderComponentsTransformer_ChatHeads());
         register(new HitboxRenderTransformer());
         register(new LayerArmorBaseTransformer_HitColor());
+        register(new LayerArmorBaseTransformer_LeatherArmor());
         register(new LayerArrowTransformer());
         register(new MinecraftTransformer_DebugMessages());
         register(new MinecraftTransformer_DropProtection());

@@ -5,7 +5,6 @@ import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.asm.MWELoadingPlugin;
 import fr.alexdoru.mwe.chat.ChatHandler;
 import fr.alexdoru.mwe.data.PlayerDataManager;
-import fr.alexdoru.mwe.features.LeatherArmorManager;
 import fr.alexdoru.mwe.hackerdetector.HackerDetector;
 import fr.alexdoru.mwe.nocheaters.ReportQueue;
 import fr.alexdoru.mwe.nocheaters.WarningMessageHandler;
@@ -748,7 +747,7 @@ public final class MWEConfig {
 
     @ConfigPropertyEvent(name = "Colored leather armor")
     private static void onColoredLeatherArmorSetting() {
-        LeatherArmorManager.onSettingChange();
+        MWE.INSTANCE().getLeatherArmorManager().onSettingChange();
     }
 
     @ConfigProperty(
