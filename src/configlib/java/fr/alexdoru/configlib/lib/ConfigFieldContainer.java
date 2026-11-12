@@ -270,7 +270,7 @@ public final class ConfigFieldContainer {
                 return new ColorEnumGuiButton(this, configGuiScreen);
             }
             case ENUM: {
-                return new EnumGuiButton(this);
+                return new EnumGuiButton(this, configGuiScreen);
             }
         }
         throw new IllegalStateException("Type of field not handled by config lib gui screen " + field.getType() + " you can mark the field as hidden to prevent crashing");

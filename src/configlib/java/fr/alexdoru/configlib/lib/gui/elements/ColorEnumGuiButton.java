@@ -7,7 +7,6 @@ import fr.alexdoru.configlib.lib.gui.ConfigGuiScreen;
 import fr.alexdoru.configlib.lib.gui.GuiUtil;
 import fr.alexdoru.configlib.lib.gui.MouseButton;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.awt.Color;
@@ -48,40 +47,38 @@ public class ColorEnumGuiButton extends OverlayConfigGuiButton {
         final int left = button.xPosition - 20 - 1;
         final int top = button.yPosition;
         GuiUtil.drawBoxWithOutline(left, top, left + 20, top + 20, 255 << 24 | color, colorPalette.COLOR_BUTTON_INDICATOR_BORDER);
-        if (isOverlayOpen) {
-            GlStateManager.translate(0, 0, 200);
+    }
 
-            final Box configBox = this.parentScreen.getConfigBoxSize();
-            final int panelWidth = 8 * SQUARE + 9 * GAP;
-            final int panelHeight = GAP + SQUARE + GAP + SQUARE + GAP + mc.fontRendererObj.FONT_HEIGHT + GAP;
-            panelBox.LEFT = configBox.LEFT + (configBox.getWidth() - panelWidth) / 2;
-            panelBox.TOP = configBox.TOP + (configBox.getHeight() - panelHeight) / 2;
-            panelBox.RIGHT = panelBox.LEFT + panelWidth;
-            panelBox.BOTTOM = panelBox.TOP + panelHeight;
-            GuiUtil.drawBoxWithOutline(panelBox.LEFT, panelBox.TOP, panelBox.RIGHT, panelBox.BOTTOM, colorPalette.SETTING_BACKGROUND, colorPalette.SETTING_BACKGROUND_BORDER);
+    @Override
+    public void drawOverlay(ColorPalette colorPalette, int mouseX, int mouseY) {
+        final Box configBox = this.parentScreen.getConfigBoxSize();
+        final int panelWidth = 8 * SQUARE + 9 * GAP;
+        final int panelHeight = GAP + SQUARE + GAP + SQUARE + GAP + mc.fontRendererObj.FONT_HEIGHT + GAP;
+        panelBox.LEFT = configBox.LEFT + (configBox.getWidth() - panelWidth) / 2;
+        panelBox.TOP = configBox.TOP + (configBox.getHeight() - panelHeight) / 2;
+        panelBox.RIGHT = panelBox.LEFT + panelWidth;
+        panelBox.BOTTOM = panelBox.TOP + panelHeight;
+        GuiUtil.drawBoxWithOutline(panelBox, colorPalette.SETTING_BACKGROUND, colorPalette.SETTING_BACKGROUND_BORDER);
 
-            EnumChatFormatting hovered = null;
-            final int startX = panelBox.LEFT + GAP;
-            final int startY = panelBox.TOP + GAP + mc.fontRendererObj.FONT_HEIGHT + GAP;
-            final List<ColorSquareButton> buttons = this.colorButtons;
-            for (int i = 0; i < buttons.size(); i++) {
-                final ColorSquareButton colorButton = buttons.get(i);
-                final int row = i / 8;
-                final int col = i % 8;
-                colorButton.xPosition = startX + col * (SQUARE + GAP);
-                colorButton.yPosition = startY + row * (SQUARE + GAP);
-                colorButton.drawButton(colorPalette, mc, mouseX, mouseY);
-                if (colorButton.isMouseOver()) hovered = colorButton.color;
-            }
+        EnumChatFormatting hovered = null;
+        final int startX = panelBox.LEFT + GAP;
+        final int startY = panelBox.TOP + GAP + mc.fontRendererObj.FONT_HEIGHT + GAP;
+        final List<ColorSquareButton> buttons = this.colorButtons;
+        for (int i = 0; i < buttons.size(); i++) {
+            final ColorSquareButton colorButton = buttons.get(i);
+            final int row = i / 8;
+            final int col = i % 8;
+            colorButton.xPosition = startX + col * (SQUARE + GAP);
+            colorButton.yPosition = startY + row * (SQUARE + GAP);
+            colorButton.drawButton(colorPalette, mc, mouseX, mouseY);
+            if (colorButton.isMouseOver()) hovered = colorButton.color;
+        }
 
-            if (hovered != null) {
-                final String titleText = hovered + hovered.name();
-                final int titleX = panelBox.LEFT + panelWidth / 2;
-                final int titleY = panelBox.TOP + GAP;
-                GuiUtil.drawCenteredString(titleText, titleX, titleY, 0xFFFFFFFF);
-            }
-
-            GlStateManager.translate(0, 0, -200);
+        if (hovered != null) {
+            final String titleText = hovered + hovered.name();
+            final int titleX = panelBox.LEFT + panelWidth / 2;
+            final int titleY = panelBox.TOP + GAP;
+            GuiUtil.drawCenteredString(titleText, titleX, titleY, 0xFFFFFFFF);
         }
     }
 

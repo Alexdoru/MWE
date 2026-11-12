@@ -16,6 +16,15 @@ public final class Scrollbar {
     private int grabbedAtY;
 
     private final Box thumb = new Box();
+    private final int padding;
+
+    public Scrollbar() {
+        this(ConfigGuiScreen.PADDING);
+    }
+
+    public Scrollbar(int padding) {
+        this.padding = padding;
+    }
 
     public void init(int lastScroll, int contentHeight, int boxHeight) {
         this.scroll = 0;
@@ -35,10 +44,10 @@ public final class Scrollbar {
     }
 
     public void drawScrollbar(ColorPalette colorPalette, Box box, int mouseY, int contentHeight) {
-        final int categoryBoxHeight = box.getHeight() - 2;
-        final boolean renderCategoryScrollbar = contentHeight > categoryBoxHeight;
-        if (renderCategoryScrollbar) {
-            final int scrollBarSize = categoryBoxHeight * categoryBoxHeight / contentHeight;
+        final int boxHeight = box.getHeight() - 2;
+        final boolean renderScrollbar = contentHeight > boxHeight;
+        if (renderScrollbar) {
+            final int scrollBarSize = boxHeight * boxHeight / contentHeight;
             final int minScrollBarY = box.TOP + 1 + 1;
             final int maxScrollBarY = box.BOTTOM - 1 - scrollBarSize - 1;
             if (dragging) {
@@ -49,7 +58,7 @@ public final class Scrollbar {
                 }
             }
             this.thumb.LEFT = box.RIGHT - 5;
-            this.thumb.TOP = ((maxScrollBarY - minScrollBarY) * this.scroll) / (contentHeight - categoryBoxHeight) + minScrollBarY;
+            this.thumb.TOP = ((maxScrollBarY - minScrollBarY) * this.scroll) / (contentHeight - boxHeight) + minScrollBarY;
             this.thumb.RIGHT = this.thumb.LEFT + 3;
             this.thumb.BOTTOM = this.thumb.TOP + scrollBarSize;
             GuiUtil.drawVerticalLine(box.RIGHT - 4, box.TOP + 4, box.BOTTOM - 4, colorPalette.SCROLLBAR_TRACK);
@@ -74,8 +83,8 @@ public final class Scrollbar {
 
     private void scroll(int amount, int contentHeight, int boxHeight) {
         this.scroll = this.scroll - amount;
-        if (this.scroll > contentHeight + 2 * ConfigGuiScreen.PADDING - boxHeight) {
-            this.scroll = contentHeight + 2 * ConfigGuiScreen.PADDING - boxHeight;
+        if (this.scroll > contentHeight + 2 * padding - boxHeight) {
+            this.scroll = contentHeight + 2 * padding - boxHeight;
             this.amountToScroll = 0;
         }
         if (this.scroll <= 0) {

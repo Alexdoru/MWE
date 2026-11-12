@@ -234,6 +234,10 @@ public class ConfigGuiScreen extends GuiScreen {
 
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
 
+        if (this.lastInteractedOverlay != null) {
+            this.lastInteractedOverlay.drawOverlay(colorPalette, mouseX, mouseY);
+        }
+
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
@@ -342,10 +346,14 @@ public class ConfigGuiScreen extends GuiScreen {
     @Override
     public void handleMouseInput() throws IOException {
         super.handleMouseInput();
+        final int wheel = Mouse.getEventDWheel();
         if (lastInteractedOverlay != null) {
+            if (wheel != 0) {
+                final int direction = wheel > 0 ? 1 : -1;
+                lastInteractedOverlay.mouseScrolled(direction);
+            }
             return;
         }
-        final int wheel = Mouse.getEventDWheel();
         if (wheel != 0) {
             final int mouseX = Mouse.getEventX() * width / mc.displayWidth;
             final int mouseY = height - Mouse.getEventY() * height / mc.displayHeight - 1;
