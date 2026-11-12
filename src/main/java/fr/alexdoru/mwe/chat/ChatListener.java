@@ -43,7 +43,6 @@ public class ChatListener {
     private static final String AFK_MESSAGE = "Are you AFK? You could be kicked for AFKing!";
     private static final String BAN_MESSAGE = "A player has been removed from your game.";
     private static final String DEATHMATCH_DAMAGE_MESSAGE = "                  Draw settled by: Deathmatch damage";
-    private static final String HUNTER_STRENGTH_MESSAGE = "Your Force of Nature gave you a 5 second Strength I buff.";
     private static final String GENERAL_START_MESSAGE = "The game starts in 1 second!";
     private static final String OWN_WITHER_DEATH_MESSAGE = "Your wither has died. You can no longer respawn!";
     private static final String PREP_PHASE = "Prepare your defenses!";
@@ -129,8 +128,7 @@ public class ChatListener {
                     return;
                 }
 
-                if (MWEConfig.strengthHUDPosition.isEnabled() && msg.equals(HUNTER_STRENGTH_MESSAGE)) {
-                    this.renderers.strengthHUD.setStrengthRenderStart(5000L);
+                if (this.renderers.classSpecificHUD.processChatMessage(msg)) {
                     return;
                 }
 
@@ -215,11 +213,7 @@ public class ChatListener {
             /*Status messages*/
         } else if (event.type == 2 && ScoreboardTracker.isInMwGame()) {
 
-            if (this.renderers.strengthHUD.processMessage(fmsg)) {
-                return;
-            }
-
-            if (this.renderers.creeperPrimedTntHUD.processMessage(fmsg)) {
+            if (this.renderers.classSpecificHUD.processStatusMessage(fmsg)) {
                 return;
             }
 

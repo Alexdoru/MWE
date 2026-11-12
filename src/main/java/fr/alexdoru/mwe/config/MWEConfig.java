@@ -852,6 +852,94 @@ public final class MWEConfig {
 
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "HUD",
+            name = "Base Location HUD",
+            comment = "Displays which base you are currently located in")
+    public static final RendererPosition baseLocationHUDPosition = new RendererPosition(true, 0.90d, 0d);
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "HUD",
+            name = "Class count HUD",
+            comment = "Displays the amounts of each class in the current lobby")
+    public static final RendererPosition classCountHUDPosition = new RendererPosition(true, 0.15d, 0.15d);
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "HUD",
+            name = "Display class count during games",
+            dependsOn = "Class count HUD",
+            comment = "Also displays the HUD when ingame")
+    public static boolean classCountHUDDuringGames = true;
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "HUD",
+            name = "Display class counts per team",
+            dependsOn = "Display class count during games",
+            comment = "During games it will display the class counts per team")
+    public static boolean classCountHUDPerTeamDisplay = true;
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "HUD",
+            name = "Display class count in tablist",
+            dependsOn = "Class count HUD",
+            comment = "Displays the class counts at the bottom of the tablist")
+    public static boolean classCountHUDOnlyInTablist = true;
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "HUD",
+            name = "Class specific HUD",
+            comment = "Displays class specific information, such as the strength duration or the Creeper primed TNT cooldown")
+    public static final RendererPosition classSpecificHUDPosition = new RendererPosition(true, 0.5d, 8d / 20d);
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "HUD",
+            name = "Creeper primed TNT HUD",
+            dependsOn = "Class specific HUD",
+            comment = "Displays the cooldown of primed TNT when playing Creeper")
+    public static boolean creeperTNTHUD = true;
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "HUD",
+            name = "Strength HUD",
+            dependsOn = "Class specific HUD",
+            comment = "Displays the duration of the strength effect when you have it or when you are about to have it with Hunter."
+                    + " Works with Dreadlord, Herobrine, Hunter and Zombie.")
+    public static boolean strengthHUD = true;
+
+    @ConfigPropertyEvent(name = "Strength HUD")
+    private static void onStrengthHUDSetting() {
+        if (MWEConfig.strengthHUD) {
+            SoundUtil.playStrengthSound();
+        }
+    }
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "HUD",
+            name = "Energy display HUD",
+            comment = "Displays a HUD with the amount of energy you have. Turns a different color when your energy level exceeds the amount set below.")
+    public static final RendererPosition energyHUDPosition = new RendererPosition(true, 0.5d, 10.5 / 20d);
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "HUD",
+            name = "High energy threshold",
+            dependsOn = "Energy display HUD",
+            sliderMax = 160)
+    public static int highEnergyThreshold = 100;
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "HUD",
+            name = "High energy color",
+            dependsOn = "Energy display HUD",
+            isColor = true)
+    public static int highEnergyHUDColor = 0x55FFFF;
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "HUD",
+            name = "Low energy color",
+            dependsOn = "Energy display HUD",
+            isColor = true)
+    public static int lowEnergyHUDColor = 0x55FF55;
+
+    @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "HUD",
             name = "Kill cooldown HUD",
             comment = "Displays the cooldown of the /kill command")
     public static final RendererPosition killCooldownHUDPosition = new RendererPosition(true, 0d, 0d);
@@ -878,95 +966,15 @@ public final class MWEConfig {
 
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "HUD",
-            name = "Strength HUD",
-            comment = "Displays the duration of the strength effect when you have it or when you are about to have it with Hunter."
-                    + " Works with Dreadlord, Herobrine, Hunter and Zombie.")
-    public static final RendererPosition strengthHUDPosition = new RendererPosition(true, 0.5d, 8d / 20d);
-
-    @ConfigPropertyEvent(name = "Strength HUD")
-    private static void onStrengthHUDSetting() {
-        if (MWEConfig.strengthHUDPosition.isEnabled()) {
-            SoundUtil.playStrengthSound();
-        }
-    }
-
-    @ConfigProperty(
-            category = MEGA_WALLS, subCategory = "HUD",
-            name = "Creeper primed TNT HUD",
-            comment = "Displays the cooldown of primed TNT when playing Creeper")
-    public static final RendererPosition creeperTNTHUDPosition = new RendererPosition(true, 0.5d, 8d / 20d);
-
-    @ConfigProperty(
-            category = MEGA_WALLS, subCategory = "HUD",
-            name = "Energy display HUD",
-            comment = "Displays a HUD with the amount of energy you have. Turns a different color when your energy level exceeds the amount set below.")
-    public static final RendererPosition energyHUDPosition = new RendererPosition(true, 0.5d, 10.5 / 20d);
-
-    @ConfigProperty(
-            category = MEGA_WALLS, subCategory = "HUD",
-            name = "High energy threshold",
-            dependsOn = "Energy display HUD",
-            sliderMax = 160)
-    public static int highEnergyThreshold = 100;
-
-    @ConfigProperty(
-            category = MEGA_WALLS, subCategory = "HUD",
-            name = "Low energy color",
-            dependsOn = "Energy display HUD",
-            isColor = true)
-    public static int lowEnergyHUDColor = 0x55FF55;
-
-    @ConfigProperty(
-            category = MEGA_WALLS, subCategory = "HUD",
-            name = "High energy color",
-            dependsOn = "Energy display HUD",
-            isColor = true)
-    public static int highEnergyHUDColor = 0x55FFFF;
-
-    @ConfigProperty(
-            category = MEGA_WALLS, subCategory = "HUD",
             name = "Phoenix Bond HUD",
             comment = "Displays the hearts healed from a Phoenix bond")
     public static final RendererPosition phxBondHUDPosition = new RendererPosition(true, 0.5d, 0.75d);
 
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "HUD",
-            name = "Base Location HUD",
-            comment = "Displays which base you are currently located in")
-    public static final RendererPosition baseLocationHUDPosition = new RendererPosition(true, 0.90d, 0d);
-
-    @ConfigProperty(
-            category = MEGA_WALLS, subCategory = "HUD",
             name = "Warcry HUD",
             comment = "Displays the warcry cooldown")
     public static final RendererPosition warcryHUDPosition = new RendererPosition(true, 0.65d, 1d);
-
-    @ConfigProperty(
-            category = MEGA_WALLS, subCategory = "HUD",
-            name = "Class count HUD",
-            comment = "Displays the amounts of each class in the current lobby")
-    public static final RendererPosition classCountHUDPosition = new RendererPosition(true, 0.15d, 0.15d);
-
-    @ConfigProperty(
-            category = MEGA_WALLS, subCategory = "HUD",
-            name = "Display class count in tablist",
-            dependsOn = "Class count HUD",
-            comment = "Displays the class counts at the bottom of the tablist")
-    public static boolean classCountHUDOnlyInTablist = true;
-
-    @ConfigProperty(
-            category = MEGA_WALLS, subCategory = "HUD",
-            name = "Display class count during games",
-            dependsOn = "Class count HUD",
-            comment = "Also displays the HUD when ingame")
-    public static boolean classCountHUDDuringGames = true;
-
-    @ConfigProperty(
-            category = MEGA_WALLS, subCategory = "HUD",
-            name = "Display class counts per team",
-            dependsOn = "Display class count during games",
-            comment = "During games it will display the class counts per team")
-    public static boolean classCountHUDPerTeamDisplay = true;
 
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "Keyboard",

@@ -7,9 +7,8 @@ public final class MWERenderers {
 
     public final ArrowHitHUD arrowHitHUD;
     public final ClassCountHUD classCountHUD;
-    public final CreeperPrimedTntHUD creeperPrimedTntHUD;
+    public final ClassSpecificHUD classSpecificHUD;
     public final FKCounterHUD fkCounterHUD;
-    public final StrengthHUD strengthHUD;
     public final KillCooldownHUD killCooldownHUD;
     public final LastWitherHPHUD lastWitherHPHUD;
     public final PhoenixBondHUD phoenixBondHUD;
@@ -21,10 +20,9 @@ public final class MWERenderers {
         rendererManager.registerHUDRenderer(arrowHitHUD = new ArrowHitHUD());
         rendererManager.registerHUDRenderer(new BaseLocationHUD());
         rendererManager.registerHUDRenderer(classCountHUD = new ClassCountHUD());
-        rendererManager.registerHUDRenderer(creeperPrimedTntHUD = new CreeperPrimedTntHUD());
+        rendererManager.registerHUDRenderer(classSpecificHUD = new ClassSpecificHUD());
         rendererManager.registerHUDRenderer(new EnergyDisplayHUD());
         rendererManager.registerHUDRenderer(fkCounterHUD = new FKCounterHUD());
-        rendererManager.registerHUDRenderer(strengthHUD = new StrengthHUD());
         rendererManager.registerHUDRenderer(killCooldownHUD = new KillCooldownHUD());
         rendererManager.registerHUDRenderer(lastWitherHPHUD = new LastWitherHPHUD());
         rendererManager.registerHUDRenderer(new MiniPotionHUD());
