@@ -293,11 +293,7 @@ public class ChatUtil {
 
     public static IChatComponent PlanckeHeaderText(String formattedname, String playername, String titletext) {
         return new ChatComponentText(getSeparatorToCenter(formattedname + GOLD + titletext))
-                .appendSibling(new ChatComponentText(formattedname)
-                        .setChatStyle(new ChatStyle()
-                                .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/names " + playername))
-                                .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(YELLOW + "Click for name history")))))
-
+                .appendSibling(new ChatComponentText(formattedname))
                 .appendSibling(new ChatComponentText(GOLD + titletext)
                         .setChatStyle(new ChatStyle()
                                 .setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://plancke.io/hypixel/player/stats/" + playername))
