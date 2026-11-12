@@ -6,10 +6,14 @@ import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 
 public class LeatherArmorManager {
+
+    private static final ItemArmor[] LEATHER_ARMOR = new ItemArmor[]{Items.leather_helmet, Items.leather_chestplate, Items.leather_leggings, Items.leather_boots};
+    private static final ItemArmor[] IRON_ARMOR = new ItemArmor[]{Items.iron_helmet, Items.iron_chestplate, Items.iron_leggings, Items.iron_boots};
 
     public static ItemStack replaceIronArmor(EntityOtherPlayerMP player, int slotIn, ItemStack stack) {
         if (slotIn != 0 && MWEConfig.coloredLeatherArmor &&
@@ -51,7 +55,7 @@ public class LeatherArmorManager {
                         }
                     } else if (isColoredLeatherArmor(stack)) {
                         final ItemArmor itemArmor = (ItemArmor) stack.getItem();
-                        player.inventory.armorInventory[i] = new ItemStack(new ItemArmor(ItemArmor.ArmorMaterial.IRON, itemArmor.renderIndex, itemArmor.armorType));
+                        player.inventory.armorInventory[i] = new ItemStack(IRON_ARMOR[itemArmor.armorType]);
                     }
                 }
             }
@@ -72,7 +76,7 @@ public class LeatherArmorManager {
 
     private static ItemStack createColoredLeatherArmor(ItemStack currentArmor, int color) {
         final ItemArmor ironArmor = (ItemArmor) currentArmor.getItem();
-        final ItemArmor leatherArmor = new ItemArmor(ItemArmor.ArmorMaterial.LEATHER, ironArmor.renderIndex, ironArmor.armorType);
+        final ItemArmor leatherArmor = LEATHER_ARMOR[ironArmor.armorType];
         final ItemStack leatherItemStack = new ItemStack(leatherArmor);
         leatherArmor.setColor(leatherItemStack, color);
         return leatherItemStack;
