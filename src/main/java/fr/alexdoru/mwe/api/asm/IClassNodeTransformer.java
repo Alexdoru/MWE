@@ -177,8 +177,10 @@ public interface IClassNodeTransformer extends Opcodes {
                 return DRETURN;
             case "F":
                 return FRETURN;
+            case "B":
             case "C":
             case "I":
+            case "S":
             case "Z":
                 return IRETURN;
             case "J":
@@ -219,8 +221,10 @@ public interface IClassNodeTransformer extends Opcodes {
                 return DLOAD;
             case "F":
                 return FLOAD;
+            case "B":
             case "C":
             case "I":
+            case "S":
             case "Z":
                 return ILOAD;
             case "J":
