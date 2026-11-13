@@ -170,24 +170,33 @@ public class SliderGuiButton extends ConfigGuiButton {
     }
 
     public void updateSliderFromIncrement(int valueIncrement) {
+        final boolean changed;
         try {
             if (isIntValue) {
+                final int prevValue = sliderValueI;
                 sliderValueI = MathHelper.clamp_int(sliderValueI + valueIncrement, minValue, maxValue);
                 sliderIncrement = MathHelper.clamp_int((SLIDER_WIDTH - 1) * (sliderValueI - minValue) / (maxValue - minValue), 0, SLIDER_WIDTH - 1);
                 field.setInt(null, sliderValueI);
+                changed = prevValue != sliderValueI;
             } else if (isPourcentage) {
+                final int prevValue = sliderValueI;
                 sliderValueI = MathHelper.clamp_int(sliderValueI + valueIncrement, 0, 100);
                 sliderIncrement = MathHelper.clamp_int((SLIDER_WIDTH - 1) * sliderValueI / (100), 0, SLIDER_WIDTH - 1);
                 field.setDouble(null, MathHelper.clamp_double(sliderValueI / 100d, 0, 1));
+                changed = prevValue != sliderValueI;
             } else {
+                final double prevValue = sliderValueD;
                 sliderValueD = MathHelper.clamp_double(MathHelper.floor_double((sliderValueD - (double) minValue) / incrementStepD + valueIncrement) * incrementStepD + minValue, minValue, maxValue);
                 sliderIncrement = MathHelper.clamp_int((int) (((double) SLIDER_WIDTH - 1d) * (sliderValueD - (double) minValue) / (double) (maxValue - minValue)), 0, SLIDER_WIDTH - 1);
                 field.setDouble(null, sliderValueD);
+                changed = prevValue != sliderValueD;
             }
         } catch (IllegalAccessException e) {
             throw new RuntimeException("Cannot set value to : " + field.getName());
         }
-        invokeConfigEvent();
+        if (changed) {
+            invokeConfigEvent();
+        }
     }
 
 }
