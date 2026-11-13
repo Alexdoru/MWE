@@ -49,6 +49,12 @@ public class RendererEditGuiScreen extends GuiScreen {
 
     @Override
     public void initGui() {
+        if (this.resolution != null) {
+            this.rendererPosition.setRelativePosition(
+                    (double) this.rendererPosition.getAbsoluteRenderX() / this.resolution.getScaledWidth(),
+                    (double) this.rendererPosition.getAbsoluteRenderY() / this.resolution.getScaledHeight()
+            );
+        }
         this.resolution = new ScaledResolution(mc);
         this.rendererPosition.updateAbsolutePosition(resolution);
         this.adjustBounds();
