@@ -44,21 +44,21 @@ public final class Scrollbar {
     }
 
     public void drawScrollbar(ColorPalette colorPalette, Box box, int mouseY, int contentHeight) {
-        final int boxHeight = box.getHeight() - 2;
-        final boolean renderScrollbar = contentHeight > boxHeight;
+        final int boxHeight = box.getHeight();
+        final int maxScroll = getMaxScroll(contentHeight, boxHeight);
+        final boolean renderScrollbar = maxScroll > 0;
         if (renderScrollbar) {
-            final int scrollBarSize = boxHeight * boxHeight / contentHeight;
-            final int minScrollBarY = box.TOP + 1 + 1;
-            final int maxScrollBarY = box.BOTTOM - 1 - scrollBarSize - 1;
-            if (dragging) {
+            final int minScrollBarY = box.TOP + 2;
+            final int trackLength = boxHeight - 4;
+            final int scrollBarSize = trackLength * boxHeight / (boxHeight + maxScroll);
+            final int thumbTravel = trackLength - scrollBarSize;
+            if (dragging && thumbTravel > 0) {
                 final int relativeMouseY = mouseY - minScrollBarY - grabbedAtY;
-                if (maxScrollBarY != minScrollBarY) {
-                    final int newScroll = relativeMouseY * (contentHeight - box.getHeight()) / (maxScrollBarY - minScrollBarY);
-                    this.scroll(this.scroll - newScroll, contentHeight, box.getHeight());
-                }
+                final int newScroll = relativeMouseY * maxScroll / thumbTravel;
+                this.scroll(this.scroll - newScroll, contentHeight, boxHeight);
             }
             this.thumb.LEFT = box.RIGHT - 5;
-            this.thumb.TOP = ((maxScrollBarY - minScrollBarY) * this.scroll) / (contentHeight - boxHeight) + minScrollBarY;
+            this.thumb.TOP = thumbTravel * this.scroll / maxScroll + minScrollBarY;
             this.thumb.RIGHT = this.thumb.LEFT + 3;
             this.thumb.BOTTOM = this.thumb.TOP + scrollBarSize;
             GuiUtil.drawVerticalLine(box.RIGHT - 4, box.TOP + 4, box.BOTTOM - 4, colorPalette.SCROLLBAR_TRACK);
@@ -83,14 +83,19 @@ public final class Scrollbar {
 
     private void scroll(int amount, int contentHeight, int boxHeight) {
         this.scroll = this.scroll - amount;
-        if (this.scroll > contentHeight + 2 * padding - boxHeight) {
-            this.scroll = contentHeight + 2 * padding - boxHeight;
+        final int maxScroll = getMaxScroll(contentHeight, boxHeight);
+        if (this.scroll > maxScroll) {
+            this.scroll = maxScroll;
             this.amountToScroll = 0;
         }
         if (this.scroll <= 0) {
             this.scroll = 0;
             this.amountToScroll = 0;
         }
+    }
+
+    private int getMaxScroll(int contentHeight, int boxHeight) {
+        return contentHeight + 2 * padding - boxHeight;
     }
 
     public void scheduleScroll(int direction, int amount) {
