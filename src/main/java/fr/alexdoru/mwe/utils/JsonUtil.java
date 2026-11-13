@@ -34,8 +34,12 @@ public final class JsonUtil {
         }
         if (useFallback) {
             MWE.logger.error("File {} read in wrong encoding, trying to read file with fallback method...", file);
-            return readFromFileFallback(file, type);
+            final T t = readFromFileFallback(file, type);
+            if (t != null) {
+                return t;
+            }
         }
+        backupUnreadableFile(file);
         return null;
     }
 
@@ -48,6 +52,17 @@ public final class JsonUtil {
             MWE.logger.error("Failed fallback read of {}", file, e);
         }
         return null;
+    }
+
+    private static void backupUnreadableFile(File file) {
+        final Path path = file.toPath();
+        final Path backup = path.resolveSibling(file.getName() + ".bak");
+        try {
+            Files.copy(path, backup, StandardCopyOption.REPLACE_EXISTING);
+            MWE.logger.error("Could not read {}, a copy was saved to {}", file, backup);
+        } catch (IOException e) {
+            MWE.logger.error("Could not read {} and failed to back it up", file, e);
+        }
     }
 
     public static boolean writeJsonToFile(File file, Object obj) {
