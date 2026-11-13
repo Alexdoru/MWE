@@ -29,7 +29,7 @@ public class KeybindGuiButton extends ConfigGuiButton {
         button.width = Math.max(minButtonWidth, mc.fontRendererObj.getStringWidth("  " + button.displayString));
         final int centerX = drawX + boxWidth - minButtonWidth / 2 - 20;
         button.xPosition = centerX - button.width / 2;
-        button.yPosition = drawY + (this.hasComment() ? 8 + mc.fontRendererObj.FONT_HEIGHT / 2 : (getHeight() - button.height) / 2);
+        button.yPosition = drawY + this.getTopPaddingToCenter(button.height);
         button.drawButton(colorPalette, mc, mouseX, mouseY);
     }
 

@@ -39,7 +39,7 @@ public class RendererGuiButton extends ConfigGuiButton {
     public void draw(ColorPalette colorPalette, int drawX, int drawY, int mouseX, int mouseY) {
         super.draw(colorPalette, drawX, drawY, mouseX, mouseY);
         buttonEnabled.xPosition = drawX + boxWidth - buttonEnabled.width - 20;
-        buttonEnabled.yPosition = drawY + 8;
+        buttonEnabled.yPosition = drawY + this.getTopPaddingToCenter(buttonEnabled.height);
         buttonEnabled.drawButton(colorPalette, mc, mouseX, mouseY);
 
         buttonMoveHud.xPosition = buttonEnabled.xPosition - buttonMoveHud.width - 1;

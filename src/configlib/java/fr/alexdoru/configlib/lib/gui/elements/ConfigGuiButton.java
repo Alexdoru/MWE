@@ -75,7 +75,7 @@ public abstract class ConfigGuiButton implements ConfigUIElement {
     }
 
     @Override
-    public boolean matchSearch(String search) {
+    public final boolean matchSearch(String search) {
         return annotation.category().toLowerCase().contains(search)
                 || annotation.subCategory().toLowerCase().contains(search)
                 || annotation.name().toLowerCase().contains(search);
@@ -90,6 +90,10 @@ public abstract class ConfigGuiButton implements ConfigUIElement {
         if (fieldContainer.hasDependent()) {
             configGuiScreen.rebuildRenderedElementList();
         }
+    }
+
+    protected int getTopPaddingToCenter(int elementHeight) {
+        return (this.getHeight() - elementHeight) / 2;
     }
 
     protected final boolean hasComment() {

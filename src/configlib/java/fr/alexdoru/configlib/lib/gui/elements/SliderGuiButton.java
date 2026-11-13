@@ -62,7 +62,7 @@ public class SliderGuiButton extends ConfigGuiButton {
         }
         final int SLIDER_HEIGHT = 6;
         sliderBarX = drawX + boxWidth - SLIDER_WIDTH - 20;
-        final int sliderBarY = drawY + 8 + mc.fontRendererObj.FONT_HEIGHT;
+        final int sliderBarY = drawY + this.getTopPaddingToCenter(SLIDER_HEIGHT);
         sliderButtonX = sliderBarX + sliderIncrement - SLIDER_BUTTON_SIZE / 2;
         sliderButtonY = sliderBarY + (SLIDER_HEIGHT - SLIDER_BUTTON_SIZE) / 2;
         minusButtonX = sliderBarX - SLIDER_BUTTON_SIZE / 2 - PLUS_BUTTON_SIZE - 1;
