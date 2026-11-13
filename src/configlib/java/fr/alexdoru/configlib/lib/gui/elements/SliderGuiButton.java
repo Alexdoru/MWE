@@ -40,7 +40,7 @@ public class SliderGuiButton extends ConfigGuiButton {
             sliderValueD = (double) field.get(null);
             if (minValue == 0 && maxValue == 1) {
                 isPourcentage = true;
-                sliderValueI = (int) ((double) field.get(null) * 100d);
+                sliderValueI = (int) Math.round(sliderValueD * 100d);
                 sliderIncrement = MathHelper.clamp_int((SLIDER_WIDTH - 1) * (sliderValueI) / 100, 0, SLIDER_WIDTH - 1);
             } else {
                 incrementStepD = Math.min(0.25D, (maxValue - minValue) / (double) 100);
