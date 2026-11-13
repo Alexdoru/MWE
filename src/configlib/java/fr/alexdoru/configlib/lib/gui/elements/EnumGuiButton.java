@@ -8,8 +8,6 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.EnumChatFormatting;
 import org.lwjgl.opengl.GL11;
 
-import java.lang.reflect.InvocationTargetException;
-
 public class EnumGuiButton extends OverlayConfigGuiButton {
 
     private static final int ROW_HEIGHT = 12;
@@ -29,11 +27,7 @@ public class EnumGuiButton extends OverlayConfigGuiButton {
     public EnumGuiButton(ConfigFieldContainer container, ConfigGuiScreen parentScreen) throws IllegalAccessException {
         super(container);
         this.parentScreen = parentScreen;
-        try {
-            values = (Enum<?>[]) this.field.getType().getDeclaredMethod("values").invoke(null);
-        } catch (NoSuchMethodException | InvocationTargetException e) {
-            throw new IllegalStateException();
-        }
+        values = (Enum<?>[]) this.field.getType().getEnumConstants();
         this.displayNames = new String[values.length];
         int width = 0;
         for (int i = 0; i < values.length; i++) {

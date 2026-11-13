@@ -96,7 +96,7 @@ public class ColorSelectionGuiScreen extends GuiScreen {
                 this.setter.accept(color);
                 this.lastSavedColor = color;
             } catch (IllegalAccessException e) {
-                throw new RuntimeException("Couldn't set color!");
+                throw new RuntimeException("Couldn't set color!", e);
             }
         }
     }

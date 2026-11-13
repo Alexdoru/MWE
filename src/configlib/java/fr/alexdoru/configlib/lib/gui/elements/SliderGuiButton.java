@@ -162,7 +162,7 @@ public class SliderGuiButton extends ConfigGuiButton {
                 }
             }
         } catch (IllegalAccessException e) {
-            throw new RuntimeException("Cannot set value to : " + field.getName());
+            throw new RuntimeException("Cannot set value to : " + field.getName(), e);
         }
     }
 
@@ -189,7 +189,7 @@ public class SliderGuiButton extends ConfigGuiButton {
                 changed = prevValue != sliderValueD;
             }
         } catch (IllegalAccessException e) {
-            throw new RuntimeException("Cannot set value to : " + field.getName());
+            throw new RuntimeException("Cannot set value to : " + field.getName(), e);
         }
         if (changed) {
             invokeConfigEvent();
