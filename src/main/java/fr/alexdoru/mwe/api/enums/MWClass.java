@@ -5,6 +5,7 @@ import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.network.NetHandlerPlayClient;
+import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.item.Item;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import org.jetbrains.annotations.NotNull;
@@ -121,7 +122,9 @@ public enum MWClass {
     public static MWClass ofPlayer(@NotNull UUID uuid) {
         final NetHandlerPlayClient netHandler = Minecraft.getMinecraft().getNetHandler();
         if (netHandler == null) return null;
-        final ScorePlayerTeam team = netHandler.getPlayerInfo(uuid).getPlayerTeam();
+        final NetworkPlayerInfo netInfo = netHandler.getPlayerInfo(uuid);
+        if (netInfo == null) return null;
+        final ScorePlayerTeam team = netInfo.getPlayerTeam();
         if (team == null) return null;
         return MWClass.fromTeamTag(ScoreboardTracker.isMWReplay() ? team.getColorPrefix() : team.getColorSuffix());
     }
