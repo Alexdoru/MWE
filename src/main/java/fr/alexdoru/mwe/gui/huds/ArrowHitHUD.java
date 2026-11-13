@@ -31,6 +31,7 @@ public class ArrowHitHUD extends AbstractRenderer {
     private static final Pattern PATTERN_LEAP_DIRECT_HIT = Pattern.compile("^You landed a direct hit against (\\w+), taking ([0-9]*[.]?[0-9]+) recoil damage after traveling [0-9]*[.]?[0-9]+ blocks!");
     private static final Pattern PATTERN_REND = Pattern.compile("^Your Rend dealt [0-9]*[.]?[0-9]+ damage to \\w+.*");
     private static final Pattern PATTERN_REND_DAMAGE = Pattern.compile("([0-9]*[.]?[0-9]+) damage to (\\w+)");
+    private static final Pattern PATTERN_TEAM_TAG = Pattern.compile("^\\[[RBGY]] ");
 
     private String displayText = "";
     private long hitTime;
@@ -142,7 +143,7 @@ public class ArrowHitHUD extends AbstractRenderer {
             return false;
         }
         final ChatLine chatLine = chatLines.get(0);
-        final String chatMessage = StringUtil.removeFormattingCodes(chatLine.getChatComponent().getUnformattedText()).replace("^\\[[RBGY]\\] ", "");
+        final String chatMessage = PATTERN_TEAM_TAG.matcher(StringUtil.removeFormattingCodes(chatLine.getChatComponent().getUnformattedText())).replaceFirst("");
         final int updatedCounter = chatLine.getUpdatedCounter();
         final int currentUpdateCounter = mc.ingameGUI.getUpdateCounter();
         final int counterDiff = Math.abs(currentUpdateCounter - updatedCounter);
