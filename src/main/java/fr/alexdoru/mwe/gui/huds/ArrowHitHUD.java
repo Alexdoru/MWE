@@ -125,8 +125,11 @@ public class ArrowHitHUD extends AbstractRenderer {
     }
 
     private void setPlayerHead(String playername) {
+        skin = null;
         final NetworkPlayerInfo netInfo = NetPlayerInfoTracker.getPlayerInfo(playername);
-        if (netInfo != null && netInfo.hasLocationSkin()) skin = netInfo.getLocationSkin();
+        if (netInfo != null && netInfo.hasLocationSkin()) {
+            skin = netInfo.getLocationSkin();
+        }
     }
 
     private boolean isDeadFromShot(String playername, String hpValue) {
