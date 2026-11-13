@@ -8,16 +8,29 @@ import java.util.*;
 
 public final class ConfigFieldRegistry {
 
+    private final List<ConfigFieldContainer> configFields = new ArrayList<>();
+    private final Map<String, ConfigFieldContainer> namesToConfigFields = new HashMap<>();
+    private final Map<String, ConfigFieldContainer> collidingConfigNames = new HashMap<>();
+
     private final Map<String, Method> events = new HashMap<>();
     private final Set<String> allEventNames = new HashSet<>();
     private final Map<String, Method> hideOverrides = new HashMap<>();
     private final Set<String> allHideNames = new HashSet<>();
-    private final List<ConfigFieldContainer> configFields = new ArrayList<>();
-    private final Map<String, ConfigFieldContainer> namesToConfigFields = new HashMap<>();
-    private final Map<String, ConfigFieldContainer> collidingConfigNames = new HashMap<>();
     private final Map<String, ConfigProperty> shortKeyUsages = new HashMap<>();
 
     ConfigFieldRegistry() {}
+
+    /**
+     * Events and hide overrides can only target fields of the class that declares them,
+     * clearing them prevents a short name from leaking onto a same-named field of another config class.
+     */
+    public void startClassRegistration() {
+        events.clear();
+        allEventNames.clear();
+        hideOverrides.clear();
+        allHideNames.clear();
+        shortKeyUsages.clear();
+    }
 
     public void addEvent(String[] names, Method method) {
         for (final String name : names) {

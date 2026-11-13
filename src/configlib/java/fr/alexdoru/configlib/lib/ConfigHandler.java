@@ -80,6 +80,7 @@ public final class ConfigHandler implements IConfigHandler {
 
     @Override
     public void registerConfig(@NotNull Class<?> clazz) {
+        configFieldRegistry.startClassRegistration();
         try {
             final List<Method> loadEvents = new ArrayList<>();
             final List<Method> updateEvents = new ArrayList<>();

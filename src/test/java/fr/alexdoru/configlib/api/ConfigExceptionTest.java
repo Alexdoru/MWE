@@ -243,4 +243,30 @@ public class ConfigExceptionTest {
         assertEquals("Cannot depend on a config field other than boolean or RendererPosition", exception.getMessage());
     }
 
+    private static class TestConfig13 {
+
+        @ConfigProperty(category = "foo", name = "bla")
+        public static boolean testBool1;
+
+        @ConfigPropertyEvent(name = "bla")
+        private static void event() {}
+
+        @ConfigPropertyHideOverride(name = "bla")
+        private static boolean hide() {return false;}
+
+    }
+
+    private static class TestConfig14 {
+
+        @ConfigProperty(category = "bar", name = "bla")
+        public static boolean testBool2;
+
+    }
+
+    @Test
+    public void shortNameAmbiguityDoesNotCrashOtherConfigClass() {
+        this.configHandler.registerConfig(TestConfig13.class);
+        this.configHandler.registerConfig(TestConfig14.class);
+    }
+
 }
