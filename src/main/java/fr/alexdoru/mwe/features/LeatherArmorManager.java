@@ -16,6 +16,7 @@ public final class LeatherArmorManager {
 
     private static final ItemArmor[] LEATHER_ARMOR = new ItemArmor[]{Items.leather_helmet, Items.leather_chestplate, Items.leather_leggings, Items.leather_boots};
     private static final ItemArmor[] IRON_ARMOR = new ItemArmor[]{Items.iron_helmet, Items.iron_chestplate, Items.iron_leggings, Items.iron_boots};
+    private static final String FAKE_ARMOR_TAG = "mwe$fakearmor";
 
     private final IScoreboardParser parser = ScoreboardTracker.getParser();
     private final ItemStack[] ownFakeArmor = new ItemStack[4];
@@ -61,7 +62,7 @@ public final class LeatherArmorManager {
                 ((EntityPlayerAccessor) player).getPlayerTeamColor() != 0) {
             for (int i = 0; i < player.inventory.armorInventory.length; i++) {
                 final ItemStack stack = player.inventory.armorInventory[i];
-                if (isColoredLeatherArmor(stack)) {
+                if (isFakeLeatherArmor(stack)) {
                     player.inventory.armorInventory[i] = createColoredLeatherArmor(stack, newColor);
                 }
             }
@@ -79,7 +80,7 @@ public final class LeatherArmorManager {
                         if (isCleanIronArmor(stack)) {
                             player.inventory.armorInventory[i] = createColoredLeatherArmor(stack, ((EntityPlayerAccessor) player).getPlayerSpecialRenderColor());
                         }
-                    } else if (isColoredLeatherArmor(stack)) {
+                    } else if (isFakeLeatherArmor(stack)) {
                         final ItemArmor itemArmor = (ItemArmor) stack.getItem();
                         player.inventory.armorInventory[i] = new ItemStack(IRON_ARMOR[itemArmor.armorType]);
                     }
@@ -92,8 +93,8 @@ public final class LeatherArmorManager {
         return stack != null && stack.getItem() instanceof ItemArmor && !stack.isItemEnchanted() && ((ItemArmor) stack.getItem()).getArmorMaterial() == ItemArmor.ArmorMaterial.IRON;
     }
 
-    private static boolean isColoredLeatherArmor(ItemStack stack) {
-        if (stack != null && stack.getItem() instanceof ItemArmor && !stack.isItemEnchanted()) {
+    private static boolean isFakeLeatherArmor(ItemStack stack) {
+        if (stack != null && stack.getItem() instanceof ItemArmor && !stack.isItemEnchanted() && stack.hasTagCompound() && stack.getTagCompound().getBoolean(FAKE_ARMOR_TAG)) {
             final ItemArmor itemArmor = (ItemArmor) stack.getItem();
             return itemArmor.getArmorMaterial() == ItemArmor.ArmorMaterial.LEATHER && itemArmor.hasColor(stack);
         }
@@ -105,6 +106,7 @@ public final class LeatherArmorManager {
         final ItemArmor leatherArmor = LEATHER_ARMOR[ironArmor.armorType];
         final ItemStack leatherItemStack = new ItemStack(leatherArmor);
         leatherArmor.setColor(leatherItemStack, color);
+        leatherItemStack.getTagCompound().setBoolean(FAKE_ARMOR_TAG, true);
         return leatherItemStack;
     }
 
