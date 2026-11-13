@@ -39,13 +39,13 @@ public class WDR implements IReportInfo, Comparable<WDR> {
     }
 
     public boolean addCheat(String cheat) {
+        this.timestamp = new Date().getTime();
         if (!this.cheats.contains(cheat)) {
             this.cheats.add(cheat);
             this.cheats.trimToSize();
             this.updateIcon();
             return true;
         }
-        this.timestamp = new Date().getTime();
         return false;
     }
 
