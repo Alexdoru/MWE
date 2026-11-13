@@ -304,4 +304,49 @@ public class ConfigExceptionTest {
         assertEquals("Circular dependency detected for config test a", exception.getMessage());
     }
 
+    private static class TestConfig17 {
+
+        @ConfigProperty(category = "test", name = "int")
+        public static int testInt;
+
+    }
+
+    @Test
+    public void intSliderWithoutBoundsThrows() {
+        final IllegalStateException exception = assertThrows(IllegalStateException.class, () ->
+                this.configHandler.registerConfig(TestConfig17.class)
+        );
+        assertEquals("Config slider cannot have same min and max values : test int", exception.getMessage());
+    }
+
+    private static class TestConfig18 {
+
+        @ConfigProperty(category = "test", name = "double")
+        public static double testDouble;
+
+    }
+
+    @Test
+    public void doubleSliderWithoutBoundsThrows() {
+        final IllegalStateException exception = assertThrows(IllegalStateException.class, () ->
+                this.configHandler.registerConfig(TestConfig18.class)
+        );
+        assertEquals("Config slider cannot have same min and max values : test double", exception.getMessage());
+    }
+
+    private static class TestConfig19 {
+
+        @ConfigProperty(category = "test", name = "hidden", hidden = true)
+        public static int hiddenInt;
+
+        @ConfigProperty(category = "test", name = "color", isColor = true)
+        public static int color;
+
+    }
+
+    @Test
+    public void hiddenOrColorIntWithoutBoundsWorks() {
+        this.configHandler.registerConfig(TestConfig19.class);
+    }
+
 }

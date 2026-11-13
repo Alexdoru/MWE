@@ -26,9 +26,6 @@ public class SliderGuiButton extends ConfigGuiButton {
 
     public SliderGuiButton(ConfigFieldContainer container) throws IllegalAccessException {
         super(container);
-        if (annotation.sliderMin() == annotation.sliderMax()) {
-            throw new IllegalArgumentException("Config slider cannot have same min and max values : " + annotation.category() + " " + annotation.name());
-        }
         minValue = annotation.sliderMin();
         maxValue = annotation.sliderMax();
         if (field.getType() == int.class) {

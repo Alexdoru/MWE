@@ -136,14 +136,14 @@ public class ConfigSaveLoadTest {
 
     private static class DoubleWrite {
 
-        @ConfigProperty(category = "foo", name = "bar")
+        @ConfigProperty(category = "foo", name = "bar", sliderMax = 10)
         public static double configFieldWrite = 1.0d;
 
     }
 
     private static class DoubleRead {
 
-        @ConfigProperty(category = "foo", name = "bar")
+        @ConfigProperty(category = "foo", name = "bar", sliderMax = 10)
         public static double configFieldRead = 2.0d;
 
     }
@@ -166,14 +166,14 @@ public class ConfigSaveLoadTest {
 
     private static class IntWrite {
 
-        @ConfigProperty(category = "foo", name = "bar")
+        @ConfigProperty(category = "foo", name = "bar", sliderMax = 10)
         public static int configFieldWrite = 1;
 
     }
 
     private static class IntRead {
 
-        @ConfigProperty(category = "foo", name = "bar")
+        @ConfigProperty(category = "foo", name = "bar", sliderMax = 10)
         public static int configFieldRead = 2;
 
     }

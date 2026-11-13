@@ -93,10 +93,14 @@ public final class ConfigFieldContainer {
                 break;
             }
             case DOUBLE: {
+                this.validateSliderBounds();
                 propertyMap.put(this.getKey(), config.get(annotation.category(), annotation.name(), (double) field.get(null)));
                 break;
             }
             case INT: {
+                if (!annotation.isColor()) {
+                    this.validateSliderBounds();
+                }
                 propertyMap.put(this.getKey(), config.get(annotation.category(), annotation.name(), (int) field.get(null)));
                 break;
             }
@@ -130,6 +134,12 @@ public final class ConfigFieldContainer {
             default: {
                 throw new IllegalStateException("Type of field not handled by config lib " + field.getType());
             }
+        }
+    }
+
+    private void validateSliderBounds() {
+        if (!annotation.hidden() && annotation.sliderMin() == annotation.sliderMax()) {
+            throw new IllegalStateException("Config slider cannot have same min and max values : " + annotation.category() + " " + annotation.name());
         }
     }
 
