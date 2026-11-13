@@ -216,9 +216,12 @@ public final class ConfigHandler implements IConfigHandler {
         // We need to parse the class bytes with ASM because
         // the reflection method class.getDeclaredFields()
         // returns the fields in no specific order.
-        final InputStream is = clazz.getResourceAsStream('/' + clazz.getName().replace('.', '/') + ".class");
-        if (is == null) return;
-        final ClassReader cr = new ClassReader(is);
+        final String classFile = '/' + clazz.getName().replace('.', '/') + ".class";
+        final ClassReader cr;
+        try (final InputStream is = clazz.getResourceAsStream(classFile)) {
+            if (is == null) return;
+            cr = new ClassReader(is);
+        }
         final ClassNode cn = new ClassNode();
         cr.accept(cn, ClassReader.SKIP_CODE);
         final String annotationDesc = Type.getDescriptor(ConfigProperty.class);
