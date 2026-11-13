@@ -50,7 +50,7 @@ public class ChatListener {
     private static final String TOKEN_DOUBLED_GUILD_MESSAGE = "Tokens just earned DOUBLED as a Guild Level Reward!";
     private static final Pattern COINS_PATTERN = Pattern.compile("^\\+\\d+ (tokens|coins)!");
     private static final Pattern COINS_BOOSTER_PATTERN = Pattern.compile("^\\+\\d+ (tokens|coins)!( \\([^()]*(?:Coins \\+ EXP|Booster)[^()]*\\))");
-    private static final Pattern ASSIST_PATTERN = Pattern.compile("^\\+\\d+ tokens|coins!.+ASSIST on (\\w{1,16})");
+    private static final Pattern ASSIST_PATTERN = Pattern.compile("^\\+\\d+ coins!.+ASSIST on (\\w{1,16})");
     private static final Pattern PLAYER_JOIN_PATTERN = Pattern.compile("^(\\w{1,16}) has joined \\([0-9]{1,3}/[0-9]{1,3}\\)!");
     private static final Pattern MESSAGE_PATTERN = Pattern.compile("^(?:\\[[^\\[\\]]+] )*(\\w{2,16}):.*");
     private static final Pattern HALO_GIVE_PATTERN = Pattern.compile("^You gave your halo to (\\w+)!");
