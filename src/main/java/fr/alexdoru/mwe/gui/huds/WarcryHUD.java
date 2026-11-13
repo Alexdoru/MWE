@@ -1,6 +1,7 @@
 package fr.alexdoru.mwe.gui.huds;
 
 import fr.alexdoru.mwe.api.events.MegaWallsGameEvent;
+import fr.alexdoru.mwe.api.events.MegaWallsGameEvent.Type;
 import fr.alexdoru.mwe.config.MWEConfig;
 import net.minecraft.client.gui.GuiGameOver;
 import net.minecraft.util.EnumChatFormatting;
@@ -27,7 +28,7 @@ public class WarcryHUD extends SimpleTextRenderer {
 
     @SubscribeEvent
     public void onMWEvent(MegaWallsGameEvent event) {
-        if (event.type == MegaWallsGameEvent.Type.DEATHMATCH_START) {
+        if (event.type == Type.GAME_START || event.type == Type.DEATHMATCH_START) {
             this.activationTime = 0;
         }
     }
