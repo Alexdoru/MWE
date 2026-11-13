@@ -16,7 +16,6 @@ public class ColorSelectionGuiScreen extends GuiScreen {
     private static final ResourceLocation BLUR = new ResourceLocation("configlib", "blur.json");
     private final GuiScreen parent;
     private final Field field;
-    private final int initialColor;
     private final int defaultColor;
     private int lastSavedColor;
     private GuiSlider sliderRed;
@@ -29,20 +28,19 @@ public class ColorSelectionGuiScreen extends GuiScreen {
     public ColorSelectionGuiScreen(ConfigGuiScreen parentScreen, Field field, int defaultColor, Consumer<Integer> setter) throws IllegalAccessException {
         this.parent = parentScreen;
         this.field = field;
-        this.initialColor = ((int) field.get(null));
         this.defaultColor = defaultColor;
-        this.lastSavedColor = this.initialColor;
+        this.lastSavedColor = ((int) field.get(null));
         this.hasAlpha = ((defaultColor >> 24) & 0xff) != 0;
         this.setter = setter;
     }
 
     @Override
     public void initGui() {
-        this.buttonList.add(this.sliderRed = new GuiSlider(1, getxCenter() - 150, getButtonYPos(2), 150, 20, "Red: ", "", 0.0D, 255.0D, (this.initialColor >> 16 & 0xFF), false, true));
-        this.buttonList.add(this.sliderGreen = new GuiSlider(2, getxCenter() - 150, getButtonYPos(3), 150, 20, "Green: ", "", 0.0D, 255.0D, (this.initialColor >> 8 & 0xFF), false, true));
-        this.buttonList.add(this.sliderBlue = new GuiSlider(3, getxCenter() - 150, getButtonYPos(4), 150, 20, "Blue: ", "", 0.0D, 255.0D, (this.initialColor & 0xFF), false, true));
+        this.buttonList.add(this.sliderRed = new GuiSlider(1, getxCenter() - 150, getButtonYPos(2), 150, 20, "Red: ", "", 0.0D, 255.0D, (this.lastSavedColor >> 16 & 0xFF), false, true));
+        this.buttonList.add(this.sliderGreen = new GuiSlider(2, getxCenter() - 150, getButtonYPos(3), 150, 20, "Green: ", "", 0.0D, 255.0D, (this.lastSavedColor >> 8 & 0xFF), false, true));
+        this.buttonList.add(this.sliderBlue = new GuiSlider(3, getxCenter() - 150, getButtonYPos(4), 150, 20, "Blue: ", "", 0.0D, 255.0D, (this.lastSavedColor & 0xFF), false, true));
         if (this.hasAlpha) {
-            this.buttonList.add(this.sliderAlpha = new GuiSlider(4, getxCenter() - 150, getButtonYPos(5), 150, 20, "Alpha: ", "", 0.0D, 255.0D, (this.initialColor >> 24 & 0xFF), false, true));
+            this.buttonList.add(this.sliderAlpha = new GuiSlider(4, getxCenter() - 150, getButtonYPos(5), 150, 20, "Alpha: ", "", 0.0D, 255.0D, (this.lastSavedColor >> 24 & 0xFF), false, true));
         }
         this.buttonList.add(new GuiButton(5, getxCenter() - 150, getButtonYPos(this.hasAlpha ? 6 : 5), 150, 20, "Reset default color"));
         this.buttonList.add(new GuiButton(6, getxCenter() - 150 / 2, getButtonYPos(this.hasAlpha ? 8 : 7), 150, 20, "Done"));
