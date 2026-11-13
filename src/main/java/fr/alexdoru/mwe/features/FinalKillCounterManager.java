@@ -31,12 +31,14 @@ public final class FinalKillCounterManager {
             }
         } else if (event.type == Type.CONNECT) {
             final String serverID = ScoreboardTracker.getServerID();
-            if (this.fkCounter == null || !this.fkCounter.getServerID().equals(serverID)) {
+            if (serverID != null && (this.fkCounter == null || !this.fkCounter.getServerID().equals(serverID))) {
                 this.fkCounter = new FinalKillCounter(fkCounterHUD, serverID);
             }
             // this is here to fix the bug where the killcounter doesn't work if you re-start your minecraft during a game of MW
             // or if you changed your colors for the teams in your MW settings and rejoined the game
-            this.fkCounter.setTeamPrefixes();
+            if (this.fkCounter != null) {
+                this.fkCounter.setTeamPrefixes();
+            }
         }
 
     }
