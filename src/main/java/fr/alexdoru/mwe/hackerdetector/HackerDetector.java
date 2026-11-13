@@ -61,7 +61,7 @@ public class HackerDetector {
             event.left.add("Block Cache: " + brokenBlocksList.size() + "/" + recentPlacedBlocks.size());
             event.left.add("Player" + (playersChecked > 1 ? "s" : "") + " checked: " + playersChecked);
             event.left.add("Time elapsed (ns/s): " + ChatUtil.formatLong(timeElapsed));
-            final double fpsLost = (timeElapsed / (10e9d - timeElapsed)) * Minecraft.getDebugFPS();
+            final double fpsLost = (timeElapsed / (1e9d - timeElapsed)) * Minecraft.getDebugFPS();
             event.left.add("Impact on performance: -" + String.format("%.2f", fpsLost) + "fps");
         }
     }
