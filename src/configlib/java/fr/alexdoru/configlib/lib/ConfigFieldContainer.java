@@ -300,6 +300,11 @@ public final class ConfigFieldContainer {
             if (dependency.fieldType != FieldType.BOOLEAN && dependency.fieldType != FieldType.RENDERER) {
                 throw new IllegalStateException("Cannot depend on a config field other than boolean or RendererPosition");
             }
+            for (ConfigFieldContainer parent = dependency; parent != null; parent = parent.dependency) {
+                if (parent == this) {
+                    throw new IllegalStateException("Circular dependency detected for config " + annotation.category() + " " + annotation.name());
+                }
+            }
             this.dependency = dependency;
             this.dependency.hasDependent = true;
         }

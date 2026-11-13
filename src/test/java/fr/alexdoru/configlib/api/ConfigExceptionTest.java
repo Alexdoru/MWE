@@ -12,8 +12,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.*;
 
 public class ConfigExceptionTest {
 
@@ -267,6 +266,42 @@ public class ConfigExceptionTest {
     public void shortNameAmbiguityDoesNotCrashOtherConfigClass() {
         this.configHandler.registerConfig(TestConfig13.class);
         this.configHandler.registerConfig(TestConfig14.class);
+    }
+
+    private static class TestConfig15 {
+
+        @ConfigProperty(category = "test", name = "a", dependsOn = "c")
+        public static boolean a;
+
+        @ConfigProperty(category = "test", name = "b", dependsOn = "a")
+        public static boolean b;
+
+        @ConfigProperty(category = "test", name = "c", dependsOn = "b")
+        public static boolean c;
+
+    }
+
+    @Test
+    public void circularDependencyThrows() {
+        final IllegalStateException exception = assertThrows(IllegalStateException.class, () ->
+                this.configHandler.registerConfig(TestConfig15.class)
+        );
+        assertTrue(exception.getMessage().startsWith("Circular dependency detected for config "));
+    }
+
+    private static class TestConfig16 {
+
+        @ConfigProperty(category = "test", name = "a", dependsOn = "a")
+        public static boolean a;
+
+    }
+
+    @Test
+    public void selfDependencyThrows() {
+        final IllegalStateException exception = assertThrows(IllegalStateException.class, () ->
+                this.configHandler.registerConfig(TestConfig16.class)
+        );
+        assertEquals("Circular dependency detected for config test a", exception.getMessage());
     }
 
 }
