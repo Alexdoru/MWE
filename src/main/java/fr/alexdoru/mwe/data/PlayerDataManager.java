@@ -16,6 +16,7 @@ import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.DelayedTask;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.scoreboard.ScorePlayerTeam;
@@ -102,7 +103,9 @@ public final class PlayerDataManager {
     }
 
     public static void refreshAllPlayerData() {
-        Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap().forEach(netInfo -> {
+        final NetHandlerPlayClient netHandler = Minecraft.getMinecraft().getNetHandler();
+        if (netHandler == null) return;
+        netHandler.getPlayerInfoMap().forEach(netInfo -> {
                     final PlayerData playerData = createPlayerData(netInfo.getGameProfile());
                     ((NetworkPlayerInfoAccessor) netInfo).setCustomDisplayname(playerData.displayName);
                 }
@@ -118,7 +121,9 @@ public final class PlayerDataManager {
     }
 
     public static void refreshPlayerData(@NotNull UUID id) {
-        refreshPlayerData(Minecraft.getMinecraft().getNetHandler().getPlayerInfo(id));
+        final NetHandlerPlayClient netHandler = Minecraft.getMinecraft().getNetHandler();
+        if (netHandler == null) return;
+        refreshPlayerData(netHandler.getPlayerInfo(id));
     }
 
     public static void refreshPlayerData(NetworkPlayerInfo netInfo) {
