@@ -300,6 +300,7 @@ public class ConfigGuiScreen extends GuiScreen {
             }
         } else if (button.isLeft() && SEARCH_BOX.isMouseInBox(mouseX, mouseY)) {
             searchField.setFocused(true);
+            lastInteractedSlider = null;
             return;
         }
         super.mouseClicked(mouseX, mouseY, mouseButton);
@@ -347,14 +348,17 @@ public class ConfigGuiScreen extends GuiScreen {
             final String search = searchField.getText();
             final boolean wasUnused = !searchField.isFocused() && searchField.getText().isEmpty();
             searchField.setFocused(true);
-            if (searchField.textboxKeyTyped(typedChar, keyCode)) {
+            final boolean consumed = searchField.textboxKeyTyped(typedChar, keyCode);
+            if (!consumed && wasUnused && searchField.getText().isEmpty()) {
+                searchField.setFocused(false);
+            } else {
+                lastInteractedSlider = null;
+            }
+            if (consumed) {
                 if (!search.equals(searchField.getText())) {
                     updateSearch();
                 }
                 return;
-            }
-            if (wasUnused && searchField.getText().isEmpty()) {
-                searchField.setFocused(false);
             }
         }
         super.keyTyped(typedChar, keyCode);
@@ -490,6 +494,9 @@ public class ConfigGuiScreen extends GuiScreen {
                     }
                 }
             }
+        }
+        if (this.lastInteractedSlider != null && !this.renderedConfigElements.contains(this.lastInteractedSlider)) {
+            this.lastInteractedSlider = null;
         }
     }
 
