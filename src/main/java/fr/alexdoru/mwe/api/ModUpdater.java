@@ -157,7 +157,7 @@ public abstract class ModUpdater {
             for (final PendingInstall install : pendingInstallations) {
                 try {
                     if (install.newJarCacheFile.exists() && install.oldJarFile.exists() && deleterFile.exists()) {
-                        final File newJarFile = new File(install.oldJarFile.getParent(), install.artifactName);
+                        final File newJarFile = getInstallTarget(install.oldJarFile, install.artifactName);
                         Files.copy(
                                 install.newJarCacheFile.toPath(),
                                 newJarFile.toPath(),
@@ -184,6 +184,22 @@ public abstract class ModUpdater {
                 LOGGER.error("Failed to start shared deleter process", e);
             }
         }
+    }
+
+    // avoid conflicts if there is already a file that has the same name as the downloaded artifact
+    private static File getInstallTarget(File oldJarFile, String artifactName) throws IOException {
+        final File directory = oldJarFile.getParentFile();
+        File target = new File(directory, artifactName);
+        if (!target.exists() || !Files.isSameFile(target.toPath(), oldJarFile.toPath())) {
+            return target;
+        }
+        final String baseName = artifactName.endsWith(".jar") ? artifactName.substring(0, artifactName.length() - 4) : artifactName;
+        int i = 1;
+        do {
+            target = new File(directory, baseName + "-update" + (i == 1 ? "" : i) + ".jar");
+            i++;
+        } while (target.exists());
+        return target;
     }
 
     protected ArtifactInfo parseArtifactInfoFromApi(JsonObject apiResponse) {
