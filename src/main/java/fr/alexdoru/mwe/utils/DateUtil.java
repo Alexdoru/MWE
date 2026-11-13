@@ -1,32 +1,23 @@
 package fr.alexdoru.mwe.utils;
 
-import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
-import java.util.TimeZone;
 
-public class DateUtil {
+public final class DateUtil {
 
-    private static final SimpleDateFormat LOCAL_DATE_FORMAT;
-    private static final SimpleDateFormat LOCAL_DATE_FORMAT_DAY;
-    private static final SimpleDateFormat EST_DATE_FORMAT;
+    private DateUtil() {}
 
-    static {
-        LOCAL_DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy 'at' HH:mm:ss");
-        LOCAL_DATE_FORMAT_DAY = new SimpleDateFormat("dd/MM/yyyy");
-        EST_DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy 'at' HH:mm:ss 'EST'");
-        EST_DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("America/New_York"));
-    }
+    private static final DateTimeFormatter LOCAL_DATE_FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy 'at' HH:mm:ss");
+    private static final DateTimeFormatter LOCAL_DATE_FORMAT_DAY = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     public static String localFormatTime(long epoch) {
-        return LOCAL_DATE_FORMAT.format(epoch);
+        return LOCAL_DATE_FORMAT.format(Instant.ofEpochMilli(epoch).atZone(ZoneId.systemDefault()));
     }
 
     public static String localFormatTimeInDay(long epoch) {
-        return LOCAL_DATE_FORMAT_DAY.format(epoch);
-    }
-
-    public static String ESTFormatTime(long epoch) {
-        return EST_DATE_FORMAT.format(epoch);
+        return LOCAL_DATE_FORMAT_DAY.format(Instant.ofEpochMilli(epoch).atZone(ZoneId.systemDefault()));
     }
 
     /**
