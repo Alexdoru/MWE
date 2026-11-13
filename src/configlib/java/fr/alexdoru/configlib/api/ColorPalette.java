@@ -4,24 +4,24 @@ import java.awt.Color;
 
 public class ColorPalette {
 
-    public int TITLE_TEXT = new Color(0xFFFFFFFF).getRGB();
-    public int BACK_GROUND = new Color(0xFF323237).getRGB();
-    public int BACK_GROUND_BORDER = new Color(0xFF4C4C51).getRGB();
-    public int SEARCH_BOX = new Color(0xFF515156).getRGB();
-    public int SEARCH_BOX_TEXT = new Color(0xFFFFFFFF).getRGB();
-    public int BELOW_TITLE_LINE = new Color(0xFF545459).getRGB();
+    public int TITLE_TEXT = new Color(0xFFFFFF).getRGB();
+    public int BACK_GROUND = new Color(0x323237).getRGB();
+    public int BACK_GROUND_BORDER = new Color(0x4C4C51).getRGB();
+    public int SEARCH_BOX = new Color(0x515156).getRGB();
+    public int SEARCH_BOX_TEXT = new Color(0xFFFFFF).getRGB();
+    public int BELOW_TITLE_LINE = new Color(0x545459).getRGB();
     public int INNER_BACKGROUND = new Color(0x3A3A40).getRGB();
-    public int INNER_BACKGROUND_BORDER = new Color(0xFF171717).getRGB();
+    public int INNER_BACKGROUND_BORDER = new Color(0x171717).getRGB();
     public int SCROLLBAR_TRACK = new Color(0x19191A).getRGB();
     public int SCROLLBAR_THUMB = new Color(0xAFAFB3).getRGB();
-    public int CATEGORY_BUTTON_TEXT = new Color(0xFFFFFFFF).getRGB();
+    public int CATEGORY_BUTTON_TEXT = new Color(0xFFFFFF).getRGB();
     public int SETTING_BACKGROUND = new Color(0x46464D).getRGB();
     public int SETTING_BACKGROUND_BORDER = new Color(0x606066).getRGB();
     public int SETTING_NAME_TEXT = new Color(5635925).getRGB();
     public int SETTING_COMMENT_TEXT = new Color(0xA2A2AB).getRGB();
-    public int CATEGORY_HEADER_TITLE_TEXT = new Color(0xFFFFFFFF).getRGB();
+    public int CATEGORY_HEADER_TITLE_TEXT = new Color(0xFFFFFF).getRGB();
     public int CATEGORY_HEADER_COMMENT_TEXT = new Color(0xA2A2AB).getRGB();
-    public int SUB_CATEGORY_HEADER_TEXT = new Color(0xFFFFFFFF).getRGB();
+    public int SUB_CATEGORY_HEADER_TEXT = new Color(0xFFFFFF).getRGB();
     public int COLOR_BUTTON_INDICATOR_BORDER = new Color(0).getRGB();
     public int HUD_BUTTON_HINT_TEXT = new Color(16777045).getRGB();
     public int SLIDER_BUTTON_PLUS_BACKGROUND = new Color(0x6D6D73).getRGB();
@@ -31,11 +31,11 @@ public class ColorPalette {
     public int SLIDER_BUTTON_TRACK_BORDER = new Color(0xBDBDBF).getRGB();
     public int SLIDER_BUTTON_THUMB = new Color(0x5E5EFF).getRGB();
     public int SLIDER_BUTTON_THUMB_BORDER = new Color(0xE3E3E6).getRGB();
-    public int SLIDER_BUTTON_VALUE_TEXT = new Color(0xFFFFFFFF).getRGB();
-    public int LABEL_TEXT = new Color(0xFFFFFFFF).getRGB();
+    public int SLIDER_BUTTON_VALUE_TEXT = new Color(0xFFFFFF).getRGB();
+    public int LABEL_TEXT = new Color(0xFFFFFF).getRGB();
     public int BUTTON_BACKGROUND = new Color(0x46464D).getRGB();
     public int BUTTON_BACKGROUND_BORDER = new Color(0x606066).getRGB();
-    public int BUTTON_TEXT = new Color(0xFFFFFFFF).getRGB();
+    public int BUTTON_TEXT = new Color(0xFFFFFF).getRGB();
 
     @SuppressWarnings("unused")
     public static final class VanillaColors {
