@@ -24,7 +24,7 @@ public class SubCategoryHeader implements ConfigUIElement {
     @Override
     public void draw(ColorPalette colorPalette, int drawX, int drawY, int mouseX, int mouseY) {
         final int textX = drawX + (boxWidth - mc.fontRendererObj.getStringWidth(subCategoryName)) / 2;
-        mc.fontRendererObj.drawStringWithShadow(subCategoryName, textX, drawY, 0xFFFFFFFF);
+        mc.fontRendererObj.drawStringWithShadow(subCategoryName, textX, drawY, colorPalette.SUB_CATEGORY_HEADER_TEXT);
     }
 
     @Override

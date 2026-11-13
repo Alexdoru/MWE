@@ -21,6 +21,7 @@ public class ColorPalette {
     public int SETTING_COMMENT_TEXT = new Color(0xA2A2AB).getRGB();
     public int CATEGORY_HEADER_TITLE_TEXT = new Color(0xFFFFFFFF).getRGB();
     public int CATEGORY_HEADER_COMMENT_TEXT = new Color(0xA2A2AB).getRGB();
+    public int SUB_CATEGORY_HEADER_TEXT = new Color(0xFFFFFFFF).getRGB();
     public int COLOR_BUTTON_INDICATOR_BORDER = new Color(0).getRGB();
     public int HUD_BUTTON_HINT_TEXT = new Color(16777045).getRGB();
     public int SLIDER_BUTTON_PLUS_BACKGROUND = new Color(0x6D6D73).getRGB();
