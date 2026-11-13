@@ -158,7 +158,7 @@ public final class WdrDataManager {
      */
     public static boolean remove(UUID uuid, String playername) {
         WDR removed = null;
-        if (uuid != null) {
+        if (uuid != null && PlayerDataManager.isRealPlayer(uuid)) {
             removed = uuidMap.remove(uuid);
             PlayerDataManager.refreshPlayerData(uuid);
         } else if (playername != null) {
