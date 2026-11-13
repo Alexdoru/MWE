@@ -11,7 +11,6 @@ import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.data.NameFormatter;
 import fr.alexdoru.mwe.data.WdrDataManager;
 import fr.alexdoru.mwe.features.SquadHandler;
-import fr.alexdoru.mwe.hackerdetector.HackerDetector;
 import fr.alexdoru.mwe.hackerdetector.data.PlayerDataSamples;
 import fr.alexdoru.mwe.hackerdetector.data.Vector3D;
 import fr.alexdoru.mwe.hackerdetector.data.ViolationLevelTracker;
@@ -43,7 +42,6 @@ import java.util.function.Predicate;
 public abstract class Check implements ICheck {
 
     private static final Set<String> flagMessages = new HashSet<>();
-    private final HackerDetector hackerDetector = MWE.INSTANCE().getHackerDetector();
     private long lastSoundTime;
 
     public final void checkViolationLevel(EntityPlayer player, boolean failedCheck, ViolationLevelTracker tracker) {
@@ -69,7 +67,7 @@ public abstract class Check implements ICheck {
         final String cheatType = this.getCheatName() + (this.getFlagType().isEmpty() ? "" : " (" + this.getFlagType() + ")");
         final String playername = ScoreboardTracker.isReplayMode() ? StringUtil.removeFormattingCodes(player.getName()) : player.getName();
         if (MWEConfig.debugLogging) {
-            this.hackerDetector.log(player.getName() + " flags " + cheatType);
+            MWE.INSTANCE().getHackerDetector().log(player.getName() + " flags " + cheatType);
         }
         if (!MWEConfig.showFlagMessages) {
             return;
@@ -129,7 +127,7 @@ public abstract class Check implements ICheck {
     }
 
     protected void log(EntityPlayer player, PlayerDataSamples data, ViolationLevelTracker vl, String extramsg) {
-        this.hackerDetector.log(player.getName() + " failed " + this.getCheatName()
+        MWE.INSTANCE().getHackerDetector().log(player.getName() + " failed " + this.getCheatName()
                 + (this.getFlagType().isEmpty() ? "" : " (" + this.getFlagType() + ")") + " check"
                 + " | vl " + vl.getViolationLevel()
                 + (extramsg == null ? "" : extramsg)
