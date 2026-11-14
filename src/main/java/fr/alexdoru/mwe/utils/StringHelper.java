@@ -23,37 +23,47 @@ public final class StringHelper {
      * after second split :"§6[MVP§8++§6] " + "Kyotone" + "§f§r§f" + ": " + "§r§eAlexdoru§r§f is bhopping§r"
      */
     public static String insertAfterName(String message, String messageSender, String injectedText, String injectAtMsgStart, boolean cleanEnd) {
-        final String[] split = message.split(messageSender, 2);
-        if (split.length != 2) {
+        final int senderIndex = message.indexOf(messageSender);
+        if (senderIndex == -1) {
             return message;
         }
-        final String[] secondSplit = split[1].split(": ", 2);
-        if (secondSplit.length != 2) {
-            return split[0] + messageSender + injectedText + (cleanEnd ? StringUtil.removeFormattingCodes(split[1]) : split[1]);
+        final String beforeSender = message.substring(0, senderIndex);
+        final String afterSender = message.substring(senderIndex + messageSender.length());
+        final int colonIndex = afterSender.indexOf(": ");
+        if (colonIndex == -1) {
+            return beforeSender + messageSender + injectedText + (cleanEnd ? StringUtil.removeFormattingCodes(afterSender) : afterSender);
         }
-        return split[0] + messageSender + injectedText + secondSplit[0] + ": " + injectAtMsgStart + (cleanEnd ? StringUtil.removeFormattingCodes(secondSplit[1]) : secondSplit[1]);
+        final String afterColon = afterSender.substring(colonIndex + 2);
+        return beforeSender + messageSender + injectedText + afterSender.substring(0, colonIndex) + ": " + injectAtMsgStart + (cleanEnd ? StringUtil.removeFormattingCodes(afterColon) : afterColon);
     }
 
     /**
      * Changes the color of the target inside a message while keeping the original color after that
      */
     public static String changeColorOf(String message, String target, EnumChatFormatting color) {
-        final String[] split = message.split(target, 2);
-        if (split.length != 2) {
+        final int index = message.indexOf(target);
+        if (index == -1) {
             return message;
         }
-        return split[0] + color + target + '§' + StringUtil.getLastFormattingCodeOf(split[0]) + split[1];
+        final String before = message.substring(0, index);
+        return before + color + target + getFormattingToRestore(before) + message.substring(index + target.length());
     }
 
     /**
      * Replaces the target inside the String while preserving the color after the replacement
      */
     public static String replaceFirstKeepFormat(String message, String target, String replacement) {
-        final String[] split = message.split(target, 2);
-        if (split.length != 2) {
+        final int index = message.indexOf(target);
+        if (index == -1) {
             return message;
         }
-        return split[0] + replacement + '§' + StringUtil.getLastFormattingCodeOf(split[0]) + split[1];
+        final String before = message.substring(0, index);
+        return before + replacement + getFormattingToRestore(before) + message.substring(index + target.length());
+    }
+
+    private static String getFormattingToRestore(String textBefore) {
+        final String code = StringUtil.getLastFormattingCodeOf(textBefore);
+        return code.isEmpty() ? EnumChatFormatting.RESET.toString() : '§' + code;
     }
 
 }
