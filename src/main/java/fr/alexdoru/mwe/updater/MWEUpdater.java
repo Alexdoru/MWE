@@ -45,6 +45,8 @@ public final class MWEUpdater extends ModUpdater {
                     ChatUtil.addChatMessage(new ChatComponentText(RED + "✘ The automatic updater is disabled on Feather."));
                 } else if (this.downloadSuccess) {
                     ChatUtil.addChatMessage(new ChatComponentText(GREEN + "✔ Update has been downloaded and will be installed automatically when closing the game."));
+                } else {
+                    ChatUtil.addChatMessage(new ChatComponentText(RED + "✘ Failed to download update"));
                 }
             }
             ChatUtil.addChatMessage(DARK_GRAY + ChatUtil.bar());
