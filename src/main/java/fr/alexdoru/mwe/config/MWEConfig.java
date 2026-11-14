@@ -454,7 +454,7 @@ public final class MWEConfig {
 
     @ConfigProperty(
             category = PVP_STUFF, subCategory = "Toggle Sprint",
-            name = "Toggle Sprint Key",
+            name = "Toggle Sprint key",
             comment = "A key for turning on and off the toggle sprint")
     public static final KeyBinding toggleSprintKey = new KeyBinding("Toggle Sprint", Keyboard.KEY_NONE, "MWE");
 
