@@ -1,5 +1,6 @@
 package fr.alexdoru.mwe.features.overlays;
 
+import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.api.enums.MWClass;
 import fr.alexdoru.mwe.api.enums.MWSkin;
 import fr.alexdoru.mwe.api.events.ContainerSlotRenderEvent;
@@ -23,8 +24,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Properties;
@@ -170,19 +174,23 @@ public final class ClassSelectorOverlay extends InventoryOverlay {
     private void saveSkinsAsync(@NotNull UUID uuid) {
         final Map<MWClass, MWSkin> snapshot = new EnumMap<>(this.selectedSkins);
         MultithreadingUtil.queueIOTask(() -> {
-            if (!this.configFolder.exists()) {
-                //noinspection ResultOfMethodCallIgnored
-                this.configFolder.mkdirs();
-            }
-            final File file = this.getSkinsFile(uuid);
             final Properties props = new Properties();
             for (final Map.Entry<MWClass, MWSkin> entry : snapshot.entrySet()) {
                 props.setProperty(entry.getKey().name(), entry.getValue().skinName);
             }
-            try (FileOutputStream out = new FileOutputStream(file)) {
-                props.store(out, "Class selector skin choices for " + uuid);
+            final Path path = this.getSkinsFile(uuid).toPath();
+            final Path tmp = path.resolveSibling(path.getFileName() + ".tmp");
+            try {
+                Files.createDirectories(this.configFolder.toPath());
+                try (OutputStream out = Files.newOutputStream(tmp)) {
+                    props.store(out, "Class selector skin choices for " + uuid);
+                }
+                Files.move(tmp, path, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
             } catch (IOException e) {
-                e.printStackTrace();
+                MWE.logger.error("Failed to save class selector skins to {}", path, e);
+                try {
+                    Files.deleteIfExists(tmp);
+                } catch (IOException ignored) {}
             }
         });
     }
