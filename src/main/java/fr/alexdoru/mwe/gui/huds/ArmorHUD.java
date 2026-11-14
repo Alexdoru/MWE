@@ -32,7 +32,7 @@ public class ArmorHUD extends AbstractRenderer {
         if (MWEConfig.lowDuraArmorHUD) {
             boolean shouldRender = false;
             for (final ItemStack stack : thePlayer.inventory.armorInventory) {
-                if (stack != null) {
+                if (stack != null && stack.isItemStackDamageable()) {
                     final int durability = stack.getMaxDamage() - stack.getItemDamage();
                     if (durability <= MWEConfig.lowDuraArmorHUDValue) {
                         shouldRender = true;
@@ -99,14 +99,16 @@ public class ArmorHUD extends AbstractRenderer {
         itemRender.renderItemAndEffectIntoGUI(stack, x, y);
         if (MWEConfig.showArmorDurability) {
             if (MWEConfig.showArmorDurabilityAsNumber) {
-                final int duraI = stack.getMaxDamage() - stack.getItemDamage();
-                final String s = ColorUtil.getHPColor(stack.getMaxDamage(), duraI).toString() + duraI;
-                GlStateManager.disableLighting();
-                GlStateManager.disableDepth();
-                GlStateManager.disableBlend();
-                fr.drawStringWithShadow(s, (float) (x + ICON_SIZE + 1 - 2 - fr.getStringWidth(s)), (float) (y + 6 + 3), 0xFFFFFFFF);
-                GlStateManager.enableLighting();
-                GlStateManager.enableDepth();
+                if (stack.isItemStackDamageable()) {
+                    final int duraI = stack.getMaxDamage() - stack.getItemDamage();
+                    final String s = ColorUtil.getHPColor(stack.getMaxDamage(), duraI).toString() + duraI;
+                    GlStateManager.disableLighting();
+                    GlStateManager.disableDepth();
+                    GlStateManager.disableBlend();
+                    fr.drawStringWithShadow(s, (float) (x + ICON_SIZE + 1 - 2 - fr.getStringWidth(s)), (float) (y + 6 + 3), 0xFFFFFFFF);
+                    GlStateManager.enableLighting();
+                    GlStateManager.enableDepth();
+                }
             } else {
                 itemRender.renderItemOverlayIntoGUI(fr, stack, x, y, null);
             }
