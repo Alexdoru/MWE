@@ -1315,7 +1315,7 @@ public final class MWEConfig {
             category = HACKER_DETECTOR, subCategory = "Report",
             name = "Report HUD in chat only",
             dependsOn = "Report HUD",
-            comment = "Displays the report HUD only when the chat is open")
+            comment = "Displays the report HUD only when the mod is typing a report")
     public static boolean showReportHUDonlyInChat;
 
     @ConfigProperty(
