@@ -10,7 +10,10 @@ import fr.alexdoru.mwe.data.NameFormatter;
 import fr.alexdoru.mwe.data.NetPlayerInfoTracker;
 import fr.alexdoru.mwe.data.ScangameData;
 import fr.alexdoru.mwe.data.WdrDataManager;
-import fr.alexdoru.mwe.features.*;
+import fr.alexdoru.mwe.features.AFKSoundWarning;
+import fr.alexdoru.mwe.features.FinalKillCounter;
+import fr.alexdoru.mwe.features.PartyDetection;
+import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.gui.MWERenderers;
 import fr.alexdoru.mwe.hackerdetector.checks.Check;
 import fr.alexdoru.mwe.nocheaters.ReportSuggestionHandler;
@@ -192,10 +195,6 @@ public class ChatListener {
 
             if (messageSender != null) {
                 ChatUtil.addSkinToComponent(event.message, messageSender);
-            }
-
-            if (MegaWallsEndGameStats.processMessage(msg)) {
-                return;
             }
 
             final Matcher playerJoinMatcher = PLAYER_JOIN_PATTERN.matcher(msg);

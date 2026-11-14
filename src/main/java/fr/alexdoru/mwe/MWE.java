@@ -71,6 +71,7 @@ public class MWE {
     private File configFolder;
     private KeyBinding newNickKey;
     private final LeatherArmorManager leatherArmorManager = new LeatherArmorManager();
+    private final MegaWallsEndGameStats mwGameStats = new MegaWallsEndGameStats();
 
     public MWE() {
         if (INSTANCE != null) {
@@ -137,7 +138,7 @@ public class MWE {
         MinecraftForge.EVENT_BUS.register(new PlayerDataManager.EventHandler());
         MinecraftForge.EVENT_BUS.register(new WarningMessageHandler());
         MinecraftForge.EVENT_BUS.register(new KeybindingListener());
-        MinecraftForge.EVENT_BUS.register(new MegaWallsEndGameStats());
+        MinecraftForge.EVENT_BUS.register(this.mwGameStats);
 
         ClientCommandHandler.instance.registerCommand(new CommandMWE());
         ClientCommandHandler.instance.registerCommand(new CommandWDR());
@@ -195,6 +196,10 @@ public class MWE {
 
     public LeatherArmorManager getLeatherArmorManager() {
         return leatherArmorManager;
+    }
+
+    public MegaWallsEndGameStats getMwGameStats() {
+        return mwGameStats;
     }
 
 }
