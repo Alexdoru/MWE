@@ -67,7 +67,7 @@ public class GuiNewChatHook_SearchBox {
             needsUpdate = true;
             isRegexSearch = true;
         } else if (obj instanceof String) {
-            prevTextToSearch = textToSearch;
+            prevTextToSearch = isRegexSearch ? "" : textToSearch;
             textToSearch = ((String) obj).toLowerCase();
             needsUpdate = !prevTextToSearch.equals(textToSearch) || isRegexSearch;
             isRegexSearch = false;
