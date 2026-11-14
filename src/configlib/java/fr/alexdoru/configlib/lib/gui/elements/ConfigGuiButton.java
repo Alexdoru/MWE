@@ -18,6 +18,7 @@ import java.util.List;
 public abstract class ConfigGuiButton implements ConfigUIElement {
 
     protected final Minecraft mc = Minecraft.getMinecraft();
+    protected final int switchButtonWidth = mc.fontRendererObj.getStringWidth(" Disabled ");
     private final ConfigFieldContainer fieldContainer;
     protected final Field field;
     protected final ConfigProperty annotation;
@@ -35,7 +36,7 @@ public abstract class ConfigGuiButton implements ConfigUIElement {
     public void setBoxWidth(int boxWidth) {
         this.boxWidth = boxWidth;
         if (this.hasComment()) {
-            final int wrapWidth = boxWidth - mc.fontRendererObj.getStringWidth(" Disabled ") - 20 - 20;
+            final int wrapWidth = boxWidth - switchButtonWidth - 20 - 20;
             this.commentToRender.clear();
             this.commentToRender.addAll(resizeCommentLines(annotation.comment(), wrapWidth));
         }
@@ -92,7 +93,13 @@ public abstract class ConfigGuiButton implements ConfigUIElement {
         }
     }
 
-    protected int getTopPaddingToCenter(int elementHeight) {
+    protected final int getLeftPaddingToCenter(int elementWidth) {
+        final int MIN_RIGHT_MARGIN = 8;
+        final int centeredPadding = this.boxWidth - 20 - (switchButtonWidth + elementWidth) / 2;
+        return Math.min(centeredPadding, this.boxWidth - MIN_RIGHT_MARGIN - elementWidth);
+    }
+
+    protected final int getTopPaddingToCenter(int elementHeight) {
         return (this.getHeight() - elementHeight) / 2;
     }
 

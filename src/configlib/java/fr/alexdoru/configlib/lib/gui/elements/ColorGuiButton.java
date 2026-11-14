@@ -19,13 +19,13 @@ public class ColorGuiButton extends ConfigGuiButton {
         this.parentScreen = configGuiScreen;
         this.color = (int) this.field.get(null);
         this.defaultColor = defaultColor;
-        this.button = new ClickGuiButton(mc.fontRendererObj.getStringWidth(" Disabled "), 20, "Change");
+        this.button = new ClickGuiButton(switchButtonWidth, 20, "Change");
     }
 
     @Override
     public void draw(ColorPalette colorPalette, int drawX, int drawY, int mouseX, int mouseY) {
         super.draw(colorPalette, drawX, drawY, mouseX, mouseY);
-        button.xPosition = drawX + boxWidth - button.width - 20;
+        button.xPosition = drawX + this.getLeftPaddingToCenter(button.width);
         button.yPosition = drawY + this.getTopPaddingToCenter(button.height);
         button.drawButton(colorPalette, mc, mouseX, mouseY);
         final int left = button.xPosition - 20 - 1;

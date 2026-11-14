@@ -24,7 +24,7 @@ public class RendererGuiButton extends ConfigGuiButton {
         this.rendererManager = rendererManager;
         this.rendererPosition = ((RendererPosition) field.get(null));
         this.toggled = this.rendererPosition.isEnabled();
-        this.buttonEnabled = new ClickGuiButton(mc.fontRendererObj.getStringWidth(" Disabled "), 20, this.getSwitchButtonText(toggled));
+        this.buttonEnabled = new ClickGuiButton(switchButtonWidth, 20, getSwitchButtonText(toggled));
         this.buttonMoveHud = new ClickGuiButton(20, 20);
         this.buttonMoveHud.setTexture(new ResourceLocation("configlib", "move.png"));
     }
@@ -38,7 +38,7 @@ public class RendererGuiButton extends ConfigGuiButton {
     @Override
     public void draw(ColorPalette colorPalette, int drawX, int drawY, int mouseX, int mouseY) {
         super.draw(colorPalette, drawX, drawY, mouseX, mouseY);
-        buttonEnabled.xPosition = drawX + boxWidth - buttonEnabled.width - 20;
+        buttonEnabled.xPosition = drawX + this.getLeftPaddingToCenter(buttonEnabled.width);
         buttonEnabled.yPosition = drawY + this.getTopPaddingToCenter(buttonEnabled.height);
         buttonEnabled.drawButton(colorPalette, mc, mouseX, mouseY);
 
@@ -59,7 +59,7 @@ public class RendererGuiButton extends ConfigGuiButton {
         if (mouseButton.isLeft()) {
             if (buttonEnabled.mousePressed(mouseX, mouseY)) {
                 flipBooleanConfig();
-                buttonEnabled.displayString = this.getSwitchButtonText(toggled);
+                buttonEnabled.displayString = getSwitchButtonText(toggled);
                 toggleDependencies(this.parentScreen);
                 return true;
             } else if (buttonMoveHud.mousePressed(mouseX, mouseY)) {
