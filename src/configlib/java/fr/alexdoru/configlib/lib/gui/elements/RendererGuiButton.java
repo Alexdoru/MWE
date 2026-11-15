@@ -5,6 +5,7 @@ import fr.alexdoru.configlib.api.RendererPosition;
 import fr.alexdoru.configlib.lib.ConfigFieldContainer;
 import fr.alexdoru.configlib.lib.RendererManager;
 import fr.alexdoru.configlib.lib.gui.ConfigGuiScreen;
+import fr.alexdoru.configlib.lib.gui.GuiUtil;
 import fr.alexdoru.configlib.lib.gui.MouseButton;
 import fr.alexdoru.configlib.lib.gui.RendererEditGuiScreen;
 import net.minecraft.util.ResourceLocation;
@@ -41,11 +42,20 @@ public class RendererGuiButton extends ConfigGuiButton {
         buttonMoveHud.drawButton(colorPalette, mc, mouseX, mouseY);
 
         if (buttonMoveHud.isMouseOver()) {
-            final String text = "Move HUD";
-            final int textX = buttonMoveHud.xPosition - 4 - mc.fontRendererObj.getStringWidth(text);
-            final int textY = buttonMoveHud.yPosition + (buttonMoveHud.height - 8) / 2;
-            mc.fontRendererObj.drawStringWithShadow(text, textX, textY, colorPalette.HUD_BUTTON_HINT_TEXT);
+            this.drawEditHint(colorPalette);
         }
+    }
+
+    private void drawEditHint(ColorPalette colorPalette) {
+        final String text = "Edit HUD";
+        final int PADDING = 3;
+        final int GAP_TO_BUTTON = 2;
+        final int textWidth = mc.fontRendererObj.getStringWidth(text);
+        final int left = buttonMoveHud.xPosition + buttonMoveHud.width / 2 - textWidth / 2 - PADDING;
+        final int bottom = buttonMoveHud.yPosition - GAP_TO_BUTTON;
+        final int top = bottom - 8 - 2 * PADDING;
+        GuiUtil.drawBoxWithOutline(left, top, left + textWidth + 2 * PADDING, bottom, colorPalette.SETTING_BACKGROUND, colorPalette.SETTING_BACKGROUND_BORDER);
+        mc.fontRendererObj.drawStringWithShadow(text, left + PADDING, top + PADDING, colorPalette.HUD_BUTTON_HINT_TEXT);
     }
 
     @Override
