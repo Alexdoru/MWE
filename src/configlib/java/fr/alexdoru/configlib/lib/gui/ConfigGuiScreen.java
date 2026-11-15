@@ -142,7 +142,7 @@ public class ConfigGuiScreen extends GuiScreen {
 
         final int elementWidth = CONFIG_BOX.getWidth() - 2 * PADDING;
         for (final ConfigUIElement element : this.configElements) {
-            element.setBoxWidth(elementWidth);
+            element.setReservedWidth(elementWidth);
         }
 
         final int lastCategoryScroll = this.categoryScrollbar.getScroll();
@@ -468,7 +468,7 @@ public class ConfigGuiScreen extends GuiScreen {
                             displayText = element.getCategory() + (element.getSubCategory().isEmpty() ? "" : " - " + element.getSubCategory());
                         }
                         final TextLabel textLabel = new TextLabel(displayText);
-                        textLabel.setBoxWidth(elementWidth);
+                        textLabel.setReservedWidth(elementWidth);
                         this.renderedConfigElements.add(textLabel);
                     }
                     this.renderedConfigElements.add(element);
@@ -476,7 +476,7 @@ public class ConfigGuiScreen extends GuiScreen {
             }
             if (this.renderedConfigElements.isEmpty()) {
                 final TextLabel textLabel = new TextLabel("Nothing was found! :(");
-                textLabel.setBoxWidth(elementWidth);
+                textLabel.setReservedWidth(elementWidth);
                 this.renderedConfigElements.add(textLabel);
             }
         } else {

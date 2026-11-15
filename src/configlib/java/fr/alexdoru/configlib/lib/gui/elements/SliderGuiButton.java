@@ -49,19 +49,13 @@ public class SliderGuiButton extends ConfigGuiButton {
     }
 
     @Override
-    public void setBoxWidth(int boxWidth) {
-        super.setBoxWidth(boxWidth - 60);
-        this.boxWidth = boxWidth;
-    }
-
-    @Override
     public void draw(ColorPalette colorPalette, int drawX, int drawY, int mouseX, int mouseY) {
         super.draw(colorPalette, drawX, drawY, mouseX, mouseY);
         if (dragging) {
             updateSliderFromPosition(mouseX - sliderBarX);
         }
         final int SLIDER_HEIGHT = 6;
-        sliderBarX = drawX + boxWidth - SLIDER_WIDTH - 20;
+        sliderBarX = drawX + this.getSliderBarLeftPadding();
         final int sliderBarY = drawY + this.getTopPaddingToCenter(SLIDER_HEIGHT);
         sliderButtonX = sliderBarX + sliderIncrement - SLIDER_BUTTON_SIZE / 2;
         sliderButtonY = sliderBarY + (SLIDER_HEIGHT - SLIDER_BUTTON_SIZE) / 2;
@@ -94,6 +88,15 @@ public class SliderGuiButton extends ConfigGuiButton {
         final int valueX = sliderButtonX + (SLIDER_BUTTON_SIZE - mc.fontRendererObj.getStringWidth(valueText)) / 2;
         final int valueY = sliderBarY - mc.fontRendererObj.FONT_HEIGHT - 4;
         mc.fontRendererObj.drawStringWithShadow(valueText, valueX, valueY, colorPalette.SLIDER_BUTTON_VALUE_TEXT);
+    }
+
+    private int getSliderBarLeftPadding() {
+        return this.getReservedWidth() - SLIDER_WIDTH - 20;
+    }
+
+    @Override
+    protected int getControlsWidth() {
+        return this.getReservedWidth() - this.getSliderBarLeftPadding() + SLIDER_BUTTON_SIZE / 2 + PLUS_BUTTON_SIZE + 1;
     }
 
     @Override

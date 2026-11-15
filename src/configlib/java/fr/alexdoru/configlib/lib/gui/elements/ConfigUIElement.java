@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface ConfigUIElement extends SizedElement {
 
-    void setBoxWidth(int boxWidth);
+    void setReservedWidth(int width);
 
     void draw(ColorPalette colorPalette, int drawX, int drawY, int mouseX, int mouseY);
 
@@ -26,7 +26,7 @@ public interface ConfigUIElement extends SizedElement {
 
     boolean isVisible();
 
-    default List<String> resizeCommentLines(String comment, int wrapWidth) {
+    static List<String> resizeCommentLines(String comment, int wrapWidth) {
         final String[] split = comment.split("\n");
         if (wrapWidth <= 0) {
             return Arrays.asList(split);

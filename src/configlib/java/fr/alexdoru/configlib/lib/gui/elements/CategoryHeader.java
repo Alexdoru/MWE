@@ -17,7 +17,7 @@ public class CategoryHeader implements ConfigUIElement {
     private final String comment;
     private final List<String> commentToRender = new ArrayList<>();
     private final boolean hasComment;
-    private int boxWidth;
+    private int reservedWidth;
 
     public CategoryHeader(String name) {
         this.name = name;
@@ -34,18 +34,18 @@ public class CategoryHeader implements ConfigUIElement {
     }
 
     @Override
-    public void setBoxWidth(int boxWidth) {
-        this.boxWidth = boxWidth;
+    public void setReservedWidth(int width) {
+        this.reservedWidth = width;
         if (hasComment) {
-            final int wrapWidth = boxWidth * 4 / 5;
+            final int wrapWidth = width * 4 / 5;
             this.commentToRender.clear();
-            this.commentToRender.addAll(resizeCommentLines(this.comment, wrapWidth));
+            this.commentToRender.addAll(ConfigUIElement.resizeCommentLines(this.comment, wrapWidth));
         }
     }
 
     @Override
     public void draw(ColorPalette colorPalette, int drawX, int drawY, int mouseX, int mouseY) {
-        final int textX = drawX + (boxWidth - mc.fontRendererObj.getStringWidth(displayname) * 2) / 2;
+        final int textX = drawX + (reservedWidth - mc.fontRendererObj.getStringWidth(displayname) * 2) / 2;
         GlStateManager.translate(textX, drawY, 0);
         GlStateManager.scale(2, 2, 2);
         mc.fontRendererObj.drawStringWithShadow(displayname, 0, 0, colorPalette.CATEGORY_HEADER_TITLE_TEXT);
@@ -54,7 +54,7 @@ public class CategoryHeader implements ConfigUIElement {
         if (hasComment) {
             int commentY = drawY + mc.fontRendererObj.FONT_HEIGHT * 2 + 8;
             for (final String line : commentToRender) {
-                final int lineX = drawX + (boxWidth - mc.fontRendererObj.getStringWidth(line)) / 2;
+                final int lineX = drawX + (reservedWidth - mc.fontRendererObj.getStringWidth(line)) / 2;
                 mc.fontRendererObj.drawStringWithShadow(line, lineX, commentY, colorPalette.CATEGORY_HEADER_COMMENT_TEXT);
                 commentY += mc.fontRendererObj.FONT_HEIGHT;
             }

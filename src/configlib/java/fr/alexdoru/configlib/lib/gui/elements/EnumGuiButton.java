@@ -48,6 +48,11 @@ public class EnumGuiButton extends OverlayConfigGuiButton {
     }
 
     @Override
+    protected int getControlsWidth() {
+        return this.getReservedWidth() - this.getLeftPaddingToCenter(button.width);
+    }
+
+    @Override
     public void drawOverlay(ColorPalette colorPalette, int mouseX, int mouseY) {
         this.updateDropdownBox();
         final int contentHeight = this.getContentHeight();

@@ -24,7 +24,7 @@ public class KeybindGuiButton extends ConfigGuiButton {
     public void draw(ColorPalette colorPalette, int drawX, int drawY, int mouseX, int mouseY) {
         super.draw(colorPalette, drawX, drawY, mouseX, mouseY);
         button.displayString = this.getDisplayString();
-        button.width = Math.max(switchButtonWidth, mc.fontRendererObj.getStringWidth("  " + button.displayString));
+        button.width = this.getButtonWidth(button.displayString);
         button.xPosition = drawX + this.getLeftPaddingToCenter(button.width);
         button.yPosition = drawY + this.getTopPaddingToCenter(button.height);
         button.drawButton(colorPalette, mc, mouseX, mouseY);
@@ -33,12 +33,26 @@ public class KeybindGuiButton extends ConfigGuiButton {
     private String getDisplayString() {
         final String keyName = GameSettings.getKeyDisplayString(keyBinding.getKeyCode());
         if (listening) {
-            return EnumChatFormatting.WHITE + "> " + EnumChatFormatting.YELLOW + keyName + EnumChatFormatting.WHITE + " <";
+            return getListeningString(keyName);
         } else if (hasConflict()) {
             return EnumChatFormatting.RED + "[" + keyName + "]";
         } else {
             return (keyBinding.getKeyCode() == 0 ? EnumChatFormatting.DARK_GRAY : EnumChatFormatting.GOLD) + "[" + keyName + "]";
         }
+    }
+
+    private static String getListeningString(String keyName) {
+        return EnumChatFormatting.WHITE + "> " + EnumChatFormatting.YELLOW + keyName + EnumChatFormatting.WHITE + " <";
+    }
+
+    @Override
+    protected int getControlsWidth() {
+        final String keyName = GameSettings.getKeyDisplayString(keyBinding.getKeyCode());
+        return this.getReservedWidth() - this.getLeftPaddingToCenter(this.getButtonWidth(getListeningString(keyName)));
+    }
+
+    private int getButtonWidth(String displayString) {
+        return Math.max(switchButtonWidth, mc.fontRendererObj.getStringWidth("  " + displayString));
     }
 
     private boolean hasConflict() {
@@ -80,6 +94,7 @@ public class KeybindGuiButton extends ConfigGuiButton {
         mc.gameSettings.setOptionKeyBinding(keyBinding, keyCode);
         KeyBinding.resetKeyBindingArrayAndHash();
         this.listening = false;
+        this.resizeCommentLines();
         this.invokeConfigEvent();
     }
 

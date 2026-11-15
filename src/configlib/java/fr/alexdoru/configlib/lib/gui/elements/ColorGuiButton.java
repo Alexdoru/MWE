@@ -34,6 +34,11 @@ public class ColorGuiButton extends ConfigGuiButton {
     }
 
     @Override
+    protected int getControlsWidth() {
+        return this.getReservedWidth() - this.getLeftPaddingToCenter(button.width) + 20 + 1;
+    }
+
+    @Override
     public boolean mouseClicked(int mouseX, int mouseY, MouseButton mouseButton) throws IllegalAccessException {
         if (mouseButton.isLeft() && button.mousePressed(mouseX, mouseY)) {
             mc.displayGuiScreen(new ColorSelectionGuiScreen(parentScreen, field, defaultColor, color -> {

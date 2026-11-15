@@ -30,12 +30,6 @@ public class RendererGuiButton extends ConfigGuiButton {
     }
 
     @Override
-    public void setBoxWidth(int boxWidth) {
-        super.setBoxWidth(boxWidth - 20 - 1);
-        this.boxWidth = boxWidth;
-    }
-
-    @Override
     public void draw(ColorPalette colorPalette, int drawX, int drawY, int mouseX, int mouseY) {
         super.draw(colorPalette, drawX, drawY, mouseX, mouseY);
         buttonEnabled.xPosition = drawX + this.getLeftPaddingToCenter(buttonEnabled.width);
@@ -68,6 +62,11 @@ public class RendererGuiButton extends ConfigGuiButton {
             }
         }
         return false;
+    }
+
+    @Override
+    protected int getControlsWidth() {
+        return this.getReservedWidth() - this.getLeftPaddingToCenter(buttonEnabled.width) + buttonMoveHud.width + 1;
     }
 
     private void flipBooleanConfig() {

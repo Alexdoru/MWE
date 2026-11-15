@@ -50,6 +50,11 @@ public class ColorEnumGuiButton extends OverlayConfigGuiButton {
     }
 
     @Override
+    protected int getControlsWidth() {
+        return this.getReservedWidth() - this.getLeftPaddingToCenter(button.width) + 20 + 1;
+    }
+
+    @Override
     public void drawOverlay(ColorPalette colorPalette, int mouseX, int mouseY) {
         final Box configBox = this.parentScreen.getConfigBoxSize();
         final int panelWidth = 8 * SQUARE + 9 * GAP;

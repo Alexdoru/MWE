@@ -9,7 +9,7 @@ public class SubCategoryHeader implements ConfigUIElement {
     private final Minecraft mc = Minecraft.getMinecraft();
     private final String categoryName;
     private final String subCategoryName;
-    private int boxWidth;
+    private int reservedWidth;
 
     public SubCategoryHeader(String categoryName, String subCategoryName) {
         this.categoryName = categoryName;
@@ -17,13 +17,13 @@ public class SubCategoryHeader implements ConfigUIElement {
     }
 
     @Override
-    public void setBoxWidth(int boxWidth) {
-        this.boxWidth = boxWidth;
+    public void setReservedWidth(int width) {
+        this.reservedWidth = width;
     }
 
     @Override
     public void draw(ColorPalette colorPalette, int drawX, int drawY, int mouseX, int mouseY) {
-        final int textX = drawX + (boxWidth - mc.fontRendererObj.getStringWidth(subCategoryName)) / 2;
+        final int textX = drawX + (reservedWidth - mc.fontRendererObj.getStringWidth(subCategoryName)) / 2;
         mc.fontRendererObj.drawStringWithShadow(subCategoryName, textX, drawY, colorPalette.SUB_CATEGORY_HEADER_TEXT);
     }
 

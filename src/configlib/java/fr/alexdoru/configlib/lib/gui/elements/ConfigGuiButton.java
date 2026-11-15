@@ -23,7 +23,7 @@ public abstract class ConfigGuiButton implements ConfigUIElement {
     protected final Field field;
     protected final ConfigProperty annotation;
     private final List<String> commentToRender = new ArrayList<>();
-    protected int boxWidth;
+    private int reservedWidth;
     protected int posX, posY;
 
     protected ConfigGuiButton(ConfigFieldContainer fieldContainer) {
@@ -33,20 +33,16 @@ public abstract class ConfigGuiButton implements ConfigUIElement {
     }
 
     @Override
-    public void setBoxWidth(int boxWidth) {
-        this.boxWidth = boxWidth;
-        if (this.hasComment()) {
-            final int wrapWidth = boxWidth - switchButtonWidth - 20 - 20;
-            this.commentToRender.clear();
-            this.commentToRender.addAll(resizeCommentLines(annotation.comment(), wrapWidth));
-        }
+    public final void setReservedWidth(int width) {
+        this.reservedWidth = width;
+        this.resizeCommentLines();
     }
 
     @Override
     public void draw(ColorPalette colorPalette, int drawX, int drawY, int mouseX, int mouseY) {
         this.posX = drawX;
         this.posY = drawY;
-        GuiUtil.drawBoxWithOutline(drawX, drawY, drawX + boxWidth, drawY + getHeight(), colorPalette.SETTING_BACKGROUND, colorPalette.SETTING_BACKGROUND_BORDER);
+        GuiUtil.drawBoxWithOutline(drawX, drawY, drawX + reservedWidth, drawY + getHeight(), colorPalette.SETTING_BACKGROUND, colorPalette.SETTING_BACKGROUND_BORDER);
         mc.fontRendererObj.drawStringWithShadow(annotation.name(), drawX + 8, drawY + 8, colorPalette.SETTING_NAME_TEXT);
         if (this.hasComment()) {
             int commentY = drawY + 8 + mc.fontRendererObj.FONT_HEIGHT + 8;
@@ -93,10 +89,21 @@ public abstract class ConfigGuiButton implements ConfigUIElement {
         }
     }
 
+    /** Width taken by the controls on the right side, from the leftmost control to the element's right edge */
+    protected abstract int getControlsWidth();
+
+    protected final void resizeCommentLines() {
+        if (this.hasComment()) {
+            final int wrapWidth = reservedWidth - (8 + this.getControlsWidth() + 8);
+            this.commentToRender.clear();
+            this.commentToRender.addAll(ConfigUIElement.resizeCommentLines(annotation.comment(), wrapWidth));
+        }
+    }
+
     protected final int getLeftPaddingToCenter(int elementWidth) {
         final int MIN_RIGHT_MARGIN = 8;
-        final int centeredPadding = this.boxWidth - 20 - (switchButtonWidth + elementWidth) / 2;
-        return Math.min(centeredPadding, this.boxWidth - MIN_RIGHT_MARGIN - elementWidth);
+        final int centeredPadding = this.reservedWidth - 20 - (switchButtonWidth + elementWidth) / 2;
+        return Math.min(centeredPadding, this.reservedWidth - MIN_RIGHT_MARGIN - elementWidth);
     }
 
     protected final int getTopPaddingToCenter(int elementHeight) {
@@ -123,6 +130,10 @@ public abstract class ConfigGuiButton implements ConfigUIElement {
 
     protected static String getSwitchButtonText(boolean toggled) {
         return toggled ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled";
+    }
+
+    protected final int getReservedWidth() {
+        return reservedWidth;
     }
 
 }

@@ -27,6 +27,11 @@ public class BooleanGuiButton extends ConfigGuiButton {
     }
 
     @Override
+    protected int getControlsWidth() {
+        return this.getReservedWidth() - this.getLeftPaddingToCenter(button.width);
+    }
+
+    @Override
     public boolean mouseClicked(int mouseX, int mouseY, MouseButton mouseButton) throws IllegalAccessException {
         if (mouseButton.isLeft() && button.mousePressed(mouseX, mouseY)) {
             flipBooleanConfig();
