@@ -12,6 +12,8 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -73,6 +75,68 @@ public class ConfigSaveLoadTest {
         assertTrue(RendererRead.configFieldRead.isEnabled());
         assertEquals(savedX, RendererRead.configFieldRead.getRelativeX(), 0d);
         assertEquals(savedY, RendererRead.configFieldRead.getRelativeY(), 0d);
+    }
+
+    private static class RendererV2Write {
+
+        @ConfigProperty(category = "foo", name = "bar")
+        public static final RendererPositionV2 configFieldWrite = new RendererPositionV2(false, 0d, 0d, 1d, RendererAlignment.TOP_LEFT);
+
+    }
+
+    private static class RendererV2Read {
+
+        @ConfigProperty(category = "foo", name = "bar")
+        public static final RendererPositionV2 configFieldRead = new RendererPositionV2(false, 0d, 0d, 1d, RendererAlignment.TOP_LEFT);
+
+    }
+
+    @Test
+    public void rendererV2Test() {
+        IConfigHandler configHandler = ConfigLib.newConfigHandler(configFile, "TestConfig");
+        configHandler.registerConfig(RendererV2Write.class);
+        assertFalse(RendererV2Write.configFieldWrite.isEnabled());
+        assertEquals(1d, RendererV2Write.configFieldWrite.getScale(), 0d);
+        assertEquals(RendererAlignment.TOP_LEFT, RendererV2Write.configFieldWrite.getAlignment());
+        final double savedX = 0.5d;
+        final double savedY = 0.75d;
+        final double savedScale = 1.7d;
+        RendererV2Write.configFieldWrite.setEnabled(true);
+        RendererV2Write.configFieldWrite.setRelativePosition(savedX, savedY);
+        RendererV2Write.configFieldWrite.setScale(savedScale);
+        RendererV2Write.configFieldWrite.setAlignment(RendererAlignment.BOTTOM_RIGHT);
+        configHandler.saveConfig();
+
+        configHandler = ConfigLib.newConfigHandler(configFile, "TestConfig");
+        assertFalse(RendererV2Read.configFieldRead.isEnabled());
+        assertEquals(1d, RendererV2Read.configFieldRead.getScale(), 0d);
+        assertEquals(RendererAlignment.TOP_LEFT, RendererV2Read.configFieldRead.getAlignment());
+        configHandler.registerConfig(RendererV2Read.class);
+        assertTrue(RendererV2Read.configFieldRead.isEnabled());
+        assertEquals(savedX, RendererV2Read.configFieldRead.getRelativeX(), 0d);
+        assertEquals(savedY, RendererV2Read.configFieldRead.getRelativeY(), 0d);
+        assertEquals(savedScale, RendererV2Read.configFieldRead.getScale(), 0d);
+        assertEquals(RendererAlignment.BOTTOM_RIGHT, RendererV2Read.configFieldRead.getAlignment());
+    }
+
+    private static class RendererV2InvalidAlignment {
+
+        @ConfigProperty(category = "foo", name = "bar")
+        public static final RendererPositionV2 configField = new RendererPositionV2(true, 0d, 0d, 1d, RendererAlignment.CENTER);
+
+    }
+
+    @Test
+    public void rendererV2InvalidAlignmentFallsBackToDefault() throws IOException {
+        Files.write(configFile.toPath(), Arrays.asList(
+                "foo {",
+                "    S:\"Align bar\"=NOT_AN_ALIGNMENT",
+                "}"
+        ), StandardCharsets.UTF_8);
+        RendererV2InvalidAlignment.configField.setAlignment(RendererAlignment.TOP_LEFT);
+        final IConfigHandler configHandler = ConfigLib.newConfigHandler(configFile, "TestConfig");
+        configHandler.registerConfig(RendererV2InvalidAlignment.class);
+        assertEquals(RendererAlignment.CENTER, RendererV2InvalidAlignment.configField.getAlignment());
     }
 
     private static class StringWrite {

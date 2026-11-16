@@ -226,6 +226,7 @@ public final class ConfigHandler implements IConfigHandler {
         cr.accept(cn, ClassReader.SKIP_CODE);
         final String annotationDesc = Type.getDescriptor(ConfigProperty.class);
         final String rendererPositionDesc = Type.getDescriptor(RendererPosition.class);
+        final String rendererPositionV2Desc = Type.getDescriptor(RendererPositionV2.class);
         for (final FieldNode field : cn.fields) {
             if (field.visibleAnnotations == null) continue;
             for (final AnnotationNode annotation : field.visibleAnnotations) {
@@ -247,11 +248,16 @@ public final class ConfigHandler implements IConfigHandler {
                 if (configCategory != null && configName != null) {
                     final LinkedHashMap<String, List<String>> subCategory = configStructure.computeIfAbsent(configCategory, m -> new LinkedHashMap<>());
                     final List<String> subCatConfigs = subCategory.computeIfAbsent(configSubCategory, l -> new ArrayList<>());
-                    final boolean isRendererPosition = field.desc.equals(rendererPositionDesc);
+                    final boolean isRendererPositionV2 = field.desc.equals(rendererPositionV2Desc);
+                    final boolean isRendererPosition = isRendererPositionV2 || field.desc.equals(rendererPositionDesc);
                     if (isRendererPosition) {
                         subCatConfigs.add("Show " + configName);
                         subCatConfigs.add("Xpos " + configName);
                         subCatConfigs.add("Ypos " + configName);
+                    }
+                    if (isRendererPositionV2) {
+                        subCatConfigs.add("Scale " + configName);
+                        subCatConfigs.add("Align " + configName);
                     }
                     subCatConfigs.add(configName);
                 }
@@ -265,10 +271,14 @@ public final class ConfigHandler implements IConfigHandler {
                 final ConfigProperty annotation = field.getAnnotation(ConfigProperty.class);
                 final LinkedHashMap<String, List<String>> subCategory = configStructure.computeIfAbsent(annotation.category(), m -> new LinkedHashMap<>());
                 final List<String> subCatConfigs = subCategory.computeIfAbsent(annotation.subCategory(), l -> new ArrayList<>());
-                if (field.getType() == RendererPosition.class) {
+                if (field.getType() == RendererPosition.class || field.getType() == RendererPositionV2.class) {
                     subCatConfigs.add("Show " + annotation.name());
                     subCatConfigs.add("Xpos " + annotation.name());
                     subCatConfigs.add("Ypos " + annotation.name());
+                }
+                if (field.getType() == RendererPositionV2.class) {
+                    subCatConfigs.add("Scale " + annotation.name());
+                    subCatConfigs.add("Align " + annotation.name());
                 }
                 subCatConfigs.add(annotation.name());
             }

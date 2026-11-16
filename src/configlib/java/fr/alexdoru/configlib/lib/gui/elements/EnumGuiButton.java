@@ -3,6 +3,7 @@ package fr.alexdoru.configlib.lib.gui.elements;
 import fr.alexdoru.configlib.api.ColorPalette;
 import fr.alexdoru.configlib.lib.ConfigFieldContainer;
 import fr.alexdoru.configlib.lib.gui.*;
+import fr.alexdoru.configlib.lib.utils.EnumUtil;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.EnumChatFormatting;
@@ -31,7 +32,7 @@ public class EnumGuiButton extends OverlayConfigGuiButton {
         this.displayNames = new String[values.length];
         int width = 0;
         for (int i = 0; i < values.length; i++) {
-            final String displayName = formatEnumName(values[i].name());
+            final String displayName = EnumUtil.formatEnumName(values[i]);
             displayNames[i] = displayName;
             width = Math.max(width, 2 * 4 + mc.fontRendererObj.getStringWidth(displayName));
         }
@@ -160,12 +161,6 @@ public class EnumGuiButton extends OverlayConfigGuiButton {
 
     private int getContentHeight() {
         return values.length * ROW_HEIGHT;
-    }
-
-    private String formatEnumName(String name) {
-        final String displayName = name.replace('_', ' ').toLowerCase();
-        if (displayName.isEmpty()) return displayName;
-        return Character.toUpperCase(displayName.charAt(0)) + displayName.substring(1);
     }
 
 }

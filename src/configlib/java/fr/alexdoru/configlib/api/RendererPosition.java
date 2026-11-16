@@ -2,8 +2,14 @@ package fr.alexdoru.configlib.api;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
+import org.jetbrains.annotations.ApiStatus;
 
-public final class RendererPosition {
+/**
+ * Not meant to be extended, config fields are matched on their exact
+ * type so a subclass wouldn't be recognized as a HUD position.
+ */
+@ApiStatus.NonExtendable
+public class RendererPosition {
 
     private boolean enabled;
     /** The default relative x and y coordinates for this HUD. Ranging from 0 to 1 */

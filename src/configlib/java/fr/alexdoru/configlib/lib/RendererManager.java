@@ -2,10 +2,12 @@ package fr.alexdoru.configlib.lib;
 
 import fr.alexdoru.configlib.api.IRenderer;
 import fr.alexdoru.configlib.api.IRendererManager;
+import fr.alexdoru.configlib.api.IRendererV2;
 import fr.alexdoru.configlib.api.RendererPosition;
-import fr.alexdoru.configlib.lib.gui.RendererEditGuiScreen;
+import fr.alexdoru.configlib.lib.gui.AbstractRendererEditGuiScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -44,12 +46,14 @@ public final class RendererManager implements IRendererManager {
     @SubscribeEvent
     public void onRenderGUI(RenderGameOverlayEvent.Post event) {
         final Minecraft mc = Minecraft.getMinecraft();
-        if (event.type == RenderGameOverlayEvent.ElementType.TEXT && !(mc.currentScreen instanceof RendererEditGuiScreen)) {
+        if (event.type == RenderGameOverlayEvent.ElementType.TEXT && !(mc.currentScreen instanceof AbstractRendererEditGuiScreen)) {
             final long time = System.currentTimeMillis();
             mc.mcProfiler.startSection(this.debugName);
             for (final IRenderer renderer : HUD_RENDERERS) {
                 if (renderer.isEnabled(time)) {
+                    GlStateManager.pushMatrix();
                     renderer.render(event.resolution);
+                    GlStateManager.popMatrix();
                 }
             }
             mc.mcProfiler.endSection();
@@ -70,8 +74,14 @@ public final class RendererManager implements IRendererManager {
         final ScaledResolution resolution = new ScaledResolution(Minecraft.getMinecraft());
         for (final IRenderer renderer : HUD_RENDERERS) {
             if (renderer != editedRenderer && renderer.getPosition().isEnabled()) {
-                renderer.getPosition().updateAbsolutePosition(resolution);
-                renderer.renderDummy();
+                GlStateManager.pushMatrix();
+                if (renderer instanceof IRendererV2) {
+                    ((IRendererV2) renderer).renderDummy(resolution);
+                } else {
+                    renderer.getPosition().updateAbsolutePosition(resolution);
+                    renderer.renderDummy();
+                }
+                GlStateManager.popMatrix();
             }
         }
     }

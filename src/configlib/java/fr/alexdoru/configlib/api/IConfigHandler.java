@@ -1,8 +1,13 @@
 package fr.alexdoru.configlib.api;
 
 import net.minecraft.client.gui.GuiScreen;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Obtained from {@link ConfigLib#newConfigHandler}, not meant to be implemented.
+ */
+@ApiStatus.NonExtendable
 public interface IConfigHandler {
 
     /**

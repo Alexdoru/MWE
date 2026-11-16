@@ -1,7 +1,9 @@
 package fr.alexdoru.configlib.lib;
 
 import fr.alexdoru.configlib.api.ConfigProperty;
+import fr.alexdoru.configlib.api.RendererAlignment;
 import fr.alexdoru.configlib.api.RendererPosition;
+import fr.alexdoru.configlib.api.RendererPositionV2;
 import fr.alexdoru.configlib.lib.gui.ConfigGuiScreen;
 import fr.alexdoru.configlib.lib.gui.elements.*;
 import net.minecraft.client.settings.KeyBinding;
@@ -47,6 +49,8 @@ public final class ConfigFieldContainer {
     private static FieldType getFieldType(Field field) {
         if (field.getType() == RendererPosition.class) {
             return FieldType.RENDERER;
+        } else if (field.getType() == RendererPositionV2.class) {
+            return FieldType.RENDERER_V2;
         } else if (field.getType() == String.class) {
             return FieldType.STRING;
         } else if (field.getType() == boolean.class) {
@@ -82,6 +86,16 @@ public final class ConfigFieldContainer {
                 propertyMap.put(this.getKey("Show "), config.get(annotation.category(), "Show " + annotation.name(), rendererPosition.isEnabled()));
                 propertyMap.put(this.getKey("Xpos "), config.get(annotation.category(), "Xpos " + annotation.name(), rendererPosition.getRelativeX()));
                 propertyMap.put(this.getKey("Ypos "), config.get(annotation.category(), "Ypos " + annotation.name(), rendererPosition.getRelativeY()));
+                break;
+            }
+            case RENDERER_V2: {
+                final RendererPositionV2 rendererPosition = (RendererPositionV2) field.get(null);
+                Objects.requireNonNull(rendererPosition);
+                propertyMap.put(this.getKey("Show "), config.get(annotation.category(), "Show " + annotation.name(), rendererPosition.isEnabled()));
+                propertyMap.put(this.getKey("Xpos "), config.get(annotation.category(), "Xpos " + annotation.name(), rendererPosition.getRelativeX()));
+                propertyMap.put(this.getKey("Ypos "), config.get(annotation.category(), "Ypos " + annotation.name(), rendererPosition.getRelativeY()));
+                propertyMap.put(this.getKey("Scale "), config.get(annotation.category(), "Scale " + annotation.name(), rendererPosition.getScale()));
+                propertyMap.put(this.getKey("Align "), config.get(annotation.category(), "Align " + annotation.name(), rendererPosition.getAlignment().name()));
                 break;
             }
             case STRING: {
@@ -154,6 +168,18 @@ public final class ConfigFieldContainer {
                 );
                 break;
             }
+            case RENDERER_V2: {
+                final RendererPositionV2 position = (RendererPositionV2) field.get(null);
+                position.setEnabled(this.getProp("Show ").getBoolean());
+                position.setRelativePosition(
+                        this.getProp("Xpos ").getDouble(),
+                        this.getProp("Ypos ").getDouble()
+                );
+                position.setScale(this.getProp("Scale ").getDouble());
+                final RendererAlignment alignment = getEnumValue(RendererAlignment.class, this.getProp("Align ").getString());
+                position.setAlignment(alignment == null ? position.getDefaultAlignment() : alignment);
+                break;
+            }
             case STRING: {
                 field.set(null, this.getProp().getString());
                 break;
@@ -210,6 +236,15 @@ public final class ConfigFieldContainer {
                 this.getProp("Show ").set(rendererPosition.isEnabled());
                 this.getProp("Xpos ").set(rendererPosition.getRelativeX());
                 this.getProp("Ypos ").set(rendererPosition.getRelativeY());
+                break;
+            }
+            case RENDERER_V2: {
+                final RendererPositionV2 rendererPosition = (RendererPositionV2) field.get(null);
+                this.getProp("Show ").set(rendererPosition.isEnabled());
+                this.getProp("Xpos ").set(rendererPosition.getRelativeX());
+                this.getProp("Ypos ").set(rendererPosition.getRelativeY());
+                this.getProp("Scale ").set(rendererPosition.getScale());
+                this.getProp("Align ").set(rendererPosition.getAlignment().name());
                 break;
             }
             case STRING: {
@@ -275,7 +310,8 @@ public final class ConfigFieldContainer {
             } catch (InvocationTargetException ignored) {}
         }
         switch (this.fieldType) {
-            case RENDERER: {
+            case RENDERER:
+            case RENDERER_V2: {
                 return new RendererGuiButton(this, configGuiScreen, rendererManager);
             }
             case BOOLEAN: {
@@ -307,7 +343,7 @@ public final class ConfigFieldContainer {
 
     void setDependency(ConfigFieldContainer dependency) {
         if (dependency != null) {
-            if (dependency.fieldType != FieldType.BOOLEAN && dependency.fieldType != FieldType.RENDERER) {
+            if (dependency.fieldType != FieldType.BOOLEAN && dependency.fieldType != FieldType.RENDERER && dependency.fieldType != FieldType.RENDERER_V2) {
                 throw new IllegalStateException("Cannot depend on a config field other than boolean or RendererPosition");
             }
             for (ConfigFieldContainer parent = dependency; parent != null; parent = parent.dependency) {
@@ -337,7 +373,7 @@ public final class ConfigFieldContainer {
         }
         if (this.fieldType == FieldType.BOOLEAN) {
             return (boolean) this.field.get(null);
-        } else if (this.fieldType == FieldType.RENDERER) {
+        } else if (this.fieldType == FieldType.RENDERER || this.fieldType == FieldType.RENDERER_V2) {
             return ((RendererPosition) this.field.get(null)).isEnabled();
         }
         throw new UnsupportedOperationException();
@@ -364,15 +400,21 @@ public final class ConfigFieldContainer {
         if (!Enum.class.isAssignableFrom(field.getType())) {
             throw new IllegalArgumentException();
         }
+        //noinspection unchecked
+        return getEnumValue((Class<T>) field.getType(), valueName);
+    }
+
+    @Nullable
+    private static <T extends Enum<T>> T getEnumValue(@NotNull Class<T> enumClass, @NotNull String valueName) {
         try {
-            //noinspection unchecked
-            return Enum.valueOf((Class<T>) field.getType(), valueName);
+            return Enum.valueOf(enumClass, valueName);
         } catch (IllegalArgumentException ignored) {}
         return null;
     }
 
     enum FieldType {
         RENDERER,
+        RENDERER_V2,
         STRING,
         BOOLEAN,
         DOUBLE,

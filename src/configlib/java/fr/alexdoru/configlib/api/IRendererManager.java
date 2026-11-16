@@ -1,7 +1,12 @@
 package fr.alexdoru.configlib.api;
 
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Obtained from {@link IConfigHandler#getRendererManager()}, not meant to be implemented.
+ */
+@ApiStatus.NonExtendable
 public interface IRendererManager {
 
     /**

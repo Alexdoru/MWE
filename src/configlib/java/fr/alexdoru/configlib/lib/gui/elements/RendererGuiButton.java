@@ -2,12 +2,10 @@ package fr.alexdoru.configlib.lib.gui.elements;
 
 import fr.alexdoru.configlib.api.ColorPalette;
 import fr.alexdoru.configlib.api.RendererPosition;
+import fr.alexdoru.configlib.api.RendererPositionV2;
 import fr.alexdoru.configlib.lib.ConfigFieldContainer;
 import fr.alexdoru.configlib.lib.RendererManager;
-import fr.alexdoru.configlib.lib.gui.ConfigGuiScreen;
-import fr.alexdoru.configlib.lib.gui.GuiUtil;
-import fr.alexdoru.configlib.lib.gui.MouseButton;
-import fr.alexdoru.configlib.lib.gui.RendererEditGuiScreen;
+import fr.alexdoru.configlib.lib.gui.*;
 import net.minecraft.util.ResourceLocation;
 
 public class RendererGuiButton extends ConfigGuiButton {
@@ -23,8 +21,8 @@ public class RendererGuiButton extends ConfigGuiButton {
         super(container);
         this.parentScreen = configGuiScreen;
         this.rendererManager = rendererManager;
-        this.rendererPosition = ((RendererPosition) field.get(null));
-        this.toggled = this.rendererPosition.isEnabled();
+        this.rendererPosition = (RendererPosition) field.get(null);
+        this.toggled = rendererPosition.isEnabled();
         this.buttonEnabled = new ClickGuiButton(switchButtonWidth, 20, getSwitchButtonText(toggled));
         this.buttonMoveHud = new ClickGuiButton(20, 20);
         this.buttonMoveHud.setTexture(new ResourceLocation("configlib", "move.png"));
@@ -67,7 +65,11 @@ public class RendererGuiButton extends ConfigGuiButton {
                 toggleDependencies(this.parentScreen);
                 return true;
             } else if (buttonMoveHud.mousePressed(mouseX, mouseY)) {
-                mc.displayGuiScreen(new RendererEditGuiScreen(rendererManager, rendererPosition, parentScreen, field));
+                if (rendererPosition instanceof RendererPositionV2) {
+                    mc.displayGuiScreen(new RendererEditGuiScreenV2(rendererManager, (RendererPositionV2) rendererPosition, parentScreen, field));
+                } else {
+                    mc.displayGuiScreen(new RendererEditGuiScreen(rendererManager, rendererPosition, parentScreen, field));
+                }
                 return true;
             }
         }
