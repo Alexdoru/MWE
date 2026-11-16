@@ -1,7 +1,6 @@
 package fr.alexdoru.mwe.gui.huds;
 
 import fr.alexdoru.mwe.config.MWEConfig;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -32,7 +31,6 @@ public class EnergyDisplayHUD extends SimpleTextRenderer {
 
     public EnergyDisplayHUD() {
         super(MWEConfig.energyHUDPosition);
-        this.setCentered();
         this.setDummyText(EnumChatFormatting.AQUA + EnumChatFormatting.BOLD.toString() + 100);
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -42,7 +40,7 @@ public class EnergyDisplayHUD extends SimpleTextRenderer {
         if (event.phase != TickEvent.Phase.END || !this.isEnabled()) {
             return;
         }
-        final EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+        final EntityPlayer player = mc.thePlayer;
         if (player == null) {
             return;
         }

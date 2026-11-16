@@ -9,11 +9,11 @@ import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.data.NameFormatter;
 import fr.alexdoru.mwe.data.NetPlayerInfoTracker;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ChatLine;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.network.NetworkPlayerInfo;
+import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
@@ -32,6 +32,7 @@ public class ArrowHitHUD extends AbstractRenderer {
     private static final Pattern PATTERN_REND = Pattern.compile("^Your Rend dealt [0-9]*[.]?[0-9]+ damage to \\w+.*");
     private static final Pattern PATTERN_REND_DAMAGE = Pattern.compile("([0-9]*[.]?[0-9]+) damage to (\\w+)");
     private static final Pattern PATTERN_TEAM_TAG = Pattern.compile("^\\[[RBGY]] ");
+    private static final int HEAD_SIZE = 8;
 
     private String displayText = "";
     private long hitTime;
@@ -137,7 +138,6 @@ public class ArrowHitHUD extends AbstractRenderer {
         if (!hpValue.equals("0")) {
             return false;
         }
-        final Minecraft mc = Minecraft.getMinecraft();
         final List<ChatLine> chatLines = ((GuiNewChatAccessor) mc.ingameGUI.getChatGUI()).getChatLines();
         if (chatLines.isEmpty()) {
             return false;
@@ -151,27 +151,29 @@ public class ArrowHitHUD extends AbstractRenderer {
     }
 
     private EnumChatFormatting getColor(String healthPoints) {
-        return ColorUtil.getHPColor(Minecraft.getMinecraft().thePlayer.getMaxHealth(), Float.parseFloat(healthPoints));
+        return ColorUtil.getHPColor(mc.thePlayer.getMaxHealth(), Float.parseFloat(healthPoints));
     }
 
     @Override
     public void render(ScaledResolution resolution) {
-        final Minecraft mc = Minecraft.getMinecraft();
-        this.rendererPosition.updateAbsolutePosition(resolution);
-        int x = this.rendererPosition.getAbsoluteRenderX();
-        int y = this.rendererPosition.getAbsoluteRenderY() - mc.fontRendererObj.FONT_HEIGHT;
-        drawCenteredString(mc.fontRendererObj, displayText, x, y, 0xFFFFFF);
-        if (MWEConfig.showHeadOnArrowHitHUD && skin != null) {
-            x -= 4;
-            y += mc.fontRendererObj.FONT_HEIGHT + 1;
-            RenderUtil.renderSkinHead(skin, x, y, true, 8);
-        }
+        this.renderArrowHit(resolution, displayText, skin);
     }
 
     @Override
-    public void renderDummy() {
-        final FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
-        drawCenteredString(fr, EnumChatFormatting.GREEN + "20.0", this.rendererPosition.getAbsoluteRenderX(), this.rendererPosition.getAbsoluteRenderY() - fr.FONT_HEIGHT, 0xFFFFFF);
+    public void renderDummy(ScaledResolution resolution) {
+        this.renderArrowHit(resolution, EnumChatFormatting.GREEN + "20.0", DefaultPlayerSkin.getDefaultSkinLegacy());
+    }
+
+    private void renderArrowHit(ScaledResolution resolution, String text, ResourceLocation headSkin) {
+        final FontRenderer fr = mc.fontRendererObj;
+        final boolean showHead = MWEConfig.showHeadOnArrowHitHUD;
+        final int width = Math.max(fr.getStringWidth(text), showHead ? HEAD_SIZE : 0);
+        final int height = fr.FONT_HEIGHT + (showHead ? 1 + HEAD_SIZE : 0);
+        this.rendererPosition.applyTransform(resolution, width, height);
+        fr.drawStringWithShadow(text, 0, 0, 0xFFFFFF);
+        if (showHead && headSkin != null) {
+            RenderUtil.renderSkinHead(headSkin, (width - HEAD_SIZE) / 2, fr.FONT_HEIGHT + 1, true, HEAD_SIZE);
+        }
     }
 
     @Override

@@ -2,14 +2,14 @@ package fr.alexdoru.mwe.gui.huds;
 
 import fr.alexdoru.mwe.api.utils.ColorUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumChatFormatting;
 
-import java.util.Collection;
-
 public class MiniPotionHUD extends AbstractRenderer {
+
+    private static final int GAP = 2;
 
     private final String[] strings = new String[7];
     private final int[] colors = new int[7];
@@ -20,13 +20,8 @@ public class MiniPotionHUD extends AbstractRenderer {
 
     @Override
     public void render(ScaledResolution resolution) {
-        final Minecraft mc = Minecraft.getMinecraft();
-        final Collection<PotionEffect> potionEffects = mc.thePlayer.getActivePotionEffects();
-        if (potionEffects.isEmpty()) return;
-        this.rendererPosition.updateAbsolutePosition(resolution);
         int count = 0;
-        int len = 0;
-        for (final PotionEffect effect : potionEffects) {
+        for (final PotionEffect effect : mc.thePlayer.getActivePotionEffects()) {
             if (count >= strings.length) break;
             switch (effect.getPotionID()) {
                 case 1: // speed
@@ -57,43 +52,59 @@ public class MiniPotionHUD extends AbstractRenderer {
                     continue;
             }
             strings[count] = formatDuration(effect);
-            len += mc.fontRendererObj.getStringWidth(strings[count]) + 2;
             count++;
         }
         if (count == 0) return;
-        len -= 2;
-        if (MWEConfig.verticalMiniPotionHUD) {
-            final int x = this.rendererPosition.getAbsoluteRenderX();
-            int y = this.rendererPosition.getAbsoluteRenderY();
-            final int maxY = resolution.getScaledHeight() - count * (mc.fontRendererObj.FONT_HEIGHT + 2);
-            if (y > maxY) {
-                y = maxY;
-            }
-            for (int i = 0; i < count; i++) {
-                mc.fontRendererObj.drawStringWithShadow(strings[i], x - mc.fontRendererObj.getStringWidth(strings[i]) / 2F, y, colors[i]);
-                y += mc.fontRendererObj.FONT_HEIGHT + 2;
-            }
-        } else {
-            int x = this.rendererPosition.getAbsoluteRenderX() - len / 2;
-            final int y = this.rendererPosition.getAbsoluteRenderY();
-            for (int i = 0; i < count; i++) {
-                mc.fontRendererObj.drawStringWithShadow(strings[i], x, y, colors[i]);
-                x += mc.fontRendererObj.getStringWidth(strings[i]) + 2;
-            }
-        }
+        this.renderStrings(resolution, count);
     }
 
     @Override
-    public void renderDummy() {
-        drawCenteredString(Minecraft.getMinecraft().fontRendererObj, EnumChatFormatting.LIGHT_PURPLE + "3", this.rendererPosition.getAbsoluteRenderX(), this.rendererPosition.getAbsoluteRenderY(), 0xFFFFFF);
+    public void renderDummy(ScaledResolution resolution) {
+        strings[0] = "3";
+        colors[0] = ColorUtil.getColorInt(EnumChatFormatting.LIGHT_PURPLE);
+        this.renderStrings(resolution, 1);
+    }
+
+    private void renderStrings(ScaledResolution resolution, int count) {
+        final FontRenderer fr = mc.fontRendererObj;
+        final int width;
+        final int height;
+        if (MWEConfig.verticalMiniPotionHUD) {
+            int maxWidth = 0;
+            for (int i = 0; i < count; i++) {
+                maxWidth = Math.max(maxWidth, fr.getStringWidth(strings[i]));
+            }
+            width = maxWidth;
+            height = count * (fr.FONT_HEIGHT + GAP) - GAP;
+        } else {
+            int totalWidth = 0;
+            for (int i = 0; i < count; i++) {
+                totalWidth += fr.getStringWidth(strings[i]) + GAP;
+            }
+            width = totalWidth - GAP;
+            height = fr.FONT_HEIGHT;
+        }
+        this.rendererPosition.applyTransform(resolution, width, height);
+        int x = 0;
+        int y = 0;
+        for (int i = 0; i < count; i++) {
+            final int stringWidth = fr.getStringWidth(strings[i]);
+            if (MWEConfig.verticalMiniPotionHUD) {
+                fr.drawStringWithShadow(strings[i], (width - stringWidth) / 2F, y, colors[i]);
+                y += fr.FONT_HEIGHT + GAP;
+            } else {
+                fr.drawStringWithShadow(strings[i], x, y, colors[i]);
+                x += stringWidth + GAP;
+            }
+        }
     }
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        if (MWEConfig.showMiniPotionHUDOnlyMW) {
-            return this.rendererPosition.isEnabled() && this.parser.isInMwGame();
+        if (!this.rendererPosition.isEnabled() || mc.thePlayer.getActivePotionEffects().isEmpty()) {
+            return false;
         }
-        return this.rendererPosition.isEnabled();
+        return !MWEConfig.showMiniPotionHUDOnlyMW || this.parser.isInMwGame();
     }
 
     private String formatDuration(PotionEffect effect) {

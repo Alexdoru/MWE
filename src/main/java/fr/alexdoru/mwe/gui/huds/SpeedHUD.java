@@ -1,7 +1,6 @@
 package fr.alexdoru.mwe.gui.huds;
 
 import fr.alexdoru.mwe.config.MWEConfig;
-import net.minecraft.client.Minecraft;
 import net.minecraft.util.EnumChatFormatting;
 
 public class SpeedHUD extends SimpleTextRenderer {
@@ -13,7 +12,6 @@ public class SpeedHUD extends SimpleTextRenderer {
 
     @Override
     protected void updateText() {
-        final Minecraft mc = Minecraft.getMinecraft();
         final double vX = mc.thePlayer.motionX;
         final double vZ = mc.thePlayer.motionZ;
         final double velocity = Math.sqrt(vX * vX + vZ * vZ) * 20d;

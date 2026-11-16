@@ -3,7 +3,6 @@ package fr.alexdoru.mwe.gui.huds;
 import fr.alexdoru.mwe.api.enums.MWMap;
 import fr.alexdoru.mwe.api.events.MapEvent;
 import fr.alexdoru.mwe.config.MWEConfig;
-import net.minecraft.client.Minecraft;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -14,7 +13,6 @@ public class BaseLocationHUD extends SimpleTextRenderer {
 
     public BaseLocationHUD() {
         super(MWEConfig.baseLocationHUDPosition);
-        this.setCentered();
         this.setDummyText(EnumChatFormatting.GREEN + "GREEN");
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -26,7 +24,7 @@ public class BaseLocationHUD extends SimpleTextRenderer {
 
     @Override
     protected void updateText() {
-        this.setText(currentMap.getPlayerBaseLocation(Minecraft.getMinecraft().thePlayer));
+        this.setText(currentMap.getPlayerBaseLocation(mc.thePlayer));
     }
 
     @Override

@@ -11,7 +11,6 @@ import fr.alexdoru.mwe.data.NameFormatter;
 import fr.alexdoru.mwe.data.PlayerDataManager;
 import fr.alexdoru.mwe.features.SquadHandler;
 import fr.alexdoru.mwe.utils.NetInfoOrdering;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -58,12 +57,11 @@ public class SquadHealthHUD extends AbstractRenderer {
             netInfoList.clear();
             playerList.clear();
             playerNamesList.clear();
-            final Minecraft mc = Minecraft.getMinecraft();
             if (mc.theWorld != null && mc.thePlayer != null && this.isEnabled(0)) {
                 final Scoreboard scoreboard = mc.theWorld.getScoreboard();
                 final ScoreObjective scoreobjective = scoreboard.getObjectiveInDisplaySlot(0);
                 if (!mc.isIntegratedServerRunning() || scoreobjective != null) {
-                    this.populateRenderList(mc, scoreboard, scoreobjective);
+                    this.populateRenderList(scoreboard, scoreobjective);
                 }
             }
         }
@@ -71,15 +69,14 @@ public class SquadHealthHUD extends AbstractRenderer {
 
     @Override
     public void render(ScaledResolution resolution) {
-        final Minecraft mc = Minecraft.getMinecraft();
         final Scoreboard scoreboard = mc.theWorld.getScoreboard();
         final ScoreObjective scoreobjective = scoreboard.getObjectiveInDisplaySlot(0);
         if (!netInfoList.isEmpty() && (!mc.isIntegratedServerRunning() || scoreobjective != null)) {
-            this.render(resolution, mc, scoreboard, scoreobjective);
+            this.render(resolution, scoreboard, scoreobjective);
         }
     }
 
-    private void render(ScaledResolution resolution, Minecraft mc, Scoreboard scoreboard, ScoreObjective scoreobjective) {
+    private void render(ScaledResolution resolution, Scoreboard scoreboard, ScoreObjective scoreobjective) {
         final int listSize = netInfoList.size();
         final boolean showScores = scoreobjective != null && scoreobjective.getRenderType() != IScoreObjectiveCriteria.EnumRenderType.HEARTS;
         final boolean showFinals = this.parser.isInMwGame();
@@ -116,22 +113,20 @@ public class SquadHealthHUD extends AbstractRenderer {
         final int maxLineWidth = 9 + maxNameWidth + maxFinalWidth + maxScoreWidth + totalExtraWidth - PADDING;
         final int hudWidth = maxLineWidth + 2;
         final int hudHeight = listSize * 9 + 1;
-        this.rendererPosition.updateAdjustedAbsolutePosition(resolution, hudWidth, hudHeight);
-        final int hudXpos = this.rendererPosition.getAbsoluteRenderX();
-        final int hudYpos = this.rendererPosition.getAbsoluteRenderY();
+        this.rendererPosition.applyTransform(resolution, hudWidth, hudHeight);
         if (MWEConfig.squadHUDShowBackground) {
-            Gui.drawRect(hudXpos, hudYpos, hudXpos + hudWidth, hudYpos + hudHeight, Integer.MIN_VALUE);
+            Gui.drawRect(0, 0, hudWidth, hudHeight, Integer.MIN_VALUE);
         }
         for (int i = 0; i < listSize; i++) {
             final NetworkPlayerInfo netInfo = netInfoList.get(i);
             final EntityPlayer entityPlayer = playerList.get(i);
             final String playername = playerNamesList.get(i);
-            int xDrawingPos = hudXpos + 1;
-            final int yDrawingPos = hudYpos + 1 + i * 9;
+            int xDrawingPos = 1;
+            final int yDrawingPos = 1 + i * 9;
             if (MWEConfig.squadHUDShowBackground) {
                 // draw background
                 final int backGroundColor = 0xFFFFFF | (MWEConfig.squadHUDBackgroundAlpha << 24);
-                Gui.drawRect(xDrawingPos, yDrawingPos, hudXpos + maxLineWidth + 1, yDrawingPos + 8, backGroundColor);
+                Gui.drawRect(xDrawingPos, yDrawingPos, maxLineWidth + 1, yDrawingPos + 8, backGroundColor);
             }
             // draw head
             final boolean renderHatLayer = entityPlayer == null || entityPlayer.isWearing(EnumPlayerModelParts.HAT);
@@ -170,24 +165,24 @@ public class SquadHealthHUD extends AbstractRenderer {
     }
 
     @Override
-    public void renderDummy() {
-        final Minecraft mc = Minecraft.getMinecraft();
-        final int hudXpos = this.rendererPosition.getAbsoluteRenderX();
-        final int hudYpos = this.rendererPosition.getAbsoluteRenderY();
+    public void renderDummy(ScaledResolution resolution) {
         final int listSize = 4;
         final int maxNameWidth = mc.fontRendererObj.getStringWidth(mc.thePlayer.getName());
         final int maxScoreWidth = mc.fontRendererObj.getStringWidth(" 00");
         final int maxFinalWidth = mc.fontRendererObj.getStringWidth(" 0");
         final int maxLineWidth = maxNameWidth + maxFinalWidth + maxScoreWidth + 9;
+        final int hudWidth = maxLineWidth + 2;
+        final int hudHeight = listSize * 9 + 1;
+        this.rendererPosition.applyTransform(resolution, hudWidth, hudHeight);
         if (MWEConfig.squadHUDShowBackground) {
-            Gui.drawRect(hudXpos, hudYpos, hudXpos + maxLineWidth + 2, hudYpos + listSize * 9 + 1, Integer.MIN_VALUE);
+            Gui.drawRect(0, 0, hudWidth, hudHeight, Integer.MIN_VALUE);
         }
         for (int i = 0; i < listSize; i++) {
-            int xDrawingPos = hudXpos + 1;
-            final int yDrawingPos = hudYpos + 1 + i * 9;
+            int xDrawingPos = 1;
+            final int yDrawingPos = 1 + i * 9;
             if (MWEConfig.squadHUDShowBackground) {
                 final int backGroundColor = 0xFFFFFF | (MWEConfig.squadHUDBackgroundAlpha << 24);
-                Gui.drawRect(xDrawingPos, yDrawingPos, hudXpos + maxLineWidth + 1, yDrawingPos + 8, backGroundColor);
+                Gui.drawRect(xDrawingPos, yDrawingPos, maxLineWidth + 1, yDrawingPos + 8, backGroundColor);
             }
             RenderUtil.renderSkinHead(DefaultPlayerSkin.getDefaultSkinLegacy(), xDrawingPos, yDrawingPos, true, 8);
             xDrawingPos += 9;
@@ -210,7 +205,7 @@ public class SquadHealthHUD extends AbstractRenderer {
         return this.rendererPosition.isEnabled() && (!SquadHandler.getSquad().isEmpty() || MWEConfig.squadHUDAutoShowTeamates);
     }
 
-    private void populateRenderList(Minecraft mc, Scoreboard scoreboard, ScoreObjective scoreobjective) {
+    private void populateRenderList(Scoreboard scoreboard, ScoreObjective scoreobjective) {
 
         final UUID ownId = mc.thePlayer.getGameProfile().getId();
         final char ownTeam = this.getPlayersTeam(scoreboard, mc.thePlayer.getGameProfile().getName());
@@ -239,7 +234,7 @@ public class SquadHealthHUD extends AbstractRenderer {
 
         if (!candidates.isEmpty()) {
             if (candidates.size() > MWEConfig.squadHUDAutoShowTeamatesCount) {
-                this.sortRenderList(candidates, MWEConfig.squadHUDAutoShowTeamatesCritera, mc, scoreboard, scoreobjective);
+                this.sortRenderList(candidates, MWEConfig.squadHUDAutoShowTeamatesCritera, scoreboard, scoreobjective);
             }
             final int limit = Math.min(candidates.size(), MWEConfig.squadHUDAutoShowTeamatesCount);
             for (int i = 0; i < limit; i++) {
@@ -252,7 +247,7 @@ public class SquadHealthHUD extends AbstractRenderer {
             if (MWEConfig.squadHUDShowSelf && !MWEConfig.squadHUDShowSelfFirst && seftInfo != null) {
                 netInfoList.add(seftInfo);
             }
-            this.sortRenderList(netInfoList, MWEConfig.squadHUDDisplaySorting, mc, scoreboard, scoreobjective);
+            this.sortRenderList(netInfoList, MWEConfig.squadHUDDisplaySorting, scoreboard, scoreobjective);
             if (MWEConfig.squadHUDShowSelf && MWEConfig.squadHUDShowSelfFirst && seftInfo != null) {
                 netInfoList.add(0, seftInfo);
             }
@@ -272,7 +267,7 @@ public class SquadHealthHUD extends AbstractRenderer {
         return StringUtil.getLastColorCharOf(team.getColorPrefix());
     }
 
-    private void sortRenderList(List<NetworkPlayerInfo> list, TablistSorting sorting, Minecraft mc, Scoreboard scoreboard, ScoreObjective scoreobjective) {
+    private void sortRenderList(List<NetworkPlayerInfo> list, TablistSorting sorting, Scoreboard scoreboard, ScoreObjective scoreobjective) {
         switch (sorting) {
             case LOWEST_SCORE:
                 if (scoreobjective != null && scoreobjective.getRenderType() != IScoreObjectiveCriteria.EnumRenderType.HEARTS) {
@@ -289,10 +284,10 @@ public class SquadHealthHUD extends AbstractRenderer {
                 }
                 break;
             case LOWEST_DISTANCE:
-                list.sort(Comparator.comparingDouble((NetworkPlayerInfo info) -> this.getDistanceSqToLocalPlayer(mc, info)));
+                list.sort(Comparator.comparingDouble((NetworkPlayerInfo info) -> this.getDistanceSqToLocalPlayer(info)));
                 break;
             case HIGHEST_DISTANCE:
-                list.sort(Comparator.comparingDouble((NetworkPlayerInfo info) -> this.getDistanceSqToLocalPlayer(mc, info)).reversed());
+                list.sort(Comparator.comparingDouble((NetworkPlayerInfo info) -> this.getDistanceSqToLocalPlayer(info)).reversed());
                 break;
             case VANILLA:
             default:
@@ -301,7 +296,7 @@ public class SquadHealthHUD extends AbstractRenderer {
         }
     }
 
-    private double getDistanceSqToLocalPlayer(Minecraft mc, NetworkPlayerInfo info) {
+    private double getDistanceSqToLocalPlayer(NetworkPlayerInfo info) {
         final EntityPlayer entity = PlayerDataManager.getPlayerEntityByUUID(info.getGameProfile().getId());
         if (entity == null) {
             return Double.MAX_VALUE;

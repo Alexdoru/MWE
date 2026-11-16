@@ -361,7 +361,7 @@ public final class MWEConfig {
             category = PVP_STUFF, subCategory = "Armor HUD",
             name = "Armor HUD",
             comment = "Displays your currently equipped armor")
-    public static final RendererPosition armorHUDPositon = new RendererPosition(true, 0.25d, 1d);
+    public static final RendererPositionV2 armorHUDPositon = new RendererPositionV2(true, 0.25d, 1d, 1d, RendererAlignment.BOTTOM);
 
     @ConfigProperty(
             category = PVP_STUFF, subCategory = "Armor HUD",
@@ -402,7 +402,7 @@ public final class MWEConfig {
             category = PVP_STUFF, subCategory = "Potion HUD",
             name = "Potion HUD",
             comment = "Displays your potion effects")
-    public static final RendererPosition potionHUDPosition = new RendererPosition(true, 0d, 0.5d);
+    public static final RendererPositionV2 potionHUDPosition = new RendererPositionV2(true, 0d, 0.5d, 1d, RendererAlignment.LEFT);
 
     @ConfigProperty(
             category = PVP_STUFF, subCategory = "Potion HUD",
@@ -430,7 +430,7 @@ public final class MWEConfig {
             name = "Mini Potion HUD",
             comment = "Displays a minimalist potion HUD with the remaining duration of the following potion buffs :"
                     + " §dregeneration§7, §8resistance§7, §bspeed§7, §cstrength§7, §finvisibility§7, §ajump boost§7, §eabsorption§7")
-    public static final RendererPosition miniPotionHUDPosition = new RendererPosition(false, 0.5d, 7.5d / 20d);
+    public static final RendererPositionV2 miniPotionHUDPosition = new RendererPositionV2(false, 0.5d, 7.5d / 20d, 1d, RendererAlignment.TOP);
 
     @ConfigProperty(
             category = PVP_STUFF, subCategory = "Potion HUD",
@@ -490,7 +490,7 @@ public final class MWEConfig {
             category = PVP_STUFF, subCategory = "Other HUD",
             name = "Arrow Hit HUD",
             comment = "Displays the HP of opponents on arrow hits, also works with Spider Leap damage and Renegade Rend in Mega Walls")
-    public static final RendererPosition arrowHitHUDPosition = new RendererPosition(true, 0.5d, 9d / 20d);
+    public static final RendererPositionV2 arrowHitHUDPosition = new RendererPositionV2(true, 0.5d, 9d / 20d, 1d, RendererAlignment.TOP);
 
     @ConfigProperty(
             category = PVP_STUFF, subCategory = "Other HUD",
@@ -503,7 +503,7 @@ public final class MWEConfig {
             category = PVP_STUFF, subCategory = "Other HUD",
             name = "Speed HUD",
             comment = "Displays your horizontal speed")
-    public static final RendererPosition speedHUDPosition = new RendererPosition(false, 1d, 1d);
+    public static final RendererPositionV2 speedHUDPosition = new RendererPositionV2(false, 1d, 1d, 1d, RendererAlignment.BOTTOM_RIGHT);
 
     @ConfigProperty(
             category = PVP_STUFF, subCategory = "Other HUD",
@@ -853,13 +853,13 @@ public final class MWEConfig {
             category = MEGA_WALLS, subCategory = "HUD",
             name = "Base Location HUD",
             comment = "Displays which base you are currently located in")
-    public static final RendererPosition baseLocationHUDPosition = new RendererPosition(true, 0.90d, 0d);
+    public static final RendererPositionV2 baseLocationHUDPosition = new RendererPositionV2(true, 0.90d, 0d, 1d, RendererAlignment.TOP_LEFT);
 
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "HUD",
             name = "Class count HUD",
             comment = "Displays the amounts of each class in the current lobby")
-    public static final RendererPosition classCountHUDPosition = new RendererPosition(true, 0.15d, 0.15d);
+    public static final RendererPositionV2 classCountHUDPosition = new RendererPositionV2(true, 0.15d, 0.15d, 1d, RendererAlignment.TOP_LEFT);
 
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "HUD",
@@ -886,7 +886,7 @@ public final class MWEConfig {
             category = MEGA_WALLS, subCategory = "HUD",
             name = "Class specific HUD",
             comment = "Displays class specific information, such as the strength duration or the Creeper primed TNT cooldown")
-    public static final RendererPosition classSpecificHUDPosition = new RendererPosition(true, 0.5d, 8d / 20d);
+    public static final RendererPositionV2 classSpecificHUDPosition = new RendererPositionV2(true, 0.5d, 8d / 20d, 1d, RendererAlignment.TOP);
 
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "HUD",
@@ -914,7 +914,7 @@ public final class MWEConfig {
             category = MEGA_WALLS, subCategory = "HUD",
             name = "Energy display HUD",
             comment = "Displays a HUD with the amount of energy you have. Turns a different color when your energy level exceeds the amount set below.")
-    public static final RendererPosition energyHUDPosition = new RendererPosition(true, 0.5d, 10.5 / 20d);
+    public static final RendererPositionV2 energyHUDPosition = new RendererPositionV2(true, 0.5d, 10.5 / 20d, 1d, RendererAlignment.TOP);
 
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "HUD",
@@ -941,7 +941,7 @@ public final class MWEConfig {
             category = MEGA_WALLS, subCategory = "HUD",
             name = "Kill cooldown HUD",
             comment = "Displays the cooldown of the /kill command")
-    public static final RendererPosition killCooldownHUDPosition = new RendererPosition(true, 0d, 0d);
+    public static final RendererPositionV2 killCooldownHUDPosition = new RendererPositionV2(true, 0d, 0d, 1d, RendererAlignment.TOP_LEFT);
 
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "HUD",
@@ -954,7 +954,7 @@ public final class MWEConfig {
             category = MEGA_WALLS, subCategory = "HUD",
             name = "Last wither HUD",
             comment = "Displays the time it takes for the last wither to die")
-    public static final RendererPosition lastWitherHUDPosition = new RendererPosition(true, 0.75d, 0d);
+    public static final RendererPositionV2 lastWitherHUDPosition = new RendererPositionV2(true, 0.75d, 0d, 1d, RendererAlignment.TOP_LEFT);
 
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "HUD",
@@ -967,13 +967,13 @@ public final class MWEConfig {
             category = MEGA_WALLS, subCategory = "HUD",
             name = "Phoenix Bond HUD",
             comment = "Displays the hearts healed from a Phoenix bond")
-    public static final RendererPosition phxBondHUDPosition = new RendererPosition(true, 0.5d, 0.75d);
+    public static final RendererPositionV2 phxBondHUDPosition = new RendererPositionV2(true, 0.5d, 0.75d, 1d, RendererAlignment.CENTER);
 
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "HUD",
             name = "Warcry HUD",
             comment = "Displays the warcry cooldown")
-    public static final RendererPosition warcryHUDPosition = new RendererPosition(true, 0.65d, 1d);
+    public static final RendererPositionV2 warcryHUDPosition = new RendererPositionV2(true, 0.65d, 1d, 1d, RendererAlignment.BOTTOM_LEFT);
 
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "Keyboard",
@@ -1016,7 +1016,7 @@ public final class MWEConfig {
             name = "Final Kill Counter HUD",
             comment = "Displays the HUD of the final kill counter\n"
                     + "§cThis will only work if you have your Hypixel language set to English")
-    public static final RendererPosition fkcounterHUDPosition = new RendererPosition(false, 0d, 0.1d);
+    public static final RendererPositionV2 fkcounterHUDPosition = new RendererPositionV2(false, 0d, 0.1d, 1d, RendererAlignment.TOP_LEFT);
 
     @ConfigProperty(
             category = FINAL_KILL_COUNTER, subCategory = "HUD",
@@ -1309,7 +1309,7 @@ public final class MWEConfig {
             name = "Report HUD",
             dependsOn = "Auto-report cheaters",
             comment = "Displays a small text when the mod has reports to send to the server and when it is typing the report")
-    public static final RendererPosition reportHUDPosition = new RendererPosition(true, 0d, 1d);
+    public static final RendererPositionV2 reportHUDPosition = new RendererPositionV2(true, 0d, 1d, 1d, RendererAlignment.BOTTOM_LEFT);
 
     @ConfigProperty(
             category = HACKER_DETECTOR, subCategory = "Report",
@@ -1506,7 +1506,7 @@ public final class MWEConfig {
             category = SQUAD, subCategory = "HUD",
             name = "Squad HUD",
             comment = "Displays a mini-tablist with your squadmates")
-    public static final RendererPosition squadHUDPosition = new RendererPosition(true, 0.25d, 0d);
+    public static final RendererPositionV2 squadHUDPosition = new RendererPositionV2(true, 0.25d, 0d, 1d, RendererAlignment.TOP_LEFT);
 
     @ConfigProperty(
             category = SQUAD, subCategory = "HUD",

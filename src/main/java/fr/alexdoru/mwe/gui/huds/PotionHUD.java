@@ -2,7 +2,6 @@ package fr.alexdoru.mwe.gui.huds;
 
 import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
@@ -18,6 +17,7 @@ import java.util.List;
 public class PotionHUD extends AbstractRenderer {
 
     private static final ResourceLocation INVENTORY_BACKGROUND = new ResourceLocation("textures/gui/container/inventory.png");
+    private static final int ICON_WIDTH = 27;
     private final List<PotionEffect> dummyList = new ArrayList<>();
 
     public PotionHUD() {
@@ -29,9 +29,21 @@ public class PotionHUD extends AbstractRenderer {
 
     @Override
     public void render(ScaledResolution resolution) {
-        final Minecraft mc = Minecraft.getMinecraft();
-        final Collection<PotionEffect> potionEffects = mc.thePlayer.getActivePotionEffects();
-        if (potionEffects.isEmpty()) return;
+        this.renderPotionHUD(resolution, mc.thePlayer.getActivePotionEffects());
+    }
+
+    @Override
+    public void renderDummy(ScaledResolution resolution) {
+        this.renderPotionHUD(resolution, dummyList);
+    }
+
+    @Override
+    public boolean isEnabled(long currentTimeMillis) {
+        return this.rendererPosition.isEnabled() && !mc.thePlayer.getActivePotionEffects().isEmpty();
+    }
+
+    private void renderPotionHUD(ScaledResolution resolution, Collection<PotionEffect> potionEffects) {
+        final FontRenderer fr = mc.fontRendererObj;
         int amountEffects = 0;
         int maxWidth = 0;
         for (final PotionEffect potioneffect : potionEffects) {
@@ -40,14 +52,13 @@ public class PotionHUD extends AbstractRenderer {
             if (potion.hasStatusIcon()) {
                 amountEffects++;
                 if (!MWEConfig.horizontalPotionHUD && MWEConfig.showPotionEffectNames) {
-                    maxWidth = Math.max(maxWidth, mc.fontRendererObj.getStringWidth(getFormattedEffect(potioneffect, potion)));
+                    maxWidth = Math.max(maxWidth, fr.getStringWidth(getFormattedEffect(potioneffect, potion)));
                 }
             }
         }
         if (amountEffects == 0) return;
         final int width;
         final int height;
-        final int ICON_WIDTH = 27;
         if (MWEConfig.horizontalPotionHUD) {
             width = (ICON_WIDTH + 2) * amountEffects - 2;
             height = ICON_WIDTH + 5;
@@ -59,51 +70,14 @@ public class PotionHUD extends AbstractRenderer {
             }
             height = (ICON_WIDTH + 7) * amountEffects - 7;
         }
-        this.rendererPosition.updateAdjustedAbsolutePosition(resolution, width, height, -width / 2, -height / 2);
-        this.renderPotionEffects(potionEffects, this.rendererPosition.getAbsoluteRenderX(), this.rendererPosition.getAbsoluteRenderY());
+        this.rendererPosition.applyTransform(resolution, width, height);
+        this.renderPotionEffects(potionEffects);
     }
 
-    @Override
-    public void renderDummy() {
-        int amountEffects = 0;
-        int maxWidth = 0;
-        for (final PotionEffect potioneffect : dummyList) {
-            if (potioneffect.getDuration() == 0) continue;
-            final Potion potion = Potion.potionTypes[potioneffect.getPotionID()];
-            if (potion.hasStatusIcon()) {
-                amountEffects++;
-                if (!MWEConfig.horizontalPotionHUD && MWEConfig.showPotionEffectNames) {
-                    maxWidth = Math.max(maxWidth, Minecraft.getMinecraft().fontRendererObj.getStringWidth(getFormattedEffect(potioneffect, potion)));
-                }
-            }
-        }
-        final int width;
-        final int height;
-        final int ICON_WIDTH = 27;
-        if (MWEConfig.horizontalPotionHUD) {
-            width = (ICON_WIDTH + 2) * amountEffects - 2;
-            height = ICON_WIDTH + 5;
-        } else {
-            if (MWEConfig.showPotionEffectNames) {
-                width = ICON_WIDTH + 4 + maxWidth;
-            } else {
-                width = ICON_WIDTH;
-            }
-            height = (ICON_WIDTH + 7) * amountEffects - 7;
-        }
-        final int xDrawPots = this.rendererPosition.getAbsoluteRenderX() - width / 2;
-        final int yDrawPots = this.rendererPosition.getAbsoluteRenderY() - height / 2;
-        this.renderPotionEffects(dummyList, xDrawPots, yDrawPots);
-    }
-
-    @Override
-    public boolean isEnabled(long currentTimeMillis) {
-        return this.rendererPosition.isEnabled();
-    }
-
-    private void renderPotionEffects(Collection<PotionEffect> potionEffects, int xDrawPots, int yDrawPots) {
-        final Minecraft mc = Minecraft.getMinecraft();
+    private void renderPotionEffects(Collection<PotionEffect> potionEffects) {
         final FontRenderer fr = mc.fontRendererObj;
+        int xDrawPots = 0;
+        int yDrawPots = 0;
         for (final PotionEffect potioneffect : potionEffects) {
             if (potioneffect.getDuration() == 0) continue;
             final Potion potion = Potion.potionTypes[potioneffect.getPotionID()];
@@ -111,13 +85,12 @@ public class PotionHUD extends AbstractRenderer {
                 GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
                 mc.getTextureManager().bindTexture(INVENTORY_BACKGROUND);
                 final int index = potion.getStatusIconIndex();
+                GlStateManager.pushMatrix();
                 GlStateManager.translate(xDrawPots, yDrawPots, 0d);
                 GlStateManager.scale(1.5d, 1.5d, 1.5d);
                 this.drawTexturedModalRect(0, 0, index % 8 * 18, 198 + index / 8 * 18, 18, 18);
-                GlStateManager.scale(2d / 3d, 2d / 3d, 2d / 3d);
-                GlStateManager.translate(-xDrawPots, -yDrawPots, 0d);
+                GlStateManager.popMatrix();
                 final String potDuration = potioneffect.getDuration() > 60 * 60 * 20 ? "**:**" : Potion.getDurationString(potioneffect);
-                final int ICON_WIDTH = 27;
                 if (!MWEConfig.horizontalPotionHUD && MWEConfig.showPotionEffectNames) {
                     final String fullName = getFormattedEffect(potioneffect, potion);
                     fr.drawStringWithShadow(fullName, xDrawPots + ICON_WIDTH + 4, (float) (yDrawPots + ICON_WIDTH / 2 - fr.FONT_HEIGHT + 1), MWEConfig.potionHUDTextColor);

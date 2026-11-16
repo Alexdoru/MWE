@@ -33,7 +33,6 @@ public class ClassSpecificHUD extends SimpleTextRenderer {
 
     public ClassSpecificHUD() {
         super(MWEConfig.classSpecificHUDPosition);
-        this.setCentered();
         this.setDummyText(RED + "Class Specific Info");
     }
 

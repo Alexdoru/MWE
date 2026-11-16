@@ -2,8 +2,6 @@ package fr.alexdoru.mwe.gui.huds;
 
 import fr.alexdoru.mwe.api.utils.ColorUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
@@ -28,35 +26,15 @@ public class ArmorHUD extends AbstractRenderer {
 
     @Override
     public void render(ScaledResolution resolution) {
-        final EntityPlayerSP thePlayer = Minecraft.getMinecraft().thePlayer;
-        if (MWEConfig.lowDuraArmorHUD) {
-            boolean shouldRender = false;
-            for (final ItemStack stack : thePlayer.inventory.armorInventory) {
-                if (stack != null && stack.isItemStackDamageable()) {
-                    final int durability = stack.getMaxDamage() - stack.getItemDamage();
-                    if (durability <= MWEConfig.lowDuraArmorHUDValue) {
-                        shouldRender = true;
-                        break;
-                    }
-                }
-            }
-            if (!shouldRender) return;
-        }
-        final int width;
-        final int height;
-        if (MWEConfig.horizontalArmorHUD) {
-            width = ICON_SIZE * 4;
-            height = ICON_SIZE;
-        } else {
-            width = ICON_SIZE;
-            height = ICON_SIZE * 4;
-        }
-        this.rendererPosition.updateAdjustedAbsolutePosition(resolution, width, height, -width / 2, -height / 2);
-        this.renderArmorBar(thePlayer.inventory.armorInventory, this.rendererPosition.getAbsoluteRenderX(), this.rendererPosition.getAbsoluteRenderY());
+        this.renderArmorHUD(resolution, mc.thePlayer.inventory.armorInventory);
     }
 
     @Override
-    public void renderDummy() {
+    public void renderDummy(ScaledResolution resolution) {
+        this.renderArmorHUD(resolution, dummyArmor);
+    }
+
+    private void renderArmorHUD(ScaledResolution resolution, ItemStack[] armorInventory) {
         final int width;
         final int height;
         if (MWEConfig.horizontalArmorHUD) {
@@ -66,17 +44,28 @@ public class ArmorHUD extends AbstractRenderer {
             width = ICON_SIZE;
             height = ICON_SIZE * 4;
         }
-        final int x = this.rendererPosition.getAbsoluteRenderX() - width / 2;
-        final int y = this.rendererPosition.getAbsoluteRenderY() - height / 2;
-        this.renderArmorBar(dummyArmor, x, y);
+        this.rendererPosition.applyTransform(resolution, width, height);
+        this.renderArmorBar(armorInventory);
     }
 
     @Override
     public boolean isEnabled(long currentTimeMillis) {
-        return this.rendererPosition.isEnabled();
+        if (!this.rendererPosition.isEnabled()) return false;
+        if (!MWEConfig.lowDuraArmorHUD) return true;
+        for (final ItemStack stack : mc.thePlayer.inventory.armorInventory) {
+            if (stack != null && stack.isItemStackDamageable()) {
+                final int durability = stack.getMaxDamage() - stack.getItemDamage();
+                if (durability <= MWEConfig.lowDuraArmorHUDValue) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
-    private void renderArmorBar(ItemStack[] armorInventory, int x, int y) {
+    private void renderArmorBar(ItemStack[] armorInventory) {
+        int x = 0;
+        int y = 0;
         for (int i = armorInventory.length - 1; i >= 0; i--) {
             final ItemStack stack = armorInventory[i];
             if (stack != null) {
@@ -91,7 +80,6 @@ public class ArmorHUD extends AbstractRenderer {
     }
 
     private void drawItemStack(ItemStack stack, int x, int y) {
-        final Minecraft mc = Minecraft.getMinecraft();
         FontRenderer fr = stack.getItem().getFontRenderer(stack);
         if (fr == null) fr = mc.fontRendererObj;
         final RenderItem itemRender = mc.getRenderItem();

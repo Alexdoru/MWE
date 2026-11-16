@@ -6,7 +6,6 @@ import fr.alexdoru.mwe.api.utils.MapUtil;
 import fr.alexdoru.mwe.api.utils.RenderUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.utils.TimerUtil;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -17,6 +16,7 @@ import java.util.*;
 public class ClassCountHUD extends AbstractRenderer {
 
     private static final int PER_LINE_HEADS = 9;
+    private static final int TEAM_PER_LINE_HEADS = 100;
 
     private final TimerUtil timer = new TimerUtil(1000L);
 
@@ -51,10 +51,19 @@ public class ClassCountHUD extends AbstractRenderer {
     @Override
     public void render(ScaledResolution resolution) {
         this.updateData();
-        this.rendererPosition.updateAbsolutePosition(resolution);
-        final int x = this.rendererPosition.getAbsoluteRenderX();
-        final int y = this.rendererPosition.getAbsoluteRenderY();
-        this.renderAt(x, y);
+        final FontRenderer fr = mc.fontRendererObj;
+        if (this.showPerTeamHud()) {
+            int width = 0;
+            for (int i = 0; i < this.perTeamRenderList.length; i++) {
+                if (this.perTeamRenderList[i].isEmpty()) continue;
+                final int labelWidth = fr.getStringWidth(getTeamDisplayName(i)) + 4;
+                width = Math.max(width, labelWidth + this.getClassListWidth(fr, this.perTeamRenderList[i], TEAM_PER_LINE_HEADS));
+            }
+            this.rendererPosition.applyTransform(resolution, width, this.getLinesCount() * fr.FONT_HEIGHT);
+        } else {
+            this.applyClassListTransform(resolution, fr, this.allClassList);
+        }
+        this.renderAt(0, 0);
     }
 
     public void updateData() {
@@ -76,10 +85,14 @@ public class ClassCountHUD extends AbstractRenderer {
     }
 
     @Override
-    public void renderDummy() {
-        final int x = this.rendererPosition.getAbsoluteRenderX();
-        final int y = this.rendererPosition.getAbsoluteRenderY();
-        this.renderClassHUD(this.dummyAllClassList, x, y);
+    public void renderDummy(ScaledResolution resolution) {
+        this.applyClassListTransform(resolution, mc.fontRendererObj, this.dummyAllClassList);
+        this.renderClassHUD(this.dummyAllClassList, 0, 0);
+    }
+
+    private void applyClassListTransform(ScaledResolution resolution, FontRenderer fr, List<Map.Entry<MWSkin, String>> list) {
+        final int rows = (list.size() + PER_LINE_HEADS - 1) / PER_LINE_HEADS;
+        this.rendererPosition.applyTransform(resolution, this.getClassListWidth(fr, list, PER_LINE_HEADS), rows * fr.FONT_HEIGHT);
     }
 
     @Override
@@ -116,7 +129,7 @@ public class ClassCountHUD extends AbstractRenderer {
     }
 
     public int getWidth() {
-        final FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
+        final FontRenderer fr = mc.fontRendererObj;
         final int singleWidth = 8 + 1 + fr.getStringWidth("1") + 1;
         if (this.showPerTeamHud()) {
             int width = 0;
@@ -134,7 +147,7 @@ public class ClassCountHUD extends AbstractRenderer {
         for (final Map<MWSkin, Integer> map : this.perTeamData) {
             map.clear();
         }
-        for (final NetworkPlayerInfo netInfo : Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap()) {
+        for (final NetworkPlayerInfo netInfo : mc.getNetHandler().getPlayerInfoMap()) {
             if (isSpectator(netInfo)) continue;
             final MWTeam team = MWTeam.ofPlayer(netInfo);
             final MWSkin defaultSkin = this.getDefaultSkin(netInfo);
@@ -149,7 +162,7 @@ public class ClassCountHUD extends AbstractRenderer {
 
     private void updateClassData() {
         final Map<MWSkin, Integer> map = new HashMap<>();
-        for (final NetworkPlayerInfo netInfo : Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap()) {
+        for (final NetworkPlayerInfo netInfo : mc.getNetHandler().getPlayerInfoMap()) {
             if (isSpectator(netInfo)) continue;
             final MWSkin defaultSkin = this.getDefaultSkin(netInfo);
             if (defaultSkin != null) {
@@ -177,7 +190,6 @@ public class ClassCountHUD extends AbstractRenderer {
     }
 
     private void renderTeamHUD(int x, int y) {
-        final Minecraft mc = Minecraft.getMinecraft();
         for (int i = 0; i < this.perTeamRenderList.length; i++) {
             final List<Map.Entry<MWSkin, String>> teamData = this.perTeamRenderList[i];
             if (teamData.isEmpty()) continue;
@@ -185,13 +197,29 @@ public class ClassCountHUD extends AbstractRenderer {
             final String label = getTeamDisplayName(i);
             mc.fontRendererObj.drawStringWithShadow(label, drawX, y, 0xFFFFFF);
             drawX += mc.fontRendererObj.getStringWidth(label) + 4;
-            drawClassListAt(mc.fontRendererObj, drawX, y, teamData, 100);
+            drawClassListAt(mc.fontRendererObj, drawX, y, teamData, TEAM_PER_LINE_HEADS);
             y += mc.fontRendererObj.FONT_HEIGHT;
         }
     }
 
     private void renderClassHUD(List<Map.Entry<MWSkin, String>> list, int x, int y) {
-        this.drawClassListAt(Minecraft.getMinecraft().fontRendererObj, x, y, list, PER_LINE_HEADS);
+        this.drawClassListAt(mc.fontRendererObj, x, y, list, PER_LINE_HEADS);
+    }
+
+    /**
+     * Width of what {@link #drawClassListAt} draws for the same list
+     */
+    private int getClassListWidth(FontRenderer fr, List<Map.Entry<MWSkin, String>> list, int perLine) {
+        final int size = list.size();
+        int width = 0;
+        for (int col = 0; col < perLine && col < size; col++) {
+            int maxWidth = 0;
+            for (int index = col; index < size; index += perLine) {
+                maxWidth = Math.max(maxWidth, fr.getStringWidth(list.get(index).getValue()));
+            }
+            width += maxWidth + 1 + 8 + 1;
+        }
+        return Math.max(0, width - 1);
     }
 
     private void drawClassListAt(FontRenderer fr, final int x, final int y, List<Map.Entry<MWSkin, String>> list, final int perLine) {

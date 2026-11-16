@@ -21,7 +21,6 @@ public class WarcryHUD extends SimpleTextRenderer {
 
     public WarcryHUD() {
         super(MWEConfig.warcryHUDPosition);
-        this.setCentered();
         this.setDummyText(EnumChatFormatting.RED + "4m 15s");
         MinecraftForge.EVENT_BUS.register(this);
     }

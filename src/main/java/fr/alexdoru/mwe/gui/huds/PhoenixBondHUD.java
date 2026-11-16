@@ -7,7 +7,7 @@ import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.config.MWEConfig;
 import fr.alexdoru.mwe.data.NetPlayerInfoTracker;
 import fr.alexdoru.mwe.features.SquadHandler;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.resources.DefaultPlayerSkin;
@@ -86,7 +86,6 @@ public class PhoenixBondHUD extends AbstractRenderer {
     private PhxHealLine getLine(String playername, String amountHealed) {
         final NetworkPlayerInfo netInfo;
         final String formattedName;
-        final Minecraft mc = Minecraft.getMinecraft();
         if (playername == null) { // myself
             netInfo = mc.thePlayer == null ? null : mc.getNetHandler().getPlayerInfo(mc.thePlayer.getUniqueID());
             formattedName = EnumChatFormatting.AQUA.toString() + EnumChatFormatting.BOLD + "You";
@@ -109,35 +108,30 @@ public class PhoenixBondHUD extends AbstractRenderer {
 
     @Override
     public void render(ScaledResolution resolution) {
-        this.rendererPosition.updateAbsolutePosition(resolution);
-        this.renderPhxHUD(this.textToRender);
+        this.renderPhxHUD(resolution, this.textToRender);
     }
 
     @Override
-    public void renderDummy() {
-        this.renderPhxHUD(this.dummyTextToRender);
+    public void renderDummy(ScaledResolution resolution) {
+        this.renderPhxHUD(resolution, this.dummyTextToRender);
     }
 
-    private void renderPhxHUD(List<PhxHealLine> toRenderList) {
-        final Minecraft mc = Minecraft.getMinecraft();
+    private void renderPhxHUD(ScaledResolution resolution, List<PhxHealLine> toRenderList) {
+        final FontRenderer fr = mc.fontRendererObj;
         int maxLeft = 0;
         int maxRight = 0;
-        int maxTotal = 0;
         for (final PhxHealLine phxHealLine : toRenderList) {
-            final int leftWidth = mc.fontRendererObj.getStringWidth(phxHealLine.hpHealed);
-            final int rightWidth = mc.fontRendererObj.getStringWidth(phxHealLine.name);
-            maxLeft = Math.max(maxLeft, leftWidth);
-            maxRight = Math.max(maxRight, rightWidth);
-            maxTotal = Math.max(maxTotal, leftWidth + rightWidth);
+            maxLeft = Math.max(maxLeft, fr.getStringWidth(phxHealLine.hpHealed));
+            maxRight = Math.max(maxRight, fr.getStringWidth(phxHealLine.name));
         }
-        maxTotal += 10;
-        final int x = this.rendererPosition.getAbsoluteRenderX() - maxTotal / 2;
-        int y = this.rendererPosition.getAbsoluteRenderY() - mc.fontRendererObj.FONT_HEIGHT * toRenderList.size() / 2;
+        final int headX = maxLeft + 1;
+        this.rendererPosition.applyTransform(resolution, headX + 9 + maxRight, fr.FONT_HEIGHT * toRenderList.size());
+        int y = 0;
         for (final PhxHealLine phxHealLine : toRenderList) {
-            mc.fontRendererObj.drawStringWithShadow(phxHealLine.hpHealed, x + maxLeft - mc.fontRendererObj.getStringWidth(phxHealLine.hpHealed) - 1, y, 0xFFFFFF);
-            mc.fontRendererObj.drawStringWithShadow(phxHealLine.name, x + maxLeft + 9, y, 0xFFFFFF);
-            RenderUtil.renderSkinHead(phxHealLine.skin, x + maxLeft, y, true, 8);
-            y += mc.fontRendererObj.FONT_HEIGHT;
+            fr.drawStringWithShadow(phxHealLine.hpHealed, maxLeft - fr.getStringWidth(phxHealLine.hpHealed), y, 0xFFFFFF);
+            fr.drawStringWithShadow(phxHealLine.name, headX + 9, y, 0xFFFFFF);
+            RenderUtil.renderSkinHead(phxHealLine.skin, headX, y, true, 8);
+            y += fr.FONT_HEIGHT;
         }
     }
 
