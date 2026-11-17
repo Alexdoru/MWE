@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Type;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.List;
@@ -109,19 +110,20 @@ public class JsonUtilTest {
         final File file = tempFolder.newFile("bad-encoding.json");
         // Valid JSON *structure* but with an invalid UTF-8 byte sequence embedded
         // inside the "name" string value.
+        final byte[] invalidUtf8 = {(byte) 0x80, (byte) 0xAF}; // invalid UTF-8 continuation bytes
         try (OutputStream os = Files.newOutputStream(file.toPath())) {
             os.write("{\"name\":\"".getBytes(StandardCharsets.UTF_8));
-            os.write(new byte[]{(byte) 0x80, (byte) 0xAF}); // invalid UTF-8 continuation bytes
+            os.write(invalidUtf8);
             os.write("\",\"value\":7}".getBytes(StandardCharsets.UTF_8));
         }
 
         final Pojo result = JsonUtil.readFromFile(file, Pojo.class);
 
-        // Strict UTF-8 decoding fails -> fallback (lenient FileReader) kicks in
-        // and succeeds, replacing the bad bytes with U+FFFD instead of failing.
+        // Strict UTF-8 decoding fails -> the fallback FileReader decodes with the platform
+        // default charset, so the expected name depends on the machine running the test.
         assertNotNull(result);
         assertEquals(7, result.value);
-        assertTrue(result.name.indexOf('\uFFFD') >= 0);
+        assertEquals(new String(invalidUtf8, Charset.defaultCharset()), result.name);
     }
 
     // ---------------------------------------------------------------
