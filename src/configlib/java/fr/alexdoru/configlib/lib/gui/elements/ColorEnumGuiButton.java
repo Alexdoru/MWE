@@ -58,10 +58,7 @@ public class ColorEnumGuiButton extends OverlayConfigGuiButton {
         final Box configBox = this.parentScreen.getConfigBoxSize();
         final int panelWidth = 8 * SQUARE + 9 * GAP;
         final int panelHeight = GAP + SQUARE + GAP + SQUARE + GAP + mc.fontRendererObj.FONT_HEIGHT + GAP;
-        panelBox.LEFT = configBox.LEFT + (configBox.getWidth() - panelWidth) / 2;
-        panelBox.TOP = configBox.TOP + (configBox.getHeight() - panelHeight) / 2;
-        panelBox.RIGHT = panelBox.LEFT + panelWidth;
-        panelBox.BOTTOM = panelBox.TOP + panelHeight;
+        panelBox.setDim(configBox.LEFT + (configBox.getWidth() - panelWidth) / 2, configBox.TOP + (configBox.getHeight() - panelHeight) / 2, panelWidth, panelHeight);
         GuiUtil.drawBoxWithOutline(panelBox, colorPalette.SETTING_BACKGROUND, colorPalette.SETTING_BACKGROUND_BORDER);
 
         EnumChatFormatting hovered = null;
@@ -79,10 +76,9 @@ public class ColorEnumGuiButton extends OverlayConfigGuiButton {
         }
 
         if (hovered != null) {
-            final String titleText = hovered + hovered.name();
-            final int titleX = panelBox.LEFT + panelWidth / 2;
-            final int titleY = panelBox.TOP + GAP;
-            GuiUtil.drawCenteredString(titleText, titleX, titleY, 0xFFFFFFFF);
+            this.drawOverlayTitle(hovered + hovered.name(), panelBox, panelBox.TOP + GAP);
+        } else {
+            this.drawOverlayTitle(colorPalette, panelBox, panelBox.TOP + GAP);
         }
     }
 

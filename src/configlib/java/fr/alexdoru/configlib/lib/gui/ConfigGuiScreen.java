@@ -118,10 +118,7 @@ public class ConfigGuiScreen extends GuiScreen {
         final int GUI_WIDTH = Math.min(600, width - 20);
         final int GUI_HEIGHT = Math.min(400, height - 20);
 
-        GUI_BORDER.LEFT = (width - GUI_WIDTH) / 2;
-        GUI_BORDER.TOP = (height - GUI_HEIGHT) / 2;
-        GUI_BORDER.RIGHT = GUI_BORDER.LEFT + GUI_WIDTH;
-        GUI_BORDER.BOTTOM = GUI_BORDER.TOP + GUI_HEIGHT;
+        GUI_BORDER.setDim((width - GUI_WIDTH) / 2, (height - GUI_HEIGHT) / 2, GUI_WIDTH, GUI_HEIGHT);
 
         GUI_INSIDE.LEFT = GUI_BORDER.LEFT + PADDING;
         GUI_INSIDE.TOP = GUI_BORDER.TOP + PADDING;

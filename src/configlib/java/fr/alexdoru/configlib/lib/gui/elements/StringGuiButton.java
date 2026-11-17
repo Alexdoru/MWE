@@ -79,10 +79,7 @@ public class StringGuiButton extends OverlayConfigGuiButton {
         final int formattingHeight = formatted ? fontHeight + GAP + paletteHeight + GAP + fontHeight + GAP : 0;
         final int panelHeight = GAP + fontHeight + GAP + FIELD_HEIGHT + GAP + formattingHeight + BUTTON_HEIGHT + GAP;
         final Box configBox = this.parentScreen.getConfigBoxSize();
-        panelBox.LEFT = configBox.LEFT + (configBox.getWidth() - PANEL_WIDTH) / 2;
-        panelBox.TOP = configBox.TOP + (configBox.getHeight() - panelHeight) / 2;
-        panelBox.RIGHT = panelBox.LEFT + PANEL_WIDTH;
-        panelBox.BOTTOM = panelBox.TOP + panelHeight;
+        panelBox.setDim(configBox.LEFT + (configBox.getWidth() - PANEL_WIDTH) / 2, configBox.TOP + (configBox.getHeight() - panelHeight) / 2, PANEL_WIDTH, panelHeight);
         GuiUtil.drawBoxWithOutline(panelBox, colorPalette.SETTING_BACKGROUND, colorPalette.SETTING_BACKGROUND_BORDER);
 
         final int left = panelBox.LEFT + GAP;
@@ -124,13 +121,12 @@ public class StringGuiButton extends OverlayConfigGuiButton {
         doneButton.yPosition = y;
         doneButton.drawButton(colorPalette, mc, mouseX, mouseY);
 
-        final String title;
         if (hovered != null) {
-            title = EnumChatFormatting.WHITE + "&" + FormattingCodeUtil.getCode(hovered) + " " + hovered + hovered.name();
+            final String title = EnumChatFormatting.WHITE + "&" + FormattingCodeUtil.getCode(hovered) + " " + hovered + hovered.name();
+            this.drawOverlayTitle(title, panelBox, titleY);
         } else {
-            title = annotation.name();
+            this.drawOverlayTitle(colorPalette, panelBox, titleY);
         }
-        GuiUtil.drawCenteredString(title, centerX, titleY, colorPalette.SETTING_NAME_TEXT);
     }
 
     @Override

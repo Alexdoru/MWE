@@ -31,4 +31,11 @@ public final class Box {
         );
     }
 
+    public void setDim(int left, int top, int width, int height) {
+        LEFT = left;
+        TOP = top;
+        RIGHT = left + width;
+        BOTTOM = top + height;
+    }
+
 }

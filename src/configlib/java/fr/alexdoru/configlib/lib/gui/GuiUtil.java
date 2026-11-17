@@ -3,6 +3,11 @@ package fr.alexdoru.configlib.lib.gui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import org.lwjgl.opengl.GL11;
 
 public final class GuiUtil {
 
@@ -55,6 +60,51 @@ public final class GuiUtil {
         g = g + (int) ((255 - g) * amount);
         b = b + (int) ((255 - b) * amount);
         return (a << 24) | (r << 16) | (g << 8) | b;
+    }
+
+    public static void drawHorizontalGradient(Box box, int leftColor, int rightColor) {
+        drawGradient(box.LEFT, box.TOP, box.RIGHT, box.BOTTOM, leftColor, rightColor, rightColor, leftColor);
+    }
+
+    public static void drawVerticalGradient(Box box, int topColor, int bottomColor) {
+        drawVerticalGradient(box.LEFT, box.TOP, box.RIGHT, box.BOTTOM, topColor, bottomColor);
+    }
+
+    public static void drawVerticalGradient(int left, int top, int right, int bottom, int topColor, int bottomColor) {
+        drawGradient(left, top, right, bottom, topColor, topColor, bottomColor, bottomColor);
+    }
+
+    private static void drawGradient(int leftPos, int topPos, int rightPos, int bottomPos, int topLeftColor, int topRightColor, int bottomRightColor, int bottomLeftColor) {
+        GlStateManager.disableTexture2D();
+        GlStateManager.enableBlend();
+        GlStateManager.disableAlpha();
+        GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+        GlStateManager.shadeModel(GL11.GL_SMOOTH);
+        final Tessellator tessellator = Tessellator.getInstance();
+        final WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+        worldrenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+        addColoredVertex(worldrenderer, rightPos, topPos, topRightColor);
+        addColoredVertex(worldrenderer, leftPos, topPos, topLeftColor);
+        addColoredVertex(worldrenderer, leftPos, bottomPos, bottomLeftColor);
+        addColoredVertex(worldrenderer, rightPos, bottomPos, bottomRightColor);
+        tessellator.draw();
+        GlStateManager.shadeModel(GL11.GL_FLAT);
+        GlStateManager.disableBlend();
+        GlStateManager.enableAlpha();
+        GlStateManager.enableTexture2D();
+    }
+
+    private static void addColoredVertex(WorldRenderer worldrenderer, int x, int y, int argb) {
+        worldrenderer.pos(x, y, 0d).color(argb >> 16 & 0xFF, argb >> 8 & 0xFF, argb & 0xFF, argb >>> 24).endVertex();
+    }
+
+    public static void drawCheckerboard(Box box, int cellSize) {
+        for (int y = box.TOP; y < box.BOTTOM; y += cellSize) {
+            for (int x = box.LEFT; x < box.RIGHT; x += cellSize) {
+                final boolean light = ((x - box.LEFT) / cellSize + (y - box.TOP) / cellSize) % 2 == 0;
+                Gui.drawRect(x, y, Math.min(x + cellSize, box.RIGHT), Math.min(y + cellSize, box.BOTTOM), light ? 0xFFFFFFFF : 0xFFBFBFBF);
+            }
+        }
     }
 
     public static void drawFullTextureWithCustomSize(int left, int top, int drawWidth, int drawHeight) {

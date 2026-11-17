@@ -57,10 +57,7 @@ public final class Scrollbar {
                 final int newScroll = relativeMouseY * maxScroll / thumbTravel;
                 this.scroll(this.scroll - newScroll, contentHeight, boxHeight);
             }
-            this.thumb.LEFT = box.RIGHT - 5;
-            this.thumb.TOP = thumbTravel * this.scroll / maxScroll + minScrollBarY;
-            this.thumb.RIGHT = this.thumb.LEFT + 3;
-            this.thumb.BOTTOM = this.thumb.TOP + scrollBarSize;
+            this.thumb.setDim(box.RIGHT - 5, thumbTravel * this.scroll / maxScroll + minScrollBarY, 3, scrollBarSize);
             GuiUtil.drawVerticalLine(box.RIGHT - 4, box.TOP + 4, box.BOTTOM - 4, colorPalette.SCROLLBAR_TRACK);
             GuiUtil.drawRect(this.thumb, colorPalette.SCROLLBAR_THUMB);
         }

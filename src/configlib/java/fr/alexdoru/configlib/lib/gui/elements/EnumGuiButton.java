@@ -143,10 +143,7 @@ public class EnumGuiButton extends OverlayConfigGuiButton {
         final int space = openBelow ? spaceBelow : spaceAbove;
         final int visibleRows = Math.max(1, Math.min(maxVisibleRows, (space - 2 * BORDER) / ROW_HEIGHT));
         final int height = visibleRows * ROW_HEIGHT + 2 * BORDER;
-        dropdownBox.LEFT = button.xPosition;
-        dropdownBox.RIGHT = button.xPosition + button.width;
-        dropdownBox.TOP = openBelow ? button.yPosition + button.height : button.yPosition - height;
-        dropdownBox.BOTTOM = dropdownBox.TOP + height;
+        dropdownBox.setDim(button.xPosition, openBelow ? button.yPosition + button.height : button.yPosition - height, button.width, height);
         rowsBox.LEFT = dropdownBox.LEFT + BORDER;
         rowsBox.RIGHT = dropdownBox.RIGHT - BORDER - (this.getContentHeight() > visibleRows * ROW_HEIGHT ? SCROLLBAR_WIDTH : 0);
         rowsBox.TOP = dropdownBox.TOP + BORDER;
