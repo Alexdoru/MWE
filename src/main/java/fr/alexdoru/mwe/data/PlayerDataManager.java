@@ -64,7 +64,7 @@ public final class PlayerDataManager {
     private PlayerDataManager() {}
 
     private static ChatComponentText IWARNING_ICON;
-    private static ChatComponentText IRED_WARNING_ICON;
+    private static ChatComponentText IBLATANT_WARNING_ICON;
     private static ChatComponentText IPINK_WARNING_ICON;
     private static ChatComponentText ISQUAD_ICON;
     private static final List<IChatComponent> ALL_ICONS_LIST = new ArrayList<>();
@@ -72,11 +72,24 @@ public final class PlayerDataManager {
     private static final List<ITabNameModifier> REGISTERED_MODIFIERS = new ArrayList<>();
 
     public static void assignIcons() {
-        IWARNING_ICON = new ChatComponentText(MWEConfig.yellowWarningIcon + " " + EnumChatFormatting.RESET);
-        IRED_WARNING_ICON = new ChatComponentText(MWEConfig.redWarningIcon + " " + EnumChatFormatting.RESET);
+        IWARNING_ICON = new ChatComponentText(MWEConfig.normalWarningIcon + " " + EnumChatFormatting.RESET);
+        IBLATANT_WARNING_ICON = new ChatComponentText(MWEConfig.blatantWarningIcon + " " + EnumChatFormatting.RESET);
         IPINK_WARNING_ICON = new ChatComponentText(MWEConfig.scangameWarningIcon + " " + EnumChatFormatting.RESET);
         ISQUAD_ICON = new ChatComponentText(MWEConfig.squadIcon + " " + EnumChatFormatting.RESET);
-        ALL_ICONS_LIST.addAll(Arrays.asList(IWARNING_ICON, IRED_WARNING_ICON, IPINK_WARNING_ICON, ISQUAD_ICON));
+        ALL_ICONS_LIST.clear();
+        ALL_ICONS_LIST.addAll(Arrays.asList(IWARNING_ICON, IBLATANT_WARNING_ICON, IPINK_WARNING_ICON, ISQUAD_ICON));
+    }
+
+    public static void reloadIcons() {
+        final Minecraft mc = Minecraft.getMinecraft();
+        if (mc.theWorld != null) {
+            for (final EntityPlayer player : mc.theWorld.playerEntities) {
+                player.getPrefixes().removeAll(ALL_ICONS_LIST);
+            }
+        }
+        assignIcons();
+        clearPlayerDataCache();
+        refreshAllPlayerData();
     }
 
     public static void registerTabNameModifier(ITabNameModifier tabNameModifier) {
@@ -205,7 +218,7 @@ public final class PlayerDataManager {
                 final WDR wdr = WdrDataManager.getWdr(id, username);
                 if (wdr != null) {
                     if (wdr.hasRedIcon()) {
-                        prefixIcon = IRED_WARNING_ICON;
+                        prefixIcon = IBLATANT_WARNING_ICON;
                     } else if (wdr.hasYellowIcon()) {
                         prefixIcon = IWARNING_ICON;
                     }

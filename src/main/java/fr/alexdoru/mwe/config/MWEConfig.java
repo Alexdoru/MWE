@@ -51,6 +51,12 @@ public final class MWEConfig {
             ConfigMigrationHelper.migrateConfig(config, VANILLA, NAME_FORMATTING, "De-obfuscate names in tab");
             ConfigMigrationHelper.migrateConfig(config, VANILLA, NAME_FORMATTING, "Show fake players in tab");
         }
+        if (ConfigMigrationHelper.isVersionLowerThan(savedVersion, "4.11")) {
+            ConfigMigrationHelper.migrateConfig(config, "Icons", "Red Warning Icon", NOCHEATERS, "Blatant Warning Icon");
+            ConfigMigrationHelper.migrateConfig(config, "Icons", "Yellow Warning Icon", NOCHEATERS, "Normal Warning Icon");
+            ConfigMigrationHelper.migrateConfig(config, "Icons", MEGA_WALLS, "Scangame Warning Icon");
+            ConfigMigrationHelper.migrateConfig(config, "Icons", "Squad Warning Icon", SQUAD, "Squad Icon");
+        }
     }
 
     @ConfigCategory(displayname = "§6Vanilla")
@@ -1006,6 +1012,12 @@ public final class MWEConfig {
     public static final KeyBinding warcryKey = new KeyBinding("/warcry", Keyboard.KEY_NONE, "MWE");
 
     @ConfigProperty(
+            category = MEGA_WALLS, subCategory = "Icons",
+            name = "Scangame Warning Icon",
+            hidden = true)
+    public static String scangameWarningIcon = EnumChatFormatting.LIGHT_PURPLE.toString() + EnumChatFormatting.BOLD + "⚠";
+
+    @ConfigProperty(
             category = FINAL_KILL_COUNTER, subCategory = "Chat",
             name = "Show kill diff in chat",
             comment = "Appends at the end of kill messages the amount of final kills the killed player had")
@@ -1149,12 +1161,8 @@ public final class MWEConfig {
     @ConfigProperty(
             category = NOCHEATERS, subCategory = "Icons",
             name = "Show Warning Icons",
-            comment = "Displays a warning icon in front of names of reported players on their nametags and in the tablist. The icons can be changed in the config file.\n"
-                    + "\n"
-                    + "§4§l⚠ §r§7: players reported for blatant cheats\n"
-                    + "§e§l⚠ §r§7: players reported for other cheats\n"
-                    + "\n"
-                    + "You can define in the config file the lists of cheats that give a red icon and cheats that don't give any icon")
+            comment = "Displays a warning icon in front of names of reported players on their nametags and in the tablist. " +
+                    "There is a separate icon for players reported for blatant cheats. The list of cheats considered blatant can be changed in the config file.")
     public static boolean warningIconsOnNames = true;
 
     @ConfigProperty(
@@ -1163,6 +1171,18 @@ public final class MWEConfig {
             dependsOn = "Show Warning Icons",
             comment = "Displays the warning icons in the tablist only, not on nametags")
     public static boolean warningIconsTabOnly;
+
+    @ConfigProperty(
+            category = NOCHEATERS, subCategory = "Icons",
+            name = "Blatant Warning Icon",
+            comment = "Icon displayed for players reported for blatant cheats")
+    public static String blatantWarningIcon = EnumChatFormatting.DARK_RED.toString() + EnumChatFormatting.BOLD + "⚠";
+
+    @ConfigProperty(
+            category = NOCHEATERS, subCategory = "Icons",
+            name = "Normal Warning Icon",
+            comment = "Icon displayed for players reported for cheats other than blatant")
+    public static String normalWarningIcon = EnumChatFormatting.YELLOW.toString() + EnumChatFormatting.BOLD + "⚠";
 
     @ConfigPropertyEvent(name = {
             "Show alias in tab",
@@ -1175,6 +1195,16 @@ public final class MWEConfig {
     })
     private static void refreshAllNames() {
         PlayerDataManager.refreshAllPlayerData();
+    }
+
+    @ConfigPropertyEvent(name = {
+            "Blatant Warning Icon",
+            "Normal Warning Icon",
+            "Scangame Warning Icon",
+            "Squad Icon"
+    })
+    private static void onIconChange() {
+        PlayerDataManager.reloadIcons();
     }
 
     @ConfigProperty(
@@ -1284,8 +1314,7 @@ public final class MWEConfig {
             category = HACKER_DETECTOR, subCategory = "Flags",
             name = "Flag message prefix",
             dependsOn = "Show flag messages",
-            comment = "Lets you choose the prefix of flag messages",
-            hidden = true)
+            comment = "Lets you choose the prefix of flag messages")
     public static String flagMessagePrefix = EnumChatFormatting.DARK_PURPLE + "[Hack]";
 
     @ConfigProperty(
@@ -1597,6 +1626,11 @@ public final class MWEConfig {
     public static boolean squadIconTabOnly;
 
     @ConfigProperty(
+            category = SQUAD, subCategory = "Icons",
+            name = "Squad Icon")
+    public static String squadIcon = EnumChatFormatting.GOLD + "[" + EnumChatFormatting.DARK_GREEN + "S" + EnumChatFormatting.GOLD + "]";
+
+    @ConfigProperty(
             category = UPDATES,
             name = "Check for Update",
             comment = "Checks if an update is available when starting the game")
@@ -1608,29 +1642,5 @@ public final class MWEConfig {
             dependsOn = "Check for Update",
             comment = "Updates the mod automatically upon closing your game")
     public static boolean automaticUpdate = true;
-
-    @ConfigProperty(
-            category = "Icons",
-            name = "Red Warning Icon",
-            hidden = true)
-    public static String redWarningIcon = EnumChatFormatting.DARK_RED.toString() + EnumChatFormatting.BOLD + "⚠";
-
-    @ConfigProperty(
-            category = "Icons",
-            name = "Yellow Warning Icon",
-            hidden = true)
-    public static String yellowWarningIcon = EnumChatFormatting.YELLOW.toString() + EnumChatFormatting.BOLD + "⚠";
-
-    @ConfigProperty(
-            category = "Icons",
-            name = "Scangame Warning Icon",
-            hidden = true)
-    public static String scangameWarningIcon = EnumChatFormatting.LIGHT_PURPLE.toString() + EnumChatFormatting.BOLD + "⚠";
-
-    @ConfigProperty(
-            category = "Icons",
-            name = "Squad Warning Icon",
-            hidden = true)
-    public static String squadIcon = EnumChatFormatting.GOLD + "[" + EnumChatFormatting.DARK_GREEN + "S" + EnumChatFormatting.GOLD + "]";
 
 }
