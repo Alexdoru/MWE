@@ -176,6 +176,7 @@ public class ConfigGuiScreen extends GuiScreen {
             this.lastInteractedOverlay = null;
         }
 
+        Keyboard.enableRepeatEvents(true);
         this.mc.entityRenderer.loadShader(BLUR);
         super.initGui();
     }
@@ -327,8 +328,11 @@ public class ConfigGuiScreen extends GuiScreen {
             return;
         }
         if (lastInteractedOverlay != null) {
-            if (keyCode == Keyboard.KEY_ESCAPE) {
+            final boolean consumed = lastInteractedOverlay.keyTyped(typedChar, keyCode);
+            if (!consumed && keyCode == Keyboard.KEY_ESCAPE) {
                 lastInteractedOverlay.closeOverlay();
+            }
+            if (!lastInteractedOverlay.isOverlayOpen()) {
                 lastInteractedOverlay = null;
             }
             return;
@@ -389,9 +393,25 @@ public class ConfigGuiScreen extends GuiScreen {
     }
 
     @Override
+    public void updateScreen() {
+        if (this.searchField != null) {
+            this.searchField.updateCursorCounter();
+        }
+        if (this.lastInteractedOverlay != null) {
+            this.lastInteractedOverlay.updateScreen();
+        }
+        super.updateScreen();
+    }
+
+    @Override
     public void onGuiClosed() {
+        if (this.lastInteractedOverlay != null) {
+            this.lastInteractedOverlay.closeOverlay();
+            this.lastInteractedOverlay = null;
+        }
         this.configHandler.saveConfig();
         this.mc.entityRenderer.stopUseShader();
+        Keyboard.enableRepeatEvents(false);
         super.onGuiClosed();
     }
 

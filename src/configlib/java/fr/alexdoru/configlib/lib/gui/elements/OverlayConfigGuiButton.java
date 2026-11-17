@@ -15,6 +15,12 @@ public abstract class OverlayConfigGuiButton extends ConfigGuiButton {
 
     public void mouseScrolled(int direction) {}
 
+    public boolean keyTyped(char typedChar, int keyCode) {
+        return false;
+    }
+
+    public void updateScreen() {}
+
     public void closeOverlay() {
         this.isOverlayOpen = false;
     }

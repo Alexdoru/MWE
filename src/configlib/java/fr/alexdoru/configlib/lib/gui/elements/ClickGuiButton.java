@@ -2,13 +2,16 @@ package fr.alexdoru.configlib.lib.gui.elements;
 
 import fr.alexdoru.configlib.api.ColorPalette;
 import fr.alexdoru.configlib.lib.gui.GuiUtil;
+import fr.alexdoru.configlib.lib.utils.FormattingCodeUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -95,6 +98,37 @@ public class ClickGuiButton extends Gui {
 
     public boolean hasHoveringText() {
         return !hoveringTextLines.isEmpty();
+    }
+
+    public static class FormattingCodeButton extends ClickGuiButton {
+
+        private final EnumChatFormatting formatting;
+
+        public FormattingCodeButton(int size, EnumChatFormatting formatting) {
+            super(size, size, formatting + String.valueOf(Character.toUpperCase(FormattingCodeUtil.getCode(formatting))));
+            this.formatting = formatting;
+        }
+
+        @Override
+        public void drawButton(ColorPalette colorPalette, Minecraft mc, int mouseX, int mouseY) {
+            if (!formatting.isColor()) {
+                super.drawButton(colorPalette, mc, mouseX, mouseY);
+                return;
+            }
+            final int argb = 255 << 24 | mc.fontRendererObj.getColorCode(FormattingCodeUtil.getCode(formatting));
+            hovered = mouseX >= xPosition && mouseY >= yPosition && mouseX < xPosition + width && mouseY < yPosition + height;
+            GuiUtil.drawBoxWithOutline(
+                    xPosition, yPosition,
+                    xPosition + width, yPosition + height,
+                    argb,
+                    hovered ? Color.WHITE.getRGB() : Color.BLACK.getRGB()
+            );
+        }
+
+        public EnumChatFormatting getFormatting() {
+            return formatting;
+        }
+
     }
 
 }

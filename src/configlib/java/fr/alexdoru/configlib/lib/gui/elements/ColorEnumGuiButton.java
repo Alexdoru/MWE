@@ -6,10 +6,9 @@ import fr.alexdoru.configlib.lib.gui.Box;
 import fr.alexdoru.configlib.lib.gui.ConfigGuiScreen;
 import fr.alexdoru.configlib.lib.gui.GuiUtil;
 import fr.alexdoru.configlib.lib.gui.MouseButton;
-import net.minecraft.client.Minecraft;
+import fr.alexdoru.configlib.lib.gui.elements.ClickGuiButton.FormattingCodeButton;
 import net.minecraft.util.EnumChatFormatting;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +19,7 @@ public class ColorEnumGuiButton extends OverlayConfigGuiButton {
 
     private final ConfigGuiScreen parentScreen;
     private final ClickGuiButton button;
-    private final List<ColorSquareButton> colorButtons = new ArrayList<>();
+    private final List<FormattingCodeButton> colorButtons = new ArrayList<>();
     private final Box panelBox = new Box();
     private int color;
 
@@ -31,7 +30,7 @@ public class ColorEnumGuiButton extends OverlayConfigGuiButton {
         for (final EnumChatFormatting c : EnumChatFormatting.values()) {
             if (c.isColor()) {
                 maxWidth = Math.max(maxWidth, mc.fontRendererObj.getStringWidth("  " + c.name()));
-                this.colorButtons.add(new ColorSquareButton(c));
+                this.colorButtons.add(new FormattingCodeButton(SQUARE, c));
             }
         }
         this.button = new ClickGuiButton(maxWidth, 20);
@@ -68,15 +67,15 @@ public class ColorEnumGuiButton extends OverlayConfigGuiButton {
         EnumChatFormatting hovered = null;
         final int startX = panelBox.LEFT + GAP;
         final int startY = panelBox.TOP + GAP + mc.fontRendererObj.FONT_HEIGHT + GAP;
-        final List<ColorSquareButton> buttons = this.colorButtons;
+        final List<FormattingCodeButton> buttons = this.colorButtons;
         for (int i = 0; i < buttons.size(); i++) {
-            final ColorSquareButton colorButton = buttons.get(i);
+            final FormattingCodeButton colorButton = buttons.get(i);
             final int row = i / 8;
             final int col = i % 8;
             colorButton.xPosition = startX + col * (SQUARE + GAP);
             colorButton.yPosition = startY + row * (SQUARE + GAP);
             colorButton.drawButton(colorPalette, mc, mouseX, mouseY);
-            if (colorButton.isMouseOver()) hovered = colorButton.color;
+            if (colorButton.isMouseOver()) hovered = colorButton.getFormatting();
         }
 
         if (hovered != null) {
@@ -92,9 +91,9 @@ public class ColorEnumGuiButton extends OverlayConfigGuiButton {
         if (!mouseButton.isLeft()) return false;
         if (isOverlayOpen) {
             if (panelBox.isMouseInBox(mouseX, mouseY)) {
-                for (final ColorSquareButton colorButton : this.colorButtons) {
+                for (final FormattingCodeButton colorButton : this.colorButtons) {
                     if (colorButton.mousePressed(mouseX, mouseY)) {
-                        this.setNewValue(colorButton.color);
+                        this.setNewValue(colorButton.getFormatting());
                         return true;
                     }
                 }
@@ -119,29 +118,6 @@ public class ColorEnumGuiButton extends OverlayConfigGuiButton {
         this.setValue(v);
         this.field.set(null, v);
         this.invokeConfigEvent();
-    }
-
-    private static class ColorSquareButton extends ClickGuiButton {
-
-        private final EnumChatFormatting color;
-
-        private ColorSquareButton(EnumChatFormatting color) {
-            super(SQUARE, SQUARE);
-            this.color = color;
-        }
-
-        @Override
-        public void drawButton(ColorPalette colorPalette, Minecraft mc, int mouseX, int mouseY) {
-            final int argb = 255 << 24 | mc.fontRendererObj.getColorCode(color.toString().charAt(1));
-            hovered = mouseX >= xPosition && mouseY >= yPosition && mouseX < xPosition + width && mouseY < yPosition + height;
-            GuiUtil.drawBoxWithOutline(
-                    xPosition, yPosition,
-                    xPosition + width, yPosition + height,
-                    argb,
-                    hovered ? Color.WHITE.getRGB() : Color.BLACK.getRGB()
-            );
-        }
-
     }
 
 }
