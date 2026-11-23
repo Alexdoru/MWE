@@ -1014,6 +1014,7 @@ public final class MWEConfig {
     @ConfigProperty(
             category = MEGA_WALLS, subCategory = "Icons",
             name = "Scangame Warning Icon",
+            isFormattedString = true,
             hidden = true)
     public static String scangameWarningIcon = EnumChatFormatting.LIGHT_PURPLE.toString() + EnumChatFormatting.BOLD + "⚠";
 
@@ -1175,13 +1176,15 @@ public final class MWEConfig {
     @ConfigProperty(
             category = NOCHEATERS, subCategory = "Icons",
             name = "Blatant Warning Icon",
-            comment = "Icon displayed for players reported for blatant cheats")
+            comment = "Icon displayed for players reported for blatant cheats",
+            isFormattedString = true)
     public static String blatantWarningIcon = EnumChatFormatting.DARK_RED.toString() + EnumChatFormatting.BOLD + "⚠";
 
     @ConfigProperty(
             category = NOCHEATERS, subCategory = "Icons",
             name = "Normal Warning Icon",
-            comment = "Icon displayed for players reported for cheats other than blatant")
+            comment = "Icon displayed for players reported for cheats other than blatant",
+            isFormattedString = true)
     public static String normalWarningIcon = EnumChatFormatting.YELLOW.toString() + EnumChatFormatting.BOLD + "⚠";
 
     @ConfigPropertyEvent(name = {
@@ -1314,7 +1317,8 @@ public final class MWEConfig {
             category = HACKER_DETECTOR, subCategory = "Flags",
             name = "Flag message prefix",
             dependsOn = "Show flag messages",
-            comment = "Lets you choose the prefix of flag messages")
+            comment = "Lets you choose the prefix of flag messages",
+            isFormattedString = true)
     public static String flagMessagePrefix = EnumChatFormatting.DARK_PURPLE + "[Hack]";
 
     @ConfigProperty(
@@ -1627,7 +1631,8 @@ public final class MWEConfig {
 
     @ConfigProperty(
             category = SQUAD, subCategory = "Icons",
-            name = "Squad Icon")
+            name = "Squad Icon",
+            isFormattedString = true)
     public static String squadIcon = EnumChatFormatting.GOLD + "[" + EnumChatFormatting.DARK_GREEN + "S" + EnumChatFormatting.GOLD + "]";
 
     @ConfigProperty(
