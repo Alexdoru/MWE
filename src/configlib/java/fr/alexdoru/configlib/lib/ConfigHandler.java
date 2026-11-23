@@ -160,12 +160,12 @@ public final class ConfigHandler implements IConfigHandler {
         if (configFieldRegistry.isEmpty()) {
             throw new IllegalStateException("Config is empty!");
         }
-        try {
-            for (final ConfigFieldContainer configField : configFieldRegistry.getFields()) {
+        for (final ConfigFieldContainer configField : configFieldRegistry.getFields()) {
+            try {
                 configField.saveFieldValueToConfig();
+            } catch (Exception e) {
+                new IllegalStateException("Failed to save config field " + configField.getKey(), e).printStackTrace();
             }
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
         }
         if (config.hasChanged()) {
             config.save();
