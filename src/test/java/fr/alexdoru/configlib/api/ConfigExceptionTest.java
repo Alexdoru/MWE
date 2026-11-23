@@ -318,7 +318,7 @@ public class ConfigExceptionTest {
         final IllegalStateException exception = assertThrows(IllegalStateException.class, () ->
                 this.configHandler.registerConfig(TestConfig17.class)
         );
-        assertEquals("Config slider cannot have same min and max values : test int", exception.getMessage());
+        assertEquals("Config slider min must be lower than max : test int", exception.getMessage());
     }
 
     private static class TestConfig18 {
@@ -333,7 +333,22 @@ public class ConfigExceptionTest {
         final IllegalStateException exception = assertThrows(IllegalStateException.class, () ->
                 this.configHandler.registerConfig(TestConfig18.class)
         );
-        assertEquals("Config slider cannot have same min and max values : test double", exception.getMessage());
+        assertEquals("Config slider min must be lower than max : test double", exception.getMessage());
+    }
+
+    private static class TestConfig23 {
+
+        @ConfigProperty(category = "test", name = "int", sliderMin = 10, sliderMax = 2)
+        public static int testInt;
+
+    }
+
+    @Test
+    public void sliderWithMinGreaterThanMaxThrows() {
+        final IllegalStateException exception = assertThrows(IllegalStateException.class, () ->
+                this.configHandler.registerConfig(TestConfig23.class)
+        );
+        assertEquals("Config slider min must be lower than max : test int", exception.getMessage());
     }
 
     private static class TestConfig19 {

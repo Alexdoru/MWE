@@ -158,8 +158,8 @@ public final class ConfigFieldContainer {
     }
 
     private void validateSliderBounds() {
-        if (!annotation.hidden() && annotation.sliderMin() == annotation.sliderMax()) {
-            throw new IllegalStateException("Config slider cannot have same min and max values : " + annotation.category() + " " + annotation.name());
+        if (!annotation.hidden() && annotation.sliderMin() >= annotation.sliderMax()) {
+            throw new IllegalStateException("Config slider min must be lower than max : " + annotation.category() + " " + annotation.name());
         }
     }
 
