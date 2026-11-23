@@ -245,7 +245,7 @@ public class ConfigSaveLoadTest {
         IConfigHandler configHandler = ConfigLib.newConfigHandler(configFile, "TestConfig");
         configHandler.registerConfig(DoubleWrite.class);
         assertEquals(1.0d, DoubleWrite.configFieldWrite, 0d);
-        final double savedValue = 25d;
+        final double savedValue = 7.5d;
         DoubleWrite.configFieldWrite = savedValue;
         configHandler.saveConfig();
         assertEquals(savedValue, DoubleWrite.configFieldWrite, 0d);
@@ -275,7 +275,7 @@ public class ConfigSaveLoadTest {
         IConfigHandler configHandler = ConfigLib.newConfigHandler(configFile, "TestConfig");
         configHandler.registerConfig(IntWrite.class);
         assertEquals(1, IntWrite.configFieldWrite);
-        final int savedValue = 25;
+        final int savedValue = 7;
         IntWrite.configFieldWrite = savedValue;
         configHandler.saveConfig();
         assertEquals(savedValue, IntWrite.configFieldWrite);
@@ -284,6 +284,55 @@ public class ConfigSaveLoadTest {
         assertEquals(2, IntRead.configFieldRead);
         configHandler.registerConfig(IntRead.class);
         assertEquals(savedValue, IntRead.configFieldRead);
+    }
+
+    private static class SliderClamp {
+
+        @ConfigProperty(category = "foo", name = "intAbove", sliderMin = 2, sliderMax = 10)
+        public static int intAbove = 5;
+
+        @ConfigProperty(category = "foo", name = "intBelow", sliderMin = 2, sliderMax = 10)
+        public static int intBelow = 5;
+
+        @ConfigProperty(category = "foo", name = "doubleAbove", sliderMin = 2, sliderMax = 10)
+        public static double doubleAbove = 5d;
+
+        @ConfigProperty(category = "foo", name = "doubleBelow", sliderMin = 2, sliderMax = 10)
+        public static double doubleBelow = 5d;
+
+        @ConfigProperty(category = "foo", name = "hiddenInt", hidden = true)
+        public static int hiddenInt = 5;
+
+        @ConfigProperty(category = "foo", name = "hiddenDouble", hidden = true)
+        public static double hiddenDouble = 5d;
+
+        @ConfigProperty(category = "foo", name = "color", isColor = true)
+        public static int color = 0xFFFFFF;
+
+    }
+
+    @Test
+    public void sliderValuesAreClampedOnLoad() throws IOException {
+        Files.write(configFile.toPath(), Arrays.asList(
+                "foo {",
+                "    I:intAbove=25",
+                "    I:intBelow=-3",
+                "    D:doubleAbove=25.0",
+                "    D:doubleBelow=-3.5",
+                "    I:hiddenInt=25",
+                "    D:hiddenDouble=-3.5",
+                "    I:color=16711680",
+                "}"
+        ), StandardCharsets.UTF_8);
+        final IConfigHandler configHandler = ConfigLib.newConfigHandler(configFile, "TestConfig");
+        configHandler.registerConfig(SliderClamp.class);
+        assertEquals(10, SliderClamp.intAbove);
+        assertEquals(2, SliderClamp.intBelow);
+        assertEquals(10d, SliderClamp.doubleAbove, 0d);
+        assertEquals(2d, SliderClamp.doubleBelow, 0d);
+        assertEquals(25, SliderClamp.hiddenInt);
+        assertEquals(-3.5d, SliderClamp.hiddenDouble, 0d);
+        assertEquals(0xFF0000, SliderClamp.color);
     }
 
     private static class EnumColorWrite {

@@ -8,6 +8,7 @@ import fr.alexdoru.configlib.lib.gui.ConfigGuiScreen;
 import fr.alexdoru.configlib.lib.gui.elements.*;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.MathHelper;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -163,6 +164,11 @@ public final class ConfigFieldContainer {
         }
     }
 
+    /** Hidden fields may leave sliderMin == sliderMax, meaning the value is unbounded */
+    private boolean hasSliderBounds() {
+        return annotation.sliderMin() < annotation.sliderMax();
+    }
+
     private void loadConfigValueToField() throws IllegalAccessException {
         switch (this.fieldType) {
             case RENDERER: {
@@ -195,11 +201,19 @@ public final class ConfigFieldContainer {
                 break;
             }
             case DOUBLE: {
-                field.setDouble(null, this.getProp().getDouble());
+                double value = this.getProp().getDouble();
+                if (this.hasSliderBounds()) {
+                    value = MathHelper.clamp_double(value, annotation.sliderMin(), annotation.sliderMax());
+                }
+                field.setDouble(null, value);
                 break;
             }
             case INT: {
-                field.setInt(null, this.getProp().getInt());
+                int value = this.getProp().getInt();
+                if (!annotation.isColor() && this.hasSliderBounds()) {
+                    value = MathHelper.clamp_int(value, annotation.sliderMin(), annotation.sliderMax());
+                }
+                field.setInt(null, value);
                 break;
             }
             case KEYBIND: {
