@@ -169,6 +169,34 @@ public class ConfigSaveLoadTest {
         assertEquals(savedValue, StringRead.configFieldRead);
     }
 
+    private static class FormattedStringWrite {
+
+        @ConfigProperty(category = "foo", name = "bar", isFormattedString = true)
+        public static String configFieldWrite = EnumChatFormatting.RED + "Hello";
+
+    }
+
+    private static class FormattedStringRead {
+
+        @ConfigProperty(category = "foo", name = "bar", isFormattedString = true)
+        public static String configFieldRead = "";
+
+    }
+
+    @Test
+    public void formattedStringTest() {
+        IConfigHandler configHandler = ConfigLib.newConfigHandler(configFile, "TestConfig");
+        configHandler.registerConfig(FormattedStringWrite.class);
+        assertEquals(EnumChatFormatting.RED + "Hello", FormattedStringWrite.configFieldWrite);
+        final String savedValue = EnumChatFormatting.GOLD.toString() + EnumChatFormatting.BOLD + "Saved";
+        FormattedStringWrite.configFieldWrite = savedValue;
+        configHandler.saveConfig();
+
+        configHandler = ConfigLib.newConfigHandler(configFile, "TestConfig");
+        configHandler.registerConfig(FormattedStringRead.class);
+        assertEquals(savedValue, FormattedStringRead.configFieldRead);
+    }
+
     private static class BoolWrite {
 
         @ConfigProperty(category = "foo", name = "bar")

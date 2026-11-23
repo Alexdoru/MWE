@@ -315,7 +315,7 @@ public final class ConfigFieldContainer {
                 return new RendererGuiButton(this, configGuiScreen, rendererManager);
             }
             case STRING: {
-                return new StringGuiButton(this, configGuiScreen, this.getProp().getDefault());
+                return new StringGuiButton(this, configGuiScreen, this.getProp().getDefault(), annotation.isFormattedString());
             }
             case BOOLEAN: {
                 return new BooleanGuiButton(this, configGuiScreen);

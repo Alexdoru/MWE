@@ -40,4 +40,7 @@ public @interface ConfigProperty {
     /** Set this to true for int fields that represent a color */
     boolean isColor() default false;
 
+    /** Set this to true for String fields that contain formatting codes */
+    boolean isFormattedString() default false;
+
 }

@@ -28,6 +28,7 @@ public class StringGuiButton extends OverlayConfigGuiButton {
 
     private final ConfigGuiScreen parentScreen;
     private final String defaultValue;
+    private final boolean formatted;
     private final ClickGuiButton button;
     private final GuiTextField textField;
     private final List<FormattingCodeButton> codeButtons = new ArrayList<>();
@@ -36,17 +37,20 @@ public class StringGuiButton extends OverlayConfigGuiButton {
     private final Box panelBox = new Box();
     private String value;
 
-    public StringGuiButton(ConfigFieldContainer container, ConfigGuiScreen parentScreen, String defaultValue) throws IllegalAccessException {
+    public StringGuiButton(ConfigFieldContainer container, ConfigGuiScreen parentScreen, String defaultValue, boolean formatted) throws IllegalAccessException {
         super(container);
         this.parentScreen = parentScreen;
         this.defaultValue = defaultValue;
+        this.formatted = formatted;
         this.button = new ClickGuiButton(switchButtonWidth, 20);
         this.textField = new GuiTextField(0, mc.fontRendererObj, 0, 0, PANEL_WIDTH - 2 * GAP, FIELD_HEIGHT);
         this.textField.setMaxStringLength(256);
         this.textField.setCanLoseFocus(false);
         this.textField.setFocused(true);
-        for (final EnumChatFormatting formatting : EnumChatFormatting.values()) {
-            this.codeButtons.add(new FormattingCodeButton(SQUARE, formatting));
+        if (formatted) {
+            for (final EnumChatFormatting formatting : EnumChatFormatting.values()) {
+                this.codeButtons.add(new FormattingCodeButton(SQUARE, formatting));
+            }
         }
         final int bottomButtonWidth = (PANEL_WIDTH - 3 * GAP) / 2;
         this.resetButton = new ClickGuiButton(bottomButtonWidth, BUTTON_HEIGHT, "Reset");
@@ -72,7 +76,8 @@ public class StringGuiButton extends OverlayConfigGuiButton {
         final int fontHeight = mc.fontRendererObj.FONT_HEIGHT;
         final int rows = (codeButtons.size() + COLUMNS - 1) / COLUMNS;
         final int paletteHeight = rows * SQUARE + (rows - 1) * GAP;
-        final int panelHeight = GAP + fontHeight + GAP + FIELD_HEIGHT + GAP + fontHeight + GAP + paletteHeight + GAP + fontHeight + GAP + BUTTON_HEIGHT + GAP;
+        final int formattingHeight = formatted ? fontHeight + GAP + paletteHeight + GAP + fontHeight + GAP : 0;
+        final int panelHeight = GAP + fontHeight + GAP + FIELD_HEIGHT + GAP + formattingHeight + BUTTON_HEIGHT + GAP;
         final Box configBox = this.parentScreen.getConfigBoxSize();
         panelBox.LEFT = configBox.LEFT + (configBox.getWidth() - PANEL_WIDTH) / 2;
         panelBox.TOP = configBox.TOP + (configBox.getHeight() - panelHeight) / 2;
@@ -93,22 +98,24 @@ public class StringGuiButton extends OverlayConfigGuiButton {
         textField.drawTextBox();
         y += FIELD_HEIGHT + GAP;
 
-        final String preview = FormattingCodeUtil.toFormattedText(textField.getText());
-        mc.fontRendererObj.drawStringWithShadow(mc.fontRendererObj.trimStringToWidth(preview, innerWidth), left, y, 0xFFFFFFFF);
-        y += fontHeight + GAP;
-
         EnumChatFormatting hovered = null;
-        for (int i = 0; i < codeButtons.size(); i++) {
-            final FormattingCodeButton codeButton = codeButtons.get(i);
-            codeButton.xPosition = left + (i % COLUMNS) * (SQUARE + GAP);
-            codeButton.yPosition = y + (i / COLUMNS) * (SQUARE + GAP);
-            codeButton.drawButton(colorPalette, mc, mouseX, mouseY);
-            if (codeButton.isMouseOver()) hovered = codeButton.getFormatting();
-        }
-        y += paletteHeight + GAP;
+        if (formatted) {
+            final String preview = FormattingCodeUtil.toFormattedText(textField.getText());
+            mc.fontRendererObj.drawStringWithShadow(mc.fontRendererObj.trimStringToWidth(preview, innerWidth), left, y, 0xFFFFFFFF);
+            y += fontHeight + GAP;
 
-        GuiUtil.drawCenteredString(HINT, centerX, y, 0xFFFFFFFF);
-        y += fontHeight + GAP;
+            for (int i = 0; i < codeButtons.size(); i++) {
+                final FormattingCodeButton codeButton = codeButtons.get(i);
+                codeButton.xPosition = left + (i % COLUMNS) * (SQUARE + GAP);
+                codeButton.yPosition = y + (i / COLUMNS) * (SQUARE + GAP);
+                codeButton.drawButton(colorPalette, mc, mouseX, mouseY);
+                if (codeButton.isMouseOver()) hovered = codeButton.getFormatting();
+            }
+            y += paletteHeight + GAP;
+
+            GuiUtil.drawCenteredString(HINT, centerX, y, 0xFFFFFFFF);
+            y += fontHeight + GAP;
+        }
 
         resetButton.xPosition = left;
         resetButton.yPosition = y;
@@ -142,14 +149,14 @@ public class StringGuiButton extends OverlayConfigGuiButton {
                 }
             }
             if (resetButton.mousePressed(mouseX, mouseY)) {
-                textField.setText(FormattingCodeUtil.toAmpersandText(defaultValue));
+                textField.setText(this.toEditorText(defaultValue));
             } else if (doneButton.mousePressed(mouseX, mouseY)) {
                 this.saveAndClose();
             }
             return true;
         }
         if (mouseButton.isLeft() && button.mousePressed(mouseX, mouseY)) {
-            textField.setText(FormattingCodeUtil.toAmpersandText(value));
+            textField.setText(this.toEditorText(value));
             textField.setCursorPositionEnd();
             isOverlayOpen = true;
             return true;
@@ -181,8 +188,16 @@ public class StringGuiButton extends OverlayConfigGuiButton {
     }
 
     private void saveAndClose() throws IllegalAccessException {
-        this.setNewValue(FormattingCodeUtil.toFormattedText(textField.getText()));
+        this.setNewValue(this.fromEditorText(textField.getText()));
         this.closeOverlay();
+    }
+
+    private String toEditorText(String text) {
+        return formatted ? FormattingCodeUtil.toAmpersandText(text) : text;
+    }
+
+    private String fromEditorText(String text) {
+        return formatted ? FormattingCodeUtil.toFormattedText(text) : text;
     }
 
     private void setValue(String newValue) {
