@@ -108,9 +108,9 @@ public final class WdrDataManager {
         }
         dirty.set(true);
         if (added) {
-            MinecraftForge.EVENT_BUS.post(new ReportListEvent(ReportListEvent.Type.ADDED, uuid, playername, wdr));
+            postReportListEvent(ReportListEvent.Type.ADDED, uuid, playername, wdr);
         } else if (cheatsAdded) {
-            MinecraftForge.EVENT_BUS.post(new ReportListEvent(ReportListEvent.Type.CHEATS_ADDED, uuid, playername, wdr));
+            postReportListEvent(ReportListEvent.Type.CHEATS_ADDED, uuid, playername, wdr);
         }
     }
 
@@ -134,9 +134,9 @@ public final class WdrDataManager {
         }
         dirty.set(true);
         if (added) {
-            MinecraftForge.EVENT_BUS.post(new ReportListEvent(ReportListEvent.Type.ADDED, uuid, playername, wdr));
+            postReportListEvent(ReportListEvent.Type.ADDED, uuid, playername, wdr);
         } else if (cheatsAdded) {
-            MinecraftForge.EVENT_BUS.post(new ReportListEvent(ReportListEvent.Type.CHEATS_ADDED, uuid, playername, wdr));
+            postReportListEvent(ReportListEvent.Type.CHEATS_ADDED, uuid, playername, wdr);
         }
         return added;
     }
@@ -166,10 +166,15 @@ public final class WdrDataManager {
             PlayerDataManager.refreshPlayerData(playername);
         }
         if (removed != null) {
-            MinecraftForge.EVENT_BUS.post(new ReportListEvent(ReportListEvent.Type.REMOVED, uuid, playername, removed));
+            postReportListEvent(ReportListEvent.Type.REMOVED, uuid, playername, removed);
             dirty.set(true);
         }
         return removed != null;
+    }
+
+    private static void postReportListEvent(ReportListEvent.Type type, UUID uuid, String playername, WDR wdr) {
+        final UUID eventUuid = uuid != null && PlayerDataManager.isRealPlayer(uuid) ? uuid : null;
+        MinecraftForge.EVENT_BUS.post(new ReportListEvent(type, eventUuid, playername, wdr));
     }
 
     private static boolean writeDataToFile(Map<Object, WDR> map) {
