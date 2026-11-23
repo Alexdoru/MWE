@@ -352,6 +352,21 @@ public class ConfigExceptionTest {
         assertEquals("Config slider min must be lower than max : test int", exception.getMessage());
     }
 
+    private static class TestConfig25 {
+
+        @ConfigProperty(category = "test", name = "float")
+        public static float testFloat;
+
+    }
+
+    @Test
+    public void floatSliderWithoutBoundsThrows() {
+        final IllegalStateException exception = assertThrows(IllegalStateException.class, () ->
+                this.configHandler.registerConfig(TestConfig25.class)
+        );
+        assertEquals("Config slider min must be lower than max : test float", exception.getMessage());
+    }
+
     private static class TestConfig24 {
 
         @ConfigProperty(category = "test", name = "array", hidden = true)

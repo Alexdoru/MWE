@@ -256,6 +256,36 @@ public class ConfigSaveLoadTest {
         assertEquals(savedValue, DoubleRead.configFieldRead, 0d);
     }
 
+    private static class FloatWrite {
+
+        @ConfigProperty(category = "foo", name = "bar", sliderMax = 10)
+        public static float configFieldWrite = 1.0f;
+
+    }
+
+    private static class FloatRead {
+
+        @ConfigProperty(category = "foo", name = "bar", sliderMax = 10)
+        public static float configFieldRead = 2.0f;
+
+    }
+
+    @Test
+    public void floatTest() throws IOException {
+        IConfigHandler configHandler = ConfigLib.newConfigHandler(configFile, "TestConfig");
+        configHandler.registerConfig(FloatWrite.class);
+        assertEquals(1.0f, FloatWrite.configFieldWrite, 0f);
+        final float savedValue = 0.1f;
+        FloatWrite.configFieldWrite = savedValue;
+        configHandler.saveConfig();
+        assertTrue(Files.readAllLines(configFile.toPath(), StandardCharsets.UTF_8).stream().anyMatch(line -> line.trim().equals("D:bar=0.1")));
+
+        configHandler = ConfigLib.newConfigHandler(configFile, "TestConfig");
+        assertEquals(2.0f, FloatRead.configFieldRead, 0f);
+        configHandler.registerConfig(FloatRead.class);
+        assertEquals(savedValue, FloatRead.configFieldRead, 0f);
+    }
+
     private static class IntWrite {
 
         @ConfigProperty(category = "foo", name = "bar", sliderMax = 10)
@@ -300,6 +330,12 @@ public class ConfigSaveLoadTest {
         @ConfigProperty(category = "foo", name = "doubleBelow", sliderMin = 2, sliderMax = 10)
         public static double doubleBelow = 5d;
 
+        @ConfigProperty(category = "foo", name = "floatAbove", sliderMin = 2, sliderMax = 10)
+        public static float floatAbove = 5f;
+
+        @ConfigProperty(category = "foo", name = "floatBelow", sliderMin = 2, sliderMax = 10)
+        public static float floatBelow = 5f;
+
         @ConfigProperty(category = "foo", name = "hiddenInt", hidden = true)
         public static int hiddenInt = 5;
 
@@ -319,6 +355,8 @@ public class ConfigSaveLoadTest {
                 "    I:intBelow=-3",
                 "    D:doubleAbove=25.0",
                 "    D:doubleBelow=-3.5",
+                "    D:floatAbove=25.0",
+                "    D:floatBelow=-3.5",
                 "    I:hiddenInt=25",
                 "    D:hiddenDouble=-3.5",
                 "    I:color=16711680",
@@ -330,9 +368,35 @@ public class ConfigSaveLoadTest {
         assertEquals(2, SliderClamp.intBelow);
         assertEquals(10d, SliderClamp.doubleAbove, 0d);
         assertEquals(2d, SliderClamp.doubleBelow, 0d);
+        assertEquals(10f, SliderClamp.floatAbove, 0f);
+        assertEquals(2f, SliderClamp.floatBelow, 0f);
         assertEquals(25, SliderClamp.hiddenInt);
         assertEquals(-3.5d, SliderClamp.hiddenDouble, 0d);
         assertEquals(0xFF0000, SliderClamp.color);
+    }
+
+    private static class SliderNaN {
+
+        @ConfigProperty(category = "foo", name = "double", sliderMin = 2, sliderMax = 10)
+        public static double doubleNaN = 5d;
+
+        @ConfigProperty(category = "foo", name = "float", sliderMin = 2, sliderMax = 10)
+        public static float floatNaN = 6f;
+
+    }
+
+    @Test
+    public void sliderNaNValuesFallBackToDefaultOnLoad() throws IOException {
+        Files.write(configFile.toPath(), Arrays.asList(
+                "foo {",
+                "    D:double=NaN",
+                "    D:float=NaN",
+                "}"
+        ), StandardCharsets.UTF_8);
+        final IConfigHandler configHandler = ConfigLib.newConfigHandler(configFile, "TestConfig");
+        configHandler.registerConfig(SliderNaN.class);
+        assertEquals(5d, SliderNaN.doubleNaN, 0d);
+        assertEquals(6f, SliderNaN.floatNaN, 0f);
     }
 
     private static class EnumColorWrite {

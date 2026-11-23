@@ -17,6 +17,7 @@ public class SliderGuiButton extends ConfigGuiButton {
     private int plusButtonX, plusButtonY;
     private int sliderIncrement;
     private final boolean isIntValue;
+    private final boolean isFloatValue;
     private boolean isPourcentage;
     private final int minValue, maxValue;
     private int sliderValueI;
@@ -28,13 +29,14 @@ public class SliderGuiButton extends ConfigGuiButton {
         super(container);
         minValue = annotation.sliderMin();
         maxValue = annotation.sliderMax();
+        isFloatValue = field.getType() == float.class;
         if (field.getType() == int.class) {
             isIntValue = true;
             sliderValueI = (int) field.get(null);
             sliderIncrement = MathHelper.clamp_int((SLIDER_WIDTH - 1) * (sliderValueI - minValue) / (maxValue - minValue), 0, SLIDER_WIDTH - 1);
-        } else if (field.getType() == double.class) {
+        } else if (field.getType() == double.class || isFloatValue) {
             isIntValue = false;
-            sliderValueD = (double) field.get(null);
+            sliderValueD = ((Number) field.get(null)).doubleValue();
             if (minValue == 0 && maxValue == 1) {
                 isPourcentage = true;
                 sliderValueI = (int) Math.round(sliderValueD * 100d);
@@ -151,7 +153,7 @@ public class SliderGuiButton extends ConfigGuiButton {
             } else if (isPourcentage) {
                 final int prevValue = sliderValueI;
                 sliderValueI = MathHelper.clamp_int(sliderIncrement * 100 / (SLIDER_WIDTH - 1), 0, 100);
-                field.setDouble(null, MathHelper.clamp_double(sliderValueI / 100d, 0, 1));
+                setDecimalValue(MathHelper.clamp_double(sliderValueI / 100d, 0, 1));
                 if (prevValue != sliderValueI) {
                     invokeConfigEvent();
                 }
@@ -159,13 +161,21 @@ public class SliderGuiButton extends ConfigGuiButton {
                 final double prevValue = sliderValueD;
                 sliderValueD = MathHelper.clamp_double(sliderIncrement * (maxValue - minValue) / (double) (SLIDER_WIDTH - 1) + (double) minValue, minValue, maxValue);
                 sliderValueD = ((int) ((sliderValueD - (double) minValue) / incrementStepD)) * incrementStepD + minValue;
-                field.setDouble(null, sliderValueD);
+                setDecimalValue(sliderValueD);
                 if (prevValue != sliderValueD) {
                     invokeConfigEvent();
                 }
             }
         } catch (IllegalAccessException e) {
             throw new RuntimeException("Cannot set value to : " + field.getName(), e);
+        }
+    }
+
+    private void setDecimalValue(double value) throws IllegalAccessException {
+        if (isFloatValue) {
+            field.setFloat(null, (float) value);
+        } else {
+            field.setDouble(null, value);
         }
     }
 
@@ -182,13 +192,13 @@ public class SliderGuiButton extends ConfigGuiButton {
                 final int prevValue = sliderValueI;
                 sliderValueI = MathHelper.clamp_int(sliderValueI + valueIncrement, 0, 100);
                 sliderIncrement = MathHelper.clamp_int((SLIDER_WIDTH - 1) * sliderValueI / (100), 0, SLIDER_WIDTH - 1);
-                field.setDouble(null, MathHelper.clamp_double(sliderValueI / 100d, 0, 1));
+                setDecimalValue(MathHelper.clamp_double(sliderValueI / 100d, 0, 1));
                 changed = prevValue != sliderValueI;
             } else {
                 final double prevValue = sliderValueD;
                 sliderValueD = MathHelper.clamp_double(MathHelper.floor_double((sliderValueD - (double) minValue) / incrementStepD + valueIncrement) * incrementStepD + minValue, minValue, maxValue);
                 sliderIncrement = MathHelper.clamp_int((int) (((double) SLIDER_WIDTH - 1d) * (sliderValueD - (double) minValue) / (double) (maxValue - minValue)), 0, SLIDER_WIDTH - 1);
-                field.setDouble(null, sliderValueD);
+                setDecimalValue(sliderValueD);
                 changed = prevValue != sliderValueD;
             }
         } catch (IllegalAccessException e) {

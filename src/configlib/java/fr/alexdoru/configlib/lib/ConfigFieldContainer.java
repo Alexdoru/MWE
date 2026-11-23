@@ -58,6 +58,8 @@ public final class ConfigFieldContainer {
             return FieldType.BOOLEAN;
         } else if (field.getType() == double.class) {
             return FieldType.DOUBLE;
+        } else if (field.getType() == float.class) {
+            return FieldType.FLOAT;
         } else if (field.getType() == int.class) {
             return FieldType.INT;
         } else if (field.getType() == KeyBinding.class) {
@@ -132,6 +134,12 @@ public final class ConfigFieldContainer {
             case DOUBLE: {
                 this.validateSliderBounds();
                 propertyMap.put(this.getKey(), config.get(annotation.category(), annotation.name(), (double) field.get(null)));
+                break;
+            }
+            case FLOAT: {
+                this.validateSliderBounds();
+                // Float.toString keeps the file readable, a float widened to double would be written as 0.10000000149011612
+                propertyMap.put(this.getKey(), config.get(annotation.category(), annotation.name(), Float.toString((float) field.get(null)), null, Property.Type.DOUBLE));
                 break;
             }
             case INT: {
@@ -240,6 +248,18 @@ public final class ConfigFieldContainer {
         return list;
     }
 
+    private double readDoubleProperty() {
+        final Property prop = this.getProp();
+        double value = prop.getDouble();
+        if (!this.hasSliderBounds()) {
+            return value;
+        }
+        if (Double.isNaN(value)) {
+            value = Double.parseDouble(prop.getDefault());
+        }
+        return MathHelper.clamp_double(value, annotation.sliderMin(), annotation.sliderMax());
+    }
+
     /** Hidden fields may leave sliderMin == sliderMax, meaning the value is unbounded */
     private boolean hasSliderBounds() {
         return annotation.sliderMin() < annotation.sliderMax();
@@ -277,11 +297,11 @@ public final class ConfigFieldContainer {
                 break;
             }
             case DOUBLE: {
-                double value = this.getProp().getDouble();
-                if (this.hasSliderBounds()) {
-                    value = MathHelper.clamp_double(value, annotation.sliderMin(), annotation.sliderMax());
-                }
-                field.setDouble(null, value);
+                field.setDouble(null, this.readDoubleProperty());
+                break;
+            }
+            case FLOAT: {
+                field.setFloat(null, (float) this.readDoubleProperty());
                 break;
             }
             case INT: {
@@ -392,6 +412,10 @@ public final class ConfigFieldContainer {
             }
             case DOUBLE: {
                 this.getProp().set((double) field.get(null));
+                break;
+            }
+            case FLOAT: {
+                this.getProp().set(Float.toString((float) field.get(null)));
                 break;
             }
             case INT: {
@@ -510,7 +534,8 @@ public final class ConfigFieldContainer {
             case BOOLEAN: {
                 return new BooleanGuiButton(this, configGuiScreen);
             }
-            case DOUBLE: {
+            case DOUBLE:
+            case FLOAT: {
                 return new SliderGuiButton(this);
             }
             case INT: {
@@ -611,6 +636,7 @@ public final class ConfigFieldContainer {
         STRING,
         BOOLEAN,
         DOUBLE,
+        FLOAT,
         INT,
         KEYBIND,
         ENUM_COLOR,
