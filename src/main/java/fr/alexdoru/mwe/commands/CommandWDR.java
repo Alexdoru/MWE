@@ -109,19 +109,15 @@ public class CommandWDR extends MWECommandBase {
     }
 
     private void addPlayerToReportList(String playername, List<String> cheats) {
-        final Minecraft mc = Minecraft.getMinecraft();
-        for (final NetworkPlayerInfo netInfo : mc.getNetHandler().getPlayerInfoMap()) {
-            if (PlayerDataManager.isNickedPlayer(netInfo.getGameProfile().getId())) {
-                if (netInfo.getGameProfile().getName().equalsIgnoreCase(playername)) {
-                    addPlayerToReportList(
-                            netInfo.getGameProfile().getId(),
-                            netInfo.getGameProfile().getName(),
-                            NameFormatter.getVanillaName(netInfo),
-                            cheats
-                    );
-                    return;
-                }
-            }
+        final NetworkPlayerInfo netInfo = PlayerDataManager.getInfoOfNickedPlayer(playername);
+        if (netInfo != null) {
+            addPlayerToReportList(
+                    netInfo.getGameProfile().getId(),
+                    netInfo.getGameProfile().getName(),
+                    NameFormatter.getVanillaName(netInfo),
+                    cheats
+            );
+            return;
         }
         MultithreadingUtil.addTaskToQueue(() -> {
             try {
@@ -136,7 +132,7 @@ public class CommandWDR extends MWECommandBase {
                     } catch (ApiException ignored) {}
                 }
                 final String formattedName = name;
-                mc.addScheduledTask(() -> addPlayerToReportList(playerID.getId(), playerID.getName(), formattedName, cheats));
+                Minecraft.getMinecraft().addScheduledTask(() -> addPlayerToReportList(playerID.getId(), playerID.getName(), formattedName, cheats));
             } catch (ApiException ignored) {}
         });
     }

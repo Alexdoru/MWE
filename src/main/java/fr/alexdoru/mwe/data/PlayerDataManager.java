@@ -28,6 +28,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -337,6 +338,20 @@ public final class PlayerDataManager {
         for (int i = playerList.size() - 1; i >= 0; --i) {
             if (uuid.equals(playerList.get(i).getUniqueID())) {
                 return playerList.get(i);
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    public static NetworkPlayerInfo getInfoOfNickedPlayer(@NotNull String playername) {
+        final NetHandlerPlayClient netHandler = Minecraft.getMinecraft().getNetHandler();
+        if (netHandler == null) return null;
+        for (final NetworkPlayerInfo netInfo : netHandler.getPlayerInfoMap()) {
+            if (PlayerDataManager.isNickedPlayer(netInfo.getGameProfile().getId())) {
+                if (netInfo.getGameProfile().getName().equalsIgnoreCase(playername)) {
+                    return netInfo;
+                }
             }
         }
         return null;

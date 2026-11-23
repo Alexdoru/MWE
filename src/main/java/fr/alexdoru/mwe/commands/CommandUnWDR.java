@@ -47,16 +47,13 @@ public class CommandUnWDR extends MWECommandBase {
     }
 
     private void unwdrPlayer(String playername) {
-        final Minecraft mc = Minecraft.getMinecraft();
-        for (final NetworkPlayerInfo netInfo : mc.getNetHandler().getPlayerInfoMap()) {
-            if (PlayerDataManager.isNickedPlayer(netInfo.getGameProfile().getId())) {
-                if (netInfo.getGameProfile().getName().equalsIgnoreCase(playername)) {
-                    this.unwdr((UUID) null, netInfo.getGameProfile().getName());
-                    return;
-                }
-            }
+        final NetworkPlayerInfo netInfo = PlayerDataManager.getInfoOfNickedPlayer(playername);
+        if (netInfo != null) {
+            this.unwdr((UUID) null, netInfo.getGameProfile().getName());
+            return;
         }
         MultithreadingUtil.addTaskToQueue(() -> {
+            final Minecraft mc = Minecraft.getMinecraft();
             try {
                 final IPlayerUUID playerID = MojangNameToUUID.getPlayerUUID(playername);
                 mc.addScheduledTask(() -> this.unwdr(playerID.getId(), playerID.getName()));

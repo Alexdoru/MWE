@@ -193,19 +193,10 @@ public class CommandAddAlias extends MWECommandBase {
     }
 
     private void addAlias(String playername, String alias) {
-        final Minecraft mc = Minecraft.getMinecraft();
-        for (final NetworkPlayerInfo netInfo : mc.getNetHandler().getPlayerInfoMap()) {
-            if (PlayerDataManager.isNickedPlayer(netInfo.getGameProfile().getId())) {
-                if (netInfo.getGameProfile().getName().equalsIgnoreCase(playername)) {
-                    this.addAlias(
-                            null,
-                            netInfo.getGameProfile().getName(),
-                            alias,
-                            NameFormatter.getVanillaName(netInfo)
-                    );
-                    return;
-                }
-            }
+        final NetworkPlayerInfo netInfo = PlayerDataManager.getInfoOfNickedPlayer(playername);
+        if (netInfo != null) {
+            this.addAlias(null, netInfo.getGameProfile().getName(), alias, NameFormatter.getVanillaName(netInfo));
+            return;
         }
         MultithreadingUtil.addTaskToQueue(() -> {
             try {
@@ -220,7 +211,7 @@ public class CommandAddAlias extends MWECommandBase {
                     } catch (ApiException ignored) {}
                 }
                 final String formattedName = name;
-                mc.addScheduledTask(() -> this.addAlias(playerID.getId(), playerID.getName(), alias, formattedName));
+                Minecraft.getMinecraft().addScheduledTask(() -> this.addAlias(playerID.getId(), playerID.getName(), alias, formattedName));
                 return;
             } catch (ApiException ignored) {}
             ChatUtil.addChatMessage(EnumChatFormatting.RED + "Couldn't find player named " + playername);
@@ -243,22 +234,17 @@ public class CommandAddAlias extends MWECommandBase {
     }
 
     private void removeAlias(String playername) {
-        final Minecraft mc = Minecraft.getMinecraft();
-        for (final NetworkPlayerInfo netInfo : mc.getNetHandler().getPlayerInfoMap()) {
-            if (PlayerDataManager.isNickedPlayer(netInfo.getGameProfile().getId())) {
-                if (netInfo.getGameProfile().getName().equalsIgnoreCase(playername)) {
-                    if (PlayerDataManager.isRealPlayer(netInfo.getGameProfile().getId())) {
-                        this.removeAlias(
-                                null,
-                                netInfo.getGameProfile().getName(),
-                                NameFormatter.getVanillaName(netInfo)
-                        );
-                        return;
-                    }
-                }
-            }
+        final NetworkPlayerInfo netInfo = PlayerDataManager.getInfoOfNickedPlayer(playername);
+        if (netInfo != null) {
+            this.removeAlias(
+                    null,
+                    netInfo.getGameProfile().getName(),
+                    NameFormatter.getVanillaName(netInfo)
+            );
+            return;
         }
         MultithreadingUtil.addTaskToQueue(() -> {
+            final Minecraft mc = Minecraft.getMinecraft();
             try {
                 final IPlayerUUID playerID = MojangNameToUUID.getPlayerUUID(playername);
                 String formattedName = null;
