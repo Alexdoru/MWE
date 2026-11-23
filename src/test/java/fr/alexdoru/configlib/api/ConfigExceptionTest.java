@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -349,6 +350,96 @@ public class ConfigExceptionTest {
                 this.configHandler.registerConfig(TestConfig23.class)
         );
         assertEquals("Config slider min must be lower than max : test int", exception.getMessage());
+    }
+
+    private static class TestConfig24 {
+
+        @ConfigProperty(category = "test", name = "array", hidden = true)
+        public static final int[] array = {1};
+
+    }
+
+    @Test
+    public void finalArrayFieldThrows() {
+        final IllegalStateException exception = assertThrows(IllegalStateException.class, () ->
+                this.configHandler.registerConfig(TestConfig24.class)
+        );
+        assertEquals("Array config fields must not be final : test array", exception.getMessage());
+    }
+
+    private static class TestConfig26 {
+
+        @ConfigProperty(category = "test", name = "list", hidden = true)
+        public static List<Integer> list;
+
+    }
+
+    @Test
+    public void nullListFieldThrows() {
+        final NullPointerException exception = assertThrows(NullPointerException.class, () ->
+                this.configHandler.registerConfig(TestConfig26.class)
+        );
+        assertEquals("List config fields must not be null : test list", exception.getMessage());
+    }
+
+    private static class TestConfig27 {
+
+        @ConfigProperty(category = "test", name = "list", hidden = true)
+        public static List<Integer> list = Arrays.asList(1, 2);
+
+    }
+
+    @Test
+    public void immutableListFieldThrows() {
+        final IllegalStateException exception = assertThrows(IllegalStateException.class, () ->
+                this.configHandler.registerConfig(TestConfig27.class)
+        );
+        assertEquals("List config fields must be mutable : test list", exception.getMessage());
+    }
+
+    private static class TestConfig28 {
+
+        @ConfigProperty(category = "test", name = "list", hidden = true)
+        public static List<Integer> list = new ArrayList<>(Arrays.asList(1, null));
+
+    }
+
+    @Test
+    public void listFieldWithNullElementThrows() {
+        final IllegalStateException exception = assertThrows(IllegalStateException.class, () ->
+                this.configHandler.registerConfig(TestConfig28.class)
+        );
+        assertEquals("List config fields must not contain null elements : test list", exception.getMessage());
+    }
+
+    private static class TestConfig29 {
+
+        @ConfigProperty(category = "test", name = "array", hidden = true)
+        public static String[] array;
+
+    }
+
+    @Test
+    public void nullArrayFieldThrows() {
+        final NullPointerException exception = assertThrows(NullPointerException.class, () ->
+                this.configHandler.registerConfig(TestConfig29.class)
+        );
+        assertEquals("Array config fields must not be null : test array", exception.getMessage());
+    }
+
+    private static class TestConfig30 {
+
+        @ConfigProperty(category = "test", name = "array", hidden = true)
+        public static String[] array = {"a", null};
+
+    }
+
+    @Test
+    public void arrayFieldWithNullElementThrows() {
+        final IllegalStateException exception = assertThrows(IllegalStateException.class, () ->
+                this.configHandler.registerConfig(TestConfig30.class)
+        );
+        assertEquals("Array config fields must not contain null elements : test array", exception.getMessage());
     }
 
     private static class TestConfig19 {

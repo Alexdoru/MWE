@@ -66,13 +66,29 @@ public final class ConfigFieldContainer {
             return FieldType.ENUM_COLOR;
         } else if (Enum.class.isAssignableFrom(field.getType())) {
             return FieldType.ENUM;
+        } else if (field.getType() == String[].class) {
+            return FieldType.STRING_ARRAY;
+        } else if (field.getType() == boolean[].class) {
+            return FieldType.BOOLEAN_ARRAY;
+        } else if (field.getType() == double[].class) {
+            return FieldType.DOUBLE_ARRAY;
+        } else if (field.getType() == int[].class) {
+            return FieldType.INT_ARRAY;
         } else if (List.class.isAssignableFrom(field.getType())) {
             final Type genericType = field.getGenericType();
             if (genericType instanceof ParameterizedType) {
                 final ParameterizedType parameterized = (ParameterizedType) genericType;
                 final Type[] typeArgs = parameterized.getActualTypeArguments();
-                if (typeArgs.length == 1 && typeArgs[0] == String.class) {
-                    return FieldType.STRING_LIST;
+                if (typeArgs.length == 1) {
+                    if (typeArgs[0] == String.class) {
+                        return FieldType.STRING_LIST;
+                    } else if (typeArgs[0] == Boolean.class) {
+                        return FieldType.BOOLEAN_LIST;
+                    } else if (typeArgs[0] == Double.class) {
+                        return FieldType.DOUBLE_LIST;
+                    } else if (typeArgs[0] == Integer.class) {
+                        return FieldType.INT_LIST;
+                    }
                 }
             }
         }
@@ -148,8 +164,39 @@ public final class ConfigFieldContainer {
             }
             case STRING_LIST: {
                 //noinspection unchecked
-                final String[] defaultStrings = ((List<String>) field.get(null)).toArray(new String[0]);
+                final String[] defaultStrings = ((List<String>) this.validateListField()).toArray(new String[0]);
                 propertyMap.put(this.getKey(), config.get(annotation.category(), annotation.name(), defaultStrings));
+                break;
+            }
+            case BOOLEAN_LIST: {
+                //noinspection unchecked
+                propertyMap.put(this.getKey(), config.get(annotation.category(), annotation.name(), toBooleanArray((List<Boolean>) this.validateListField())));
+                break;
+            }
+            case DOUBLE_LIST: {
+                //noinspection unchecked
+                propertyMap.put(this.getKey(), config.get(annotation.category(), annotation.name(), toDoubleArray((List<Double>) this.validateListField())));
+                break;
+            }
+            case INT_LIST: {
+                //noinspection unchecked
+                propertyMap.put(this.getKey(), config.get(annotation.category(), annotation.name(), toIntArray((List<Integer>) this.validateListField())));
+                break;
+            }
+            case STRING_ARRAY: {
+                propertyMap.put(this.getKey(), config.get(annotation.category(), annotation.name(), (String[]) this.validateArrayField()));
+                break;
+            }
+            case BOOLEAN_ARRAY: {
+                propertyMap.put(this.getKey(), config.get(annotation.category(), annotation.name(), (boolean[]) this.validateArrayField()));
+                break;
+            }
+            case DOUBLE_ARRAY: {
+                propertyMap.put(this.getKey(), config.get(annotation.category(), annotation.name(), (double[]) this.validateArrayField()));
+                break;
+            }
+            case INT_ARRAY: {
+                propertyMap.put(this.getKey(), config.get(annotation.category(), annotation.name(), (int[]) this.validateArrayField()));
                 break;
             }
             default: {
@@ -162,6 +209,35 @@ public final class ConfigFieldContainer {
         if (!annotation.hidden() && annotation.sliderMin() >= annotation.sliderMax()) {
             throw new IllegalStateException("Config slider min must be lower than max : " + annotation.category() + " " + annotation.name());
         }
+    }
+
+    private Object validateArrayField() throws IllegalAccessException {
+        final String fieldName = annotation.category() + " " + annotation.name();
+        if (Modifier.isFinal(field.getModifiers())) {
+            throw new IllegalStateException("Array config fields must not be final : " + fieldName);
+        }
+        final Object array = Objects.requireNonNull(field.get(null), "Array config fields must not be null : " + fieldName);
+        if (array instanceof Object[] && Arrays.asList((Object[]) array).contains(null)) {
+            throw new IllegalStateException("Array config fields must not contain null elements : " + fieldName);
+        }
+        return array;
+    }
+
+    private List<?> validateListField() throws IllegalAccessException {
+        final String fieldName = annotation.category() + " " + annotation.name();
+        //noinspection unchecked
+        final List<Object> list = (List<Object>) field.get(null);
+        Objects.requireNonNull(list, "List config fields must not be null : " + fieldName);
+        try {
+            list.add(null);
+            list.remove(list.size() - 1);
+        } catch (UnsupportedOperationException e) {
+            throw new IllegalStateException("List config fields must be mutable : " + fieldName, e);
+        }
+        if (list.contains(null)) {
+            throw new IllegalStateException("List config fields must not contain null elements : " + fieldName);
+        }
+        return list;
     }
 
     /** Hidden fields may leave sliderMin == sliderMax, meaning the value is unbounded */
@@ -243,6 +319,45 @@ public final class ConfigFieldContainer {
                 list.addAll(Arrays.asList(strings));
                 break;
             }
+            case INT_LIST: {
+                //noinspection unchecked
+                final List<Integer> list = (List<Integer>) field.get(null);
+                list.clear();
+                Arrays.stream(this.getProp().getIntList()).forEach(list::add);
+                break;
+            }
+            case DOUBLE_LIST: {
+                //noinspection unchecked
+                final List<Double> list = (List<Double>) field.get(null);
+                list.clear();
+                Arrays.stream(this.getProp().getDoubleList()).forEach(list::add);
+                break;
+            }
+            case BOOLEAN_LIST: {
+                //noinspection unchecked
+                final List<Boolean> list = (List<Boolean>) field.get(null);
+                list.clear();
+                for (final boolean value : this.getProp().getBooleanList()) {
+                    list.add(value);
+                }
+                break;
+            }
+            case INT_ARRAY: {
+                field.set(null, this.getProp().getIntList());
+                break;
+            }
+            case DOUBLE_ARRAY: {
+                field.set(null, this.getProp().getDoubleList());
+                break;
+            }
+            case BOOLEAN_ARRAY: {
+                field.set(null, this.getProp().getBooleanList());
+                break;
+            }
+            case STRING_ARRAY: {
+                field.set(null, this.getProp().getStringList().clone());
+                break;
+            }
             default: {
                 throw new IllegalStateException("Type of field not handled by config lib " + field.getType());
             }
@@ -299,10 +414,65 @@ public final class ConfigFieldContainer {
                 this.getProp().set(((List<String>) field.get(null)).toArray(new String[0]));
                 break;
             }
+            case INT_ARRAY: {
+                this.getProp().set((int[]) field.get(null));
+                break;
+            }
+            case DOUBLE_ARRAY: {
+                this.getProp().set((double[]) field.get(null));
+                break;
+            }
+            case BOOLEAN_ARRAY: {
+                this.getProp().set((boolean[]) field.get(null));
+                break;
+            }
+            case STRING_ARRAY: {
+                this.getProp().set((String[]) field.get(null));
+                break;
+            }
+            case INT_LIST: {
+                //noinspection unchecked
+                this.getProp().set(toIntArray((List<Integer>) field.get(null)));
+                break;
+            }
+            case DOUBLE_LIST: {
+                //noinspection unchecked
+                this.getProp().set(toDoubleArray((List<Double>) field.get(null)));
+                break;
+            }
+            case BOOLEAN_LIST: {
+                //noinspection unchecked
+                this.getProp().set(toBooleanArray((List<Boolean>) field.get(null)));
+                break;
+            }
             default: {
                 throw new IllegalStateException("Type of field not handled by config lib " + field.getType());
             }
         }
+    }
+
+    private static boolean[] toBooleanArray(List<Boolean> list) {
+        final boolean[] array = new boolean[list.size()];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = list.get(i);
+        }
+        return array;
+    }
+
+    private static double[] toDoubleArray(List<Double> list) {
+        final double[] array = new double[list.size()];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = list.get(i);
+        }
+        return array;
+    }
+
+    private static int[] toIntArray(List<Integer> list) {
+        final int[] array = new int[list.size()];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = list.get(i);
+        }
+        return array;
     }
 
     public String getKey() {
@@ -445,7 +615,14 @@ public final class ConfigFieldContainer {
         KEYBIND,
         ENUM_COLOR,
         ENUM,
-        STRING_LIST
+        STRING_ARRAY,
+        BOOLEAN_ARRAY,
+        DOUBLE_ARRAY,
+        INT_ARRAY,
+        STRING_LIST,
+        BOOLEAN_LIST,
+        DOUBLE_LIST,
+        INT_LIST
     }
 
 }

@@ -440,4 +440,203 @@ public class ConfigSaveLoadTest {
         assertEquals("five", StringListRead.configFieldRead.get(2));
     }
 
+    private static class IntArrayWrite {
+
+        @ConfigProperty(category = "foo", name = "bar", hidden = true)
+        public static int[] configFieldWrite = {1, 2};
+
+    }
+
+    private static class IntArrayRead {
+
+        @ConfigProperty(category = "foo", name = "bar", hidden = true)
+        public static int[] configFieldRead = {9};
+
+    }
+
+    @Test
+    public void intArrayTest() {
+        IConfigHandler configHandler = ConfigLib.newConfigHandler(configFile, "TestConfig");
+        configHandler.registerConfig(IntArrayWrite.class);
+        assertArrayEquals(new int[]{1, 2}, IntArrayWrite.configFieldWrite);
+        final int[] savedValue = {3, -4, 5};
+        IntArrayWrite.configFieldWrite = savedValue;
+        configHandler.saveConfig();
+
+        configHandler = ConfigLib.newConfigHandler(configFile, "TestConfig");
+        configHandler.registerConfig(IntArrayRead.class);
+        assertArrayEquals(savedValue, IntArrayRead.configFieldRead);
+    }
+
+    private static class DoubleArrayWrite {
+
+        @ConfigProperty(category = "foo", name = "bar", hidden = true)
+        public static double[] configFieldWrite = {1.5d, 2d};
+
+    }
+
+    private static class DoubleArrayRead {
+
+        @ConfigProperty(category = "foo", name = "bar", hidden = true)
+        public static double[] configFieldRead = {9d};
+
+    }
+
+    @Test
+    public void doubleArrayTest() {
+        IConfigHandler configHandler = ConfigLib.newConfigHandler(configFile, "TestConfig");
+        configHandler.registerConfig(DoubleArrayWrite.class);
+        assertArrayEquals(new double[]{1.5d, 2d}, DoubleArrayWrite.configFieldWrite, 0d);
+        final double[] savedValue = {3.25d, -4d, 5.5d};
+        DoubleArrayWrite.configFieldWrite = savedValue;
+        configHandler.saveConfig();
+
+        configHandler = ConfigLib.newConfigHandler(configFile, "TestConfig");
+        configHandler.registerConfig(DoubleArrayRead.class);
+        assertArrayEquals(savedValue, DoubleArrayRead.configFieldRead, 0d);
+    }
+
+    private static class BooleanArrayWrite {
+
+        @ConfigProperty(category = "foo", name = "bar", hidden = true)
+        public static boolean[] configFieldWrite = {true, false};
+
+    }
+
+    private static class BooleanArrayRead {
+
+        @ConfigProperty(category = "foo", name = "bar", hidden = true)
+        public static boolean[] configFieldRead = {false};
+
+    }
+
+    @Test
+    public void booleanArrayTest() {
+        IConfigHandler configHandler = ConfigLib.newConfigHandler(configFile, "TestConfig");
+        configHandler.registerConfig(BooleanArrayWrite.class);
+        assertArrayEquals(new boolean[]{true, false}, BooleanArrayWrite.configFieldWrite);
+        final boolean[] savedValue = {false, true, true};
+        BooleanArrayWrite.configFieldWrite = savedValue;
+        configHandler.saveConfig();
+
+        configHandler = ConfigLib.newConfigHandler(configFile, "TestConfig");
+        configHandler.registerConfig(BooleanArrayRead.class);
+        assertArrayEquals(savedValue, BooleanArrayRead.configFieldRead);
+    }
+
+    private static class StringArrayWrite {
+
+        @ConfigProperty(category = "foo", name = "bar", hidden = true)
+        public static String[] configFieldWrite = {"one", "two"};
+
+    }
+
+    private static class StringArrayRead {
+
+        @ConfigProperty(category = "foo", name = "bar", hidden = true)
+        public static String[] configFieldRead = {"apple"};
+
+    }
+
+    @Test
+    public void stringArrayTest() {
+        IConfigHandler configHandler = ConfigLib.newConfigHandler(configFile, "TestConfig");
+        configHandler.registerConfig(StringArrayWrite.class);
+        assertArrayEquals(new String[]{"one", "two"}, StringArrayWrite.configFieldWrite);
+        final String[] savedValue = {"three", "four", "five"};
+        StringArrayWrite.configFieldWrite = savedValue;
+        configHandler.saveConfig();
+
+        configHandler = ConfigLib.newConfigHandler(configFile, "TestConfig");
+        configHandler.registerConfig(StringArrayRead.class);
+        assertArrayEquals(savedValue, StringArrayRead.configFieldRead);
+    }
+
+    private static class IntListWrite {
+
+        @ConfigProperty(category = "foo", name = "bar", hidden = true)
+        public static final List<Integer> configFieldWrite = new ArrayList<>(Arrays.asList(1, 2));
+
+    }
+
+    private static class IntListRead {
+
+        @ConfigProperty(category = "foo", name = "bar", hidden = true)
+        public static final List<Integer> configFieldRead = new ArrayList<>(Collections.singletonList(9));
+
+    }
+
+    @Test
+    public void intListTest() {
+        IConfigHandler configHandler = ConfigLib.newConfigHandler(configFile, "TestConfig");
+        configHandler.registerConfig(IntListWrite.class);
+        assertEquals(Arrays.asList(1, 2), IntListWrite.configFieldWrite);
+        final List<Integer> savedValue = Arrays.asList(3, -4, 5);
+        IntListWrite.configFieldWrite.clear();
+        IntListWrite.configFieldWrite.addAll(savedValue);
+        configHandler.saveConfig();
+
+        configHandler = ConfigLib.newConfigHandler(configFile, "TestConfig");
+        configHandler.registerConfig(IntListRead.class);
+        assertEquals(savedValue, IntListRead.configFieldRead);
+    }
+
+    private static class DoubleListWrite {
+
+        @ConfigProperty(category = "foo", name = "bar", hidden = true)
+        public static final List<Double> configFieldWrite = new ArrayList<>(Arrays.asList(1.5d, 2d));
+
+    }
+
+    private static class DoubleListRead {
+
+        @ConfigProperty(category = "foo", name = "bar", hidden = true)
+        public static final List<Double> configFieldRead = new ArrayList<>(Collections.singletonList(9d));
+
+    }
+
+    @Test
+    public void doubleListTest() {
+        IConfigHandler configHandler = ConfigLib.newConfigHandler(configFile, "TestConfig");
+        configHandler.registerConfig(DoubleListWrite.class);
+        assertEquals(Arrays.asList(1.5d, 2d), DoubleListWrite.configFieldWrite);
+        final List<Double> savedValue = Arrays.asList(3.25d, -4d, 5.5d);
+        DoubleListWrite.configFieldWrite.clear();
+        DoubleListWrite.configFieldWrite.addAll(savedValue);
+        configHandler.saveConfig();
+
+        configHandler = ConfigLib.newConfigHandler(configFile, "TestConfig");
+        configHandler.registerConfig(DoubleListRead.class);
+        assertEquals(savedValue, DoubleListRead.configFieldRead);
+    }
+
+    private static class BooleanListWrite {
+
+        @ConfigProperty(category = "foo", name = "bar", hidden = true)
+        public static final List<Boolean> configFieldWrite = new ArrayList<>(Arrays.asList(true, false));
+
+    }
+
+    private static class BooleanListRead {
+
+        @ConfigProperty(category = "foo", name = "bar", hidden = true)
+        public static final List<Boolean> configFieldRead = new ArrayList<>(Collections.singletonList(false));
+
+    }
+
+    @Test
+    public void booleanListTest() {
+        IConfigHandler configHandler = ConfigLib.newConfigHandler(configFile, "TestConfig");
+        configHandler.registerConfig(BooleanListWrite.class);
+        assertEquals(Arrays.asList(true, false), BooleanListWrite.configFieldWrite);
+        final List<Boolean> savedValue = Arrays.asList(false, true, true);
+        BooleanListWrite.configFieldWrite.clear();
+        BooleanListWrite.configFieldWrite.addAll(savedValue);
+        configHandler.saveConfig();
+
+        configHandler = ConfigLib.newConfigHandler(configFile, "TestConfig");
+        configHandler.registerConfig(BooleanListRead.class);
+        assertEquals(savedValue, BooleanListRead.configFieldRead);
+    }
+
 }
