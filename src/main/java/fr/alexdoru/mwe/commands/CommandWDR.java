@@ -11,10 +11,8 @@ import fr.alexdoru.mwe.data.PlayerDataManager;
 import fr.alexdoru.mwe.data.WdrDataManager;
 import fr.alexdoru.mwe.features.FinalKillCounter;
 import fr.alexdoru.mwe.features.PartyDetection;
-import fr.alexdoru.mwe.http.apikey.HypixelApiKeyUtil;
-import fr.alexdoru.mwe.http.cache.CachedHypixelPlayerData;
+import fr.alexdoru.mwe.http.cache.HypixelFormattedNameLookup;
 import fr.alexdoru.mwe.http.exceptions.ApiException;
-import fr.alexdoru.mwe.http.parsers.hypixel.LoginData;
 import fr.alexdoru.mwe.http.requests.MojangNameToUUID;
 import fr.alexdoru.mwe.scoreboard.ScoreboardTracker;
 import fr.alexdoru.mwe.utils.MultithreadingUtil;
@@ -122,16 +120,7 @@ public class CommandWDR extends MWECommandBase {
         MultithreadingUtil.addTaskToQueue(() -> {
             try {
                 final IPlayerUUID playerID = MojangNameToUUID.getPlayerUUID(playername);
-                String name = null;
-                if (!HypixelApiKeyUtil.apiKeyIsNotSetup()) {
-                    try {
-                        final LoginData loginData = new LoginData(CachedHypixelPlayerData.getPlayerData(playerID.getId()));
-                        if (!loginData.hasNeverJoinedHypixel() && playerID.getName().equals(loginData.getdisplayname())) {
-                            name = loginData.getFormattedName();
-                        }
-                    } catch (ApiException ignored) {}
-                }
-                final String formattedName = name;
+                final String formattedName = HypixelFormattedNameLookup.fetchFormattedName(playerID);
                 Minecraft.getMinecraft().addScheduledTask(() -> addPlayerToReportList(playerID.getId(), playerID.getName(), formattedName, cheats));
             } catch (ApiException ignored) {}
         });

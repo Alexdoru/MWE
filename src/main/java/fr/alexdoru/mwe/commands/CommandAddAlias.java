@@ -8,7 +8,7 @@ import fr.alexdoru.mwe.data.AliasDataManager;
 import fr.alexdoru.mwe.data.NameFormatter;
 import fr.alexdoru.mwe.data.PlayerDataManager;
 import fr.alexdoru.mwe.http.apikey.HypixelApiKeyUtil;
-import fr.alexdoru.mwe.http.cache.CachedHypixelPlayerData;
+import fr.alexdoru.mwe.http.cache.HypixelFormattedNameLookup;
 import fr.alexdoru.mwe.http.exceptions.ApiException;
 import fr.alexdoru.mwe.http.parsers.hypixel.LoginData;
 import fr.alexdoru.mwe.http.requests.HypixelPlayerData;
@@ -201,20 +201,11 @@ public class CommandAddAlias extends MWECommandBase {
         MultithreadingUtil.addTaskToQueue(() -> {
             try {
                 final IPlayerUUID playerID = MojangNameToUUID.getPlayerUUID(playername);
-                String name = null;
-                if (!HypixelApiKeyUtil.apiKeyIsNotSetup()) {
-                    try {
-                        final LoginData loginData = new LoginData(CachedHypixelPlayerData.getPlayerData(playerID.getId()));
-                        if (!loginData.hasNeverJoinedHypixel() && playerID.getName().equals(loginData.getdisplayname())) {
-                            name = loginData.getFormattedName();
-                        }
-                    } catch (ApiException ignored) {}
-                }
-                final String formattedName = name;
+                final String formattedName = HypixelFormattedNameLookup.fetchFormattedName(playerID);
                 Minecraft.getMinecraft().addScheduledTask(() -> this.addAlias(playerID.getId(), playerID.getName(), alias, formattedName));
-                return;
-            } catch (ApiException ignored) {}
-            ChatUtil.addChatMessage(EnumChatFormatting.RED + "Couldn't find player named " + playername);
+            } catch (ApiException e) {
+                ChatUtil.addChatMessage(EnumChatFormatting.RED + "Couldn't find player named " + playername);
+            }
         });
     }
 
@@ -244,24 +235,14 @@ public class CommandAddAlias extends MWECommandBase {
             return;
         }
         MultithreadingUtil.addTaskToQueue(() -> {
-            final Minecraft mc = Minecraft.getMinecraft();
             try {
                 final IPlayerUUID playerID = MojangNameToUUID.getPlayerUUID(playername);
-                String formattedName = null;
-                if (!HypixelApiKeyUtil.apiKeyIsNotSetup()) {
-                    try {
-                        final LoginData loginData = new LoginData(CachedHypixelPlayerData.getPlayerData(playerID.getId()));
-                        if (!loginData.hasNeverJoinedHypixel() && playerID.getName().equals(loginData.getdisplayname())) {
-                            formattedName = loginData.getFormattedName();
-                        }
-                    } catch (ApiException ignored) {}
-                }
-                final String finalFormattedName = formattedName;
-                mc.addScheduledTask(() -> this.removeAlias(playerID.getId(), playerID.getName(), finalFormattedName));
-                return;
-            } catch (ApiException ignored) {}
-            // nicked player
-            mc.addScheduledTask(() -> this.removeAlias(null, playername, null));
+                final String formattedName = HypixelFormattedNameLookup.fetchFormattedName(playerID);
+                Minecraft.getMinecraft().addScheduledTask(() -> this.removeAlias(playerID.getId(), playerID.getName(), formattedName));
+            } catch (ApiException e) {
+                // nicked player
+                Minecraft.getMinecraft().addScheduledTask(() -> this.removeAlias(null, playername, null));
+            }
         });
     }
 
