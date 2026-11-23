@@ -79,6 +79,12 @@ public final class ConfigFieldContainer {
     }
 
     private void createPropertyFromField(Configuration config) throws IllegalAccessException {
+        if (annotation.isColor() && this.fieldType != FieldType.INT) {
+            throw new IllegalStateException("isColor can only be used on int fields : " + annotation.category() + " " + annotation.name());
+        }
+        if (annotation.isFormattedString() && this.fieldType != FieldType.STRING) {
+            throw new IllegalStateException("isFormattedString can only be used on String fields : " + annotation.category() + " " + annotation.name());
+        }
         switch (this.fieldType) {
             case RENDERER: {
                 final RendererPosition rendererPosition = (RendererPosition) field.get(null);

@@ -11,6 +11,8 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -347,6 +349,51 @@ public class ConfigExceptionTest {
     @Test
     public void hiddenOrColorIntWithoutBoundsWorks() {
         this.configHandler.registerConfig(TestConfig19.class);
+    }
+
+    private static class TestConfig20 {
+
+        @ConfigProperty(category = "test", name = "color", isColor = true)
+        public static String color = "";
+
+    }
+
+    @Test
+    public void colorOnNonIntFieldThrows() {
+        final IllegalStateException exception = assertThrows(IllegalStateException.class, () ->
+                this.configHandler.registerConfig(TestConfig20.class)
+        );
+        assertEquals("isColor can only be used on int fields : test color", exception.getMessage());
+    }
+
+    private static class TestConfig21 {
+
+        @ConfigProperty(category = "test", name = "formatted", isFormattedString = true)
+        public static boolean formatted;
+
+    }
+
+    @Test
+    public void formattedStringOnNonStringFieldThrows() {
+        final IllegalStateException exception = assertThrows(IllegalStateException.class, () ->
+                this.configHandler.registerConfig(TestConfig21.class)
+        );
+        assertEquals("isFormattedString can only be used on String fields : test formatted", exception.getMessage());
+    }
+
+    private static class TestConfig22 {
+
+        @ConfigProperty(category = "test", name = "formatted", isFormattedString = true)
+        public static List<String> formatted = new ArrayList<>();
+
+    }
+
+    @Test
+    public void formattedStringOnStringListFieldThrows() {
+        final IllegalStateException exception = assertThrows(IllegalStateException.class, () ->
+                this.configHandler.registerConfig(TestConfig22.class)
+        );
+        assertEquals("isFormattedString can only be used on String fields : test formatted", exception.getMessage());
     }
 
 }
