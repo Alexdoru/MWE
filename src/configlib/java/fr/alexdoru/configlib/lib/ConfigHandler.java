@@ -13,6 +13,7 @@ import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldNode;
+import org.objectweb.asm.tree.MethodNode;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,6 +37,7 @@ public final class ConfigHandler implements IConfigHandler {
     private final List<ConfigCategoryContainer> categories = new ArrayList<>();
     /** CategoryName -> SubCategoryName -> List of ConfigSetting */
     private final LinkedHashMap<String, LinkedHashMap<String, List<String>>> configStructure = new LinkedHashMap<>();
+    private final List<Method> guiActions = new ArrayList<>();
     private final RendererManager rendererManager;
     @Nullable
     private IConfigTitleRenderer titleRenderer;
@@ -81,6 +83,7 @@ public final class ConfigHandler implements IConfigHandler {
     @Override
     public void registerConfig(@NotNull Class<?> clazz) {
         configFieldRegistry.startClassRegistration();
+        final List<Method> classGuiActions = new ArrayList<>();
         try {
             final List<Method> loadEvents = new ArrayList<>();
             final List<Method> updateEvents = new ArrayList<>();
@@ -101,6 +104,10 @@ public final class ConfigHandler implements IConfigHandler {
                     validateMethod(method, "load", "(Lnet/minecraftforge/common/config/Configuration;)V");
                     method.setAccessible(true);
                     loadEvents.add(method);
+                } else if (method.isAnnotationPresent(ConfigGuiAction.class)) {
+                    validateMethod(method, "gui action", "()V");
+                    method.setAccessible(true);
+                    classGuiActions.add(method);
                 }
             }
             for (final Method method : loadEvents) {
@@ -144,11 +151,12 @@ public final class ConfigHandler implements IConfigHandler {
             throw new RuntimeException("Caught exception while registering config class " + clazz.getName(), e);
         }
         try {
-            readConfigInDefinitionOrder(clazz);
+            readConfigInDefinitionOrder(clazz, classGuiActions);
         } catch (IOException e) {
             readConfigInAlphabeticalOrder(clazz);
             e.printStackTrace();
         }
+        guiActions.addAll(classGuiActions);
         setConfigPropertyOrder();
         if (config.hasChanged()) {
             config.save();
@@ -178,7 +186,7 @@ public final class ConfigHandler implements IConfigHandler {
             throw new IllegalStateException("Config is empty!");
         }
         try {
-            return new ConfigGuiScreen(this, configName, categories, configFieldRegistry.getFields(), configStructure, colorPalette, titleRenderer, rendererManager);
+            return new ConfigGuiScreen(this, configName, categories, configFieldRegistry.getFields(), configStructure, guiActions, colorPalette, titleRenderer, rendererManager);
         } catch (IllegalAccessException e) {
             throw new RuntimeException("Failed to generate the config menu!", e);
         }
@@ -212,7 +220,7 @@ public final class ConfigHandler implements IConfigHandler {
         this.colorPalette = colorPalette;
     }
 
-    private void readConfigInDefinitionOrder(Class<?> clazz) throws IOException {
+    private void readConfigInDefinitionOrder(Class<?> clazz, List<Method> guiActionsToSort) throws IOException {
         // We need to parse the class bytes with ASM because
         // the reflection method class.getDeclaredFields()
         // returns the fields in no specific order.
@@ -263,6 +271,11 @@ public final class ConfigHandler implements IConfigHandler {
                 }
             }
         }
+        final List<String> methodOrder = new ArrayList<>();
+        for (final MethodNode method : cn.methods) {
+            methodOrder.add(method.name + method.desc);
+        }
+        guiActionsToSort.sort(Comparator.comparingInt(m -> methodOrder.indexOf(m.getName() + Type.getMethodDescriptor(m))));
     }
 
     private void readConfigInAlphabeticalOrder(Class<?> clazz) {

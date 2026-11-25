@@ -15,6 +15,7 @@ public class ColorPalette {
     public int SCROLLBAR_TRACK = new Color(0x19191A).getRGB();
     public int SCROLLBAR_THUMB = new Color(0xAFAFB3).getRGB();
     public int CATEGORY_BUTTON_TEXT = new Color(0xFFFFFF).getRGB();
+    public int ACTION_BUTTON_TEXT = VanillaColors.DARK_GRAY;
     public int SETTING_BACKGROUND = new Color(0x46464D).getRGB();
     public int SETTING_BACKGROUND_BORDER = new Color(0x606066).getRGB();
     public int SETTING_NAME_TEXT = new Color(5635925).getRGB();

@@ -20,6 +20,7 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.*;
 
 public class ConfigGuiScreen extends GuiScreen {
@@ -37,6 +38,7 @@ public class ConfigGuiScreen extends GuiScreen {
     private final List<CategoryGuiButton> categoryElements = new ArrayList<>();
     private final List<ConfigUIElement> configElements = new ArrayList<>();
     private final List<ConfigUIElement> renderedConfigElements = new ArrayList<>();
+    private final List<ActionGuiButton> actionButtons = new ArrayList<>();
     private GuiTextField searchField;
     private String selectedCategory = "";
     private SliderGuiButton lastInteractedSlider;
@@ -58,6 +60,7 @@ public class ConfigGuiScreen extends GuiScreen {
             List<ConfigCategoryContainer> categories,
             List<ConfigFieldContainer> configFields,
             LinkedHashMap<String, LinkedHashMap<String, List<String>>> configStructure,
+            List<Method> guiActions,
             @NotNull ColorPalette colorPalette,
             @Nullable IConfigTitleRenderer titleRenderer,
             RendererManager rendererManager) throws IllegalAccessException {
@@ -108,6 +111,9 @@ public class ConfigGuiScreen extends GuiScreen {
                 }
             }
         }
+        for (final Method action : guiActions) {
+            this.actionButtons.add(new ActionGuiButton(action));
+        }
         if (!this.configElements.isEmpty()) {
             this.setFocusedCategory(this.configElements.get(0).getCategory());
         }
@@ -130,7 +136,20 @@ public class ConfigGuiScreen extends GuiScreen {
         CATEGORY_BOX.RIGHT = GUI_INSIDE.LEFT + GUI_WIDTH / 5;
         final int categoryContentHeight = getCategoryContentHeight();
         final int categoryMaxY = CATEGORY_BOX.TOP + categoryContentHeight + 2 * PADDING;
-        CATEGORY_BOX.BOTTOM = Math.min(categoryMaxY, GUI_INSIDE.BOTTOM);
+        if (this.actionButtons.isEmpty()) {
+            CATEGORY_BOX.BOTTOM = Math.min(categoryMaxY, GUI_INSIDE.BOTTOM);
+        } else {
+            int actionsHeight = 0;
+            for (final ActionGuiButton actionButton : this.actionButtons) {
+                actionsHeight += actionButton.getHeight();
+            }
+            CATEGORY_BOX.BOTTOM = Math.min(categoryMaxY, GUI_INSIDE.BOTTOM - actionsHeight - PADDING);
+            int buttonY = GUI_INSIDE.BOTTOM - actionsHeight;
+            for (final ActionGuiButton actionButton : this.actionButtons) {
+                actionButton.setLayout(CATEGORY_BOX.LEFT, buttonY, CATEGORY_BOX.getWidth());
+                buttonY += actionButton.getHeight();
+            }
+        }
 
         CONFIG_BOX.LEFT = CATEGORY_BOX.RIGHT + PADDING;
         CONFIG_BOX.TOP = GUI_INSIDE.TOP + fontRendererObj.FONT_HEIGHT + 1 + PADDING;
@@ -234,6 +253,10 @@ public class ConfigGuiScreen extends GuiScreen {
 
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
 
+        for (final ActionGuiButton actionButton : this.actionButtons) {
+            actionButton.draw(colorPalette, mouseX, mouseY);
+        }
+
         if (this.lastInteractedOverlay != null) {
             this.lastInteractedOverlay.drawOverlay(colorPalette, mouseX, mouseY);
         }
@@ -259,6 +282,11 @@ public class ConfigGuiScreen extends GuiScreen {
                 lastInteractedOverlay = null;
             }
             return;
+        }
+        for (final ActionGuiButton actionButton : this.actionButtons) {
+            if (actionButton.mouseClicked(mouseX, mouseY, button)) {
+                return;
+            }
         }
         if (CATEGORY_BOX.isMouseInBox(mouseX, mouseY)) {
             final boolean consumedClick = forEachVisible(this.categoryElements, CATEGORY_BOX, this.categoryScrollbar.getScroll(), (element, drawY) ->
