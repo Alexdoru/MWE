@@ -4,6 +4,7 @@ import fr.alexdoru.configlib.api.*;
 import fr.alexdoru.mwe.MWE;
 import fr.alexdoru.mwe.asm.MWELoadingPlugin;
 import fr.alexdoru.mwe.chat.ChatHandler;
+import fr.alexdoru.mwe.chat.ChatUtil;
 import fr.alexdoru.mwe.data.PlayerDataManager;
 import fr.alexdoru.mwe.hackerdetector.HackerDetector;
 import fr.alexdoru.mwe.nocheaters.ReportQueue;
@@ -18,6 +19,7 @@ import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.Loader;
 import org.lwjgl.input.Keyboard;
 
+import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -112,6 +114,21 @@ public final class MWEConfig {
 
     @ConfigCategory(displayname = "§5Name Formatting")
     private static final String NAME_FORMATTING = "Name Formatting";
+
+    @ConfigGuiAction(displayString = "Changelog")
+    private static void openChangelog() {
+        final String changelogUrl = "https://modrinth.com/mod/mwe/changelog";
+        try {
+            // same method as in GuiScreen
+            final URI uri = new URI(changelogUrl);
+            final Class<?> oclass = Class.forName("java.awt.Desktop");
+            final Object object = oclass.getMethod("getDesktop", new Class[0]).invoke(null);
+            oclass.getMethod("browse", new Class[]{URI.class}).invoke(object, uri);
+        } catch (Throwable throwable) {
+            MWE.logger.error("Couldn't open link", throwable);
+            ChatUtil.addChatMessage(ChatUtil.getTagMW() + EnumChatFormatting.RED + "Couldn't open the changelog in your browser : " + EnumChatFormatting.WHITE + changelogUrl);
+        }
+    }
 
     @ConfigProperty(
             category = "April Fools",
